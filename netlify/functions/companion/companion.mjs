@@ -36,14 +36,24 @@ function retrySeconds(errBody) {
   return 30;
 }
 
-async function callGemini(prompt, outerSignal) {
+const timeoutMs = () => Number(env("UPSTREAM_TIMEOUT_MS") || UPSTREAM_TIMEOUT_MS);
+const pause = ms => new Promise(r => setTimeout(r, ms));
+const BUSY_STATUSES = [500, 502, 503, 504]; // Gemini's "overloaded" and internal errors: usually pass on a retry
+
+function detailOf(status, data) {
+  const e = data && data.error;
+  const msg = e && typeof e.message === "string" ? e.message.replace(/\s+/g, " ").slice(0, 160) : "";
+  return [String(status), e && e.status, msg].filter(Boolean).join(" ");
+}
+
+async function callOnce(prompt, outerSignal, ms) {
   const key = env("GEMINI_API_KEY");
   if (!key) throw fail(503, "not_configured");
   const level = thinkingLevel();
   const body = { contents: [{ role: "user", parts: [{ text: prompt }] }], generationConfig: { responseMimeType: "application/json", maxOutputTokens: 2048 } };
   if (level) body.generationConfig.thinkingConfig = { thinkingLevel: level };
   const url = `https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model())}:generateContent`;
-  const timeout = AbortSignal.timeout(UPSTREAM_TIMEOUT_MS);
+  const timeout = AbortSignal.timeout(ms);
   const signal = outerSignal && AbortSignal.any ? AbortSignal.any([outerSignal, timeout]) : timeout;
   const post = () => fetch(url, { method: "POST", headers: { "content-type": "application/json", "x-goog-api-key": key }, body: JSON.stringify(body), signal });
 
@@ -60,17 +70,36 @@ async function callGemini(prompt, outerSignal) {
   }
 
   let data = null; try { data = await res.json(); } catch { /* not JSON */ }
-  if (res.status === 429) throw fail(429, "rate_limited", { retryAfter: retrySeconds(data) });
-  if (res.status === 401 || res.status === 403) throw fail(502, "upstream_auth");
-  if (res.status === 404) throw fail(502, "model_not_found");
-  if (!res.ok) throw fail(502, "upstream_error", { upstreamStatus: res.status });
+  if (res.status === 429) throw fail(429, "rate_limited", { retryAfter: retrySeconds(data), detail: detailOf(res.status, data) });
+  if (BUSY_STATUSES.includes(res.status)) throw fail(503, "upstream_busy", { retryAfter: 5, detail: detailOf(res.status, data) });
+  if (res.status === 401 || res.status === 403) throw fail(502, "upstream_auth", { detail: detailOf(res.status, data) });
+  if (res.status === 404) throw fail(502, "model_not_found", { detail: detailOf(res.status, data) });
+  if (!res.ok) throw fail(502, "upstream_error", { detail: detailOf(res.status, data) });
 
   const cand = data && data.candidates && data.candidates[0];
   const parts = (cand && cand.content && cand.content.parts) || [];
   const text = parts.filter(p => p && !p.thought && typeof p.text === "string").map(p => p.text).join("").trim();
-  if (!text) throw fail(502, "no_answer", { finishReason: cand && cand.finishReason });
+  if (!text) throw fail(502, "no_answer", { detail: [cand && cand.finishReason, data && data.promptFeedback && data.promptFeedback.blockReason].filter(Boolean).join(" ") });
   try { return JSON.parse(text.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/, "")); }
   catch { throw fail(502, "bad_json"); }
+}
+
+// One call to Gemini, retried within the function's time budget when Google reports it is busy.
+async function callGemini(prompt, outerSignal) {
+  const started = Date.now(), budget = timeoutMs(); let lastErr = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const left = budget - (Date.now() - started);
+    if (left < 2500) break;
+    try { return await callOnce(prompt, outerSignal, left); }
+    catch (e) {
+      lastErr = e;
+      if (e.code !== "upstream_busy") throw e;
+      const wait = Math.min(1000 * (attempt + 1), budget - (Date.now() - started) - 2500);
+      if (wait <= 0) break;
+      await pause(wait);
+    }
+  }
+  throw lastErr || fail(504, "timeout");
 }
 
 export default async (req, context) => {
@@ -106,7 +135,7 @@ export default async (req, context) => {
     }
     return reply(400, { code: "bad_step" });
   } catch (e) {
-    return reply(e.status || 502, { code: e.code || "error", retryAfter: e.retryAfter });
+    return reply(e.status || 502, { code: e.code || "error", retryAfter: e.retryAfter, detail: e.detail });
   }
 };
 
