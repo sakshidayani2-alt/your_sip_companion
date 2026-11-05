@@ -5,178 +5,279 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="A concept for a product case study: help for people in their first year of SIPs. Not investment advice.">
 <meta name="robots" content="noindex">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 28 28'%3E%3Crect width='28' height='28' rx='7' fill='%232c6bd6'/%3E%3Cpath d='M5 20h5v-4h5v-4h5V8h3' stroke='white' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23387ed1'/%3E%3Cpath d='M11 23h10M14 23c5-2.3.7-5.8 2.7-9.1M13.6 13.4c1 .7 1.6 2 2.1 3.4-1.8.4-3.2.4-4.4-.3-1.1-.5-2.1-1.7-2.7-3.8 2.5-.5 4 0 5 .7zM17.8 10.6a6.4 6.4 0 0 0-1 3.6c1.7-.1 3-.5 3.9-1.3.9-.9 1.5-2.1 1.6-4.2-2.5.1-3.6.9-4.5 1.9z' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
 <title>Your SIP Companion</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700&family=Nunito+Sans:opsz,wght@6..12,400;6..12,600;6..12,700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: a chat with a friendly companion; each answer carries a small visual card (meter, ledger, calendar or checklist) built from the person's own numbers. */
+/* Coin-inspired: light grey canvas, white cards, Zerodha blue as the accent. Own name, own mark, no Zerodha logo. */
 :root {
-  --bg: #f3f6fb; --surface: #ffffff; --ink: #1d283a; --muted: #5d6879; --line: #dfe6f0;
-  --blue: #2c6bd6; --blue-ink: #ffffff; --blue-soft: #e7effc; --orange: #b4530c; --orange-soft: #fdf0e4;
-  --bubble-me: #2c6bd6; --bubble-me-ink: #ffffff;
-  --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
-  --body: "Nunito Sans", "Segoe UI", system-ui, sans-serif;
-  --mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  --page: #e9edf2; --bg: #f4f6f9; --surface: #ffffff; --surface-2: #f8fafc; --ink: #1f2933; --muted: #5d6877; --line: #e2e7ee;
+  --blue: #387ed1; --btn: #2a6ab8; --btn-ink: #ffffff; --blue-text: #2a6ab8; --blue-soft: #e9f1fc;
+  --green: #1d7a44; --green-line: #2e9d57; --green-soft: #e6f4eb; --red: #b93a2e; --red-soft: #fcecea;
+  --amber: #8f4f00; --amber-line: #e38a17; --amber-soft: #fff2df; --violet: #5b45c2; --violet-soft: #efecfc;
+  --grey-line: #97a3b1; --shadow: 0 1px 2px rgba(16, 24, 40, .05), 0 2px 6px rgba(16, 24, 40, .06);
+  --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --bg: #0e1420; --surface: #162033; --ink: #e9eef7; --muted: #a4afc2; --line: #2a3650;
-  --blue: #78a9f2; --blue-ink: #0e1420; --blue-soft: #1c2c48; --orange: #f2a766; --orange-soft: #3a2714;
-  --bubble-me: #2f5fae; --bubble-me-ink: #ffffff; color-scheme: dark } }
+  --page: #090d12; --bg: #0e131a; --surface: #161d27; --surface-2: #1a2330; --ink: #e7ecf2; --muted: #9ea9b8; --line: #283345;
+  --blue: #5b9cea; --btn: #2f6fbd; --btn-ink: #ffffff; --blue-text: #86b6f2; --blue-soft: #1a2a40;
+  --green: #5fcf8d; --green-line: #4cc27e; --green-soft: #15301f; --red: #ff8a7f; --red-soft: #3a1e1b;
+  --amber: #f5b25d; --amber-line: #f2a649; --amber-soft: #3a2a12; --violet: #b3a5ff; --violet-soft: #2a2447;
+  --grey-line: #6f7c8d; --shadow: none; color-scheme: dark } }
 :root[data-theme="dark"] {
-  --bg: #0e1420; --surface: #162033; --ink: #e9eef7; --muted: #a4afc2; --line: #2a3650;
-  --blue: #78a9f2; --blue-ink: #0e1420; --blue-soft: #1c2c48; --orange: #f2a766; --orange-soft: #3a2714;
-  --bubble-me: #2f5fae; --bubble-me-ink: #ffffff; color-scheme: dark }
+  --page: #090d12; --bg: #0e131a; --surface: #161d27; --surface-2: #1a2330; --ink: #e7ecf2; --muted: #9ea9b8; --line: #283345;
+  --blue: #5b9cea; --btn: #2f6fbd; --btn-ink: #ffffff; --blue-text: #86b6f2; --blue-soft: #1a2a40;
+  --green: #5fcf8d; --green-line: #4cc27e; --green-soft: #15301f; --red: #ff8a7f; --red-soft: #3a1e1b;
+  --amber: #f5b25d; --amber-line: #f2a649; --amber-soft: #3a2a12; --violet: #b3a5ff; --violet-soft: #2a2447;
+  --grey-line: #6f7c8d; --shadow: none; color-scheme: dark }
 * { box-sizing: border-box }
 [hidden] { display: none !important }
-body { background: var(--bg); color: var(--ink); font: 16px/1.55 var(--body); padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 0 40px }
-.wrap { max-width: 760px; margin: 0 auto; display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px }
-.wrap > *, .view > *, .card > *, .bubble > * { min-width: 0 }
-header.top { display: flex; align-items: center; gap: 14px; padding-block: 22px 0; flex-wrap: wrap }
-.logo { width: 46px; height: 46px; border-radius: 14px; background: var(--blue); display: grid; place-items: center; flex: none }
-.logo svg { width: 28px; height: 28px }
-.brand { display: grid; gap: 2px; flex: 1; min-width: 200px }
-h1 { font: 700 28px/1.1 var(--display); margin: 0; letter-spacing: -0.01em }
-.tag { color: var(--muted); font-size: 15px }
-.pill { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; padding: 6px 10px; border-radius: 999px; background: var(--orange-soft); color: var(--orange); border: 1px solid transparent; text-decoration: none }
-h2 { font: 700 22px/1.2 var(--display); margin: 0; text-wrap: balance }
-h3 { font: 700 15px/1.3 var(--body); margin: 0 }
+html { -webkit-text-size-adjust: 100% }
+body { margin: 0; background: var(--page); color: var(--ink); font: 15px/1.5 var(--font); -webkit-font-smoothing: antialiased; font-feature-settings: "cv11" }
+.app { max-width: 560px; margin: 0 auto; min-height: 100vh; background: var(--bg); display: flex; flex-direction: column }
+@media (min-width: 600px) { .app { box-shadow: 0 0 0 1px var(--line) } }
 p { margin: 0 }
-.notice { font-size: 14px; color: var(--muted); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 14px }
-.notice b { color: var(--orange) }
-nav.tabs { display: flex; gap: 6px; flex-wrap: wrap; background: var(--surface); border: 1px solid var(--line); padding: 5px; border-radius: 14px }
-nav.tabs a { flex: 1 1 auto; text-align: center; padding: 9px 12px; border-radius: 10px; text-decoration: none; color: var(--muted); font-weight: 700; font-size: 15px }
-nav.tabs a[aria-current="page"] { background: var(--blue-soft); color: var(--blue) }
+h1, h2, h3 { margin: 0; text-wrap: balance }
+a { color: var(--blue-text) }
 a:focus-visible, button:focus-visible, textarea:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px }
-.view { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px }
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 18px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px }
-.gate { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--muted) }
-.dot { width: 9px; height: 9px; border-radius: 50%; flex: none; background: var(--muted) }
-.gate.on .dot { background: var(--blue) } .gate.off .dot { background: var(--orange) }
+.num { font-variant-numeric: tabular-nums }
+
+/* header */
+.head { position: sticky; top: 0; z-index: 10; background: var(--surface); border-bottom: 1px solid var(--line) }
+.bar { display: flex; align-items: center; gap: 10px; padding: 10px max(16px, env(safe-area-inset-left, 0px)) 6px max(16px, env(safe-area-inset-right, 0px)) }
+.mark { width: 34px; height: 34px; border-radius: 10px; background: var(--blue); color: #fff; display: grid; place-items: center; flex: none }
+.mark svg { width: 22px; height: 22px }
+.titles { min-width: 0; flex: 1 }
+h1 { font-size: 16px; font-weight: 700; letter-spacing: -0.01em }
+.sub { font-size: 12px; color: var(--muted) }
+.status { display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; background: var(--surface-2); color: var(--muted); white-space: nowrap; flex: none }
+.status .dot { width: 8px; height: 8px; border-radius: 50%; background: currentColor }
+.status.on { background: var(--green-soft); color: var(--green) }
+.status.off { background: var(--amber-soft); color: var(--amber) }
+.tabs { display: flex; gap: 2px; padding: 0 10px; overflow-x: auto; scrollbar-width: none }
+.tabs a { padding: 10px 10px 11px; color: var(--muted); font-size: 14px; font-weight: 600; text-decoration: none; border-bottom: 2px solid transparent; white-space: nowrap }
+.tabs a[aria-current="page"] { color: var(--blue-text); border-color: var(--blue) }
+body:not(.mentor) [data-mentor] { display: none }
+.notice { margin: 12px 16px 0; display: flex; gap: 8px; align-items: flex-start; background: var(--blue-soft); border-radius: 12px; padding: 9px 12px; font-size: 12.5px; line-height: 1.45 }
+.notice .ico { width: 18px; height: 18px; color: var(--blue-text); margin-top: 1px }
+
+/* views */
+.view { padding: 14px 16px 20px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; flex: 1 }
+.view > *, .bubble > *, .mini > *, .card > * { min-width: 0 }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 16px; display: grid; gap: 12px; box-shadow: var(--shadow) }
+.card h2 { font-size: 17px; font-weight: 700 }
+.lead { color: var(--muted); font-size: 14px }
+
+/* icons */
+.ico { display: inline-grid; place-items: center; flex: none }
+.ico svg { width: 100%; height: 100% }
+.ic { width: 38px; height: 38px; border-radius: 12px; display: grid; place-items: center; flex: none }
+.ic .ico { width: 20px; height: 20px }
+.t-blue { background: var(--blue-soft); color: var(--blue-text) } .t-green { background: var(--green-soft); color: var(--green) } .t-amber { background: var(--amber-soft); color: var(--amber) } .t-red { background: var(--red-soft); color: var(--red) } .t-violet { background: var(--violet-soft); color: var(--violet) }
 
 /* chat */
-.chat { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; display: grid; grid-template-columns: minmax(0, 1fr) }
-.thread { display: grid; gap: 14px; padding: 18px; min-height: 360px; align-content: start }
-.msg { display: flex; gap: 10px; align-items: flex-start }
+.thread { display: grid; gap: 14px; align-content: start }
+.msg { display: flex; gap: 8px; align-items: flex-start }
 .msg.me { justify-content: flex-end }
-.avatar { width: 32px; height: 32px; border-radius: 10px; background: var(--blue); display: grid; place-items: center; flex: none; margin-top: 2px }
-.avatar svg { width: 20px; height: 20px }
-.bubble { display: grid; gap: 10px; max-width: min(560px, 100%); background: var(--bg); border: 1px solid var(--line); border-radius: 4px 16px 16px 16px; padding: 12px 14px }
-.msg.me .bubble { background: var(--bubble-me); color: var(--bubble-me-ink); border-color: transparent; border-radius: 16px 4px 16px 16px }
+.avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--blue-soft); color: var(--blue-text); display: grid; place-items: center; flex: none; margin-top: 2px }
+.avatar .ico { width: 18px; height: 18px }
+.bubble { display: grid; gap: 10px; min-width: 0; flex: 1; background: var(--surface); border: 1px solid var(--line); border-radius: 4px 18px 18px 18px; padding: 12px 14px; box-shadow: var(--shadow) }
+.msg.me .bubble { flex: 0 1 auto; max-width: 85%; background: var(--btn); color: var(--btn-ink); border-color: transparent; border-radius: 18px 4px 18px 18px; box-shadow: none }
 .bubble .text { white-space: pre-wrap }
-.composer { border-top: 1px solid var(--line); padding: 12px; display: grid; gap: 10px }
-.composer .row { display: flex; gap: 8px; align-items: flex-end }
-textarea, input, select { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; width: 100% }
-textarea { min-height: 48px; max-height: 160px; resize: vertical }
-button { font: 700 15px var(--body); border-radius: 12px; padding: 10px 16px; border: 1px solid var(--blue); background: var(--blue); color: var(--blue-ink); cursor: pointer }
-button.ghost { background: transparent; color: var(--blue) }
-button:disabled { opacity: .55; cursor: not-allowed }
-.chips { display: flex; flex-wrap: wrap; gap: 8px }
-.chip { font: 700 14px var(--body); padding: 8px 12px; border-radius: 999px; background: var(--surface); color: var(--blue); border: 1px solid var(--blue); text-align: left }
-.chip:hover { background: var(--blue-soft) }
 .typing { display: inline-flex; gap: 4px; padding: 4px 2px }
 .typing i { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); display: block }
+
+/* welcome */
+.hero { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; overflow: hidden; box-shadow: var(--shadow) }
+.hero-art { background: var(--blue-soft); display: block; width: 100%; height: auto }
+.hero-body { padding: 14px 16px 16px; display: grid; gap: 12px }
+.hero h2 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em }
+.hero p { color: var(--muted); font-size: 14px }
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px }
+.tiles > :last-child:nth-child(odd) { grid-column: 1 / -1 }
+.tile { display: flex; align-items: center; gap: 10px; text-align: left; padding: 11px 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--ink); font: 600 14px/1.3 var(--font); cursor: pointer; min-height: 60px }
+.tile:hover { border-color: var(--blue) }
+.tile:disabled { opacity: .55; cursor: default }
+.tile .ic { width: 36px; height: 36px; border-radius: 11px }
+.facts-h { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--muted) }
+.facts-h .ico { width: 16px; height: 16px; color: var(--amber) }
+.facts { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(220px, 78%); gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; scrollbar-width: thin }
+.fact { scroll-snap-align: start; display: flex; gap: 10px; align-items: flex-start; background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; font-size: 13px; line-height: 1.45 }
+
+/* composer */
+.composer { position: sticky; bottom: 0; padding: 10px 0 max(12px, env(safe-area-inset-bottom, 0px)); background: linear-gradient(to bottom, transparent, var(--bg) 35%) }
+.composer .row { display: flex; align-items: flex-end; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: 24px; padding: 5px 5px 5px 16px; box-shadow: var(--shadow) }
+textarea, input, select { font: inherit; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 9px 11px; width: 100% }
+.composer textarea { border: 0; background: transparent; padding: 8px 0; min-height: 38px; max-height: 140px; resize: none; border-radius: 0 }
+.composer textarea:focus-visible { outline: none }
+.composer .row:focus-within { border-color: var(--blue) }
+button { font: 600 14px var(--font); border-radius: 12px; padding: 10px 16px; border: 1px solid var(--btn); background: var(--btn); color: var(--btn-ink); cursor: pointer }
+button.ghost { background: transparent; color: var(--blue-text); border-color: var(--line) }
+button:disabled { opacity: .55; cursor: default }
+.send { width: 40px; height: 40px; border-radius: 50%; padding: 0; display: grid; place-items: center; flex: none }
+.send .ico { width: 18px; height: 18px }
+.chips { display: flex; flex-wrap: wrap; gap: 8px }
+.chip { font: 600 13px var(--font); padding: 8px 12px; border-radius: 999px; background: var(--surface); color: var(--blue-text); border: 1px solid var(--line) }
+.chip:hover { border-color: var(--blue) }
+
+/* answer cards */
+.mini { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 12px; display: grid; gap: 10px }
+.mini h3 { font-size: 14px; font-weight: 700 }
+.row-h { display: flex; align-items: center; gap: 10px }
+.row-h .ic { width: 34px; height: 34px; border-radius: 10px }
+.row-h .ic .ico { width: 18px; height: 18px }
+.badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 9px; border-radius: 999px; font-size: 12px; font-weight: 700; white-space: nowrap }
+.b-amber { background: var(--amber-soft); color: var(--amber) } .b-green { background: var(--green-soft); color: var(--green) } .b-red { background: var(--red-soft); color: var(--red) } .b-blue { background: var(--blue-soft); color: var(--blue-text) }
+.stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px }
+.stat .k { font-size: 12px; color: var(--muted); font-weight: 500 }
+.stat .v { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; font-variant-numeric: tabular-nums }
+.stat.amber .v { color: var(--amber) } .stat.blue .v { color: var(--blue-text) } .stat.green .v { color: var(--green) } .stat.red .v { color: var(--red) }
+.chart { width: 100% }
+.chart svg { width: 100%; height: auto; display: block; overflow: visible }
+.chart text { font-family: var(--font); font-variant-numeric: tabular-nums }
+.c-grid { stroke: var(--line); stroke-width: 1 }
+.c-ax { fill: var(--muted); font-size: 12px }
+.c-put { stroke: var(--grey-line); stroke-width: 2; stroke-dasharray: 5 4; fill: none }
+.c-hist { stroke: var(--blue); stroke-width: 2.5; fill: none }
+.c-hist-a { fill: var(--blue); opacity: .08 }
+.c-need { stroke: var(--amber-line); stroke-width: 3; fill: none }
+.c-dot-need { fill: var(--amber-line) } .c-dot-up { fill: var(--green-line) } .c-dot-down { fill: var(--red) }
+.c-lb { font-size: 12px; fill: var(--muted) }
+.c-v { font-size: 13.5px; font-weight: 700 }
+.c-v.need { fill: var(--amber) } .c-v.hist { fill: var(--blue-text) } .c-v.put { fill: var(--muted) } .c-v.up { fill: var(--green) } .c-v.down { fill: var(--red) }
+.c-bar { fill: var(--blue); opacity: .75 }
+.c-avg { stroke: var(--amber-line); stroke-width: 2; stroke-dasharray: 4 3 }
+.c-avg-t { fill: var(--amber); font-size: 12px; font-weight: 700 }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 12px; color: var(--muted) }
+.legend span { display: inline-flex; align-items: center; gap: 6px }
+.sw { width: 16px; height: 0; border-top: 3px solid; display: inline-block }
+.sw.put { border-top: 2px dashed var(--grey-line) } .sw.hist { border-color: var(--blue) } .sw.need { border-color: var(--amber-line) }
+.swd { width: 10px; height: 10px; border-radius: 50%; display: inline-block }
+.note { font-size: 12.5px; color: var(--muted) }
+details.more { font-size: 13px }
+details.more summary { cursor: pointer; color: var(--blue-text); font-weight: 600 }
+.ledger { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 6px }
+.ledger td { padding: 6px 0; border-bottom: 1px dashed var(--line); vertical-align: top }
+.ledger tr:last-child td { border-bottom: 0 }
+.ledger td:first-child { color: var(--muted); width: 50% }
+.ledger td.v { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; padding-left: 12px; overflow-wrap: anywhere }
+
+/* calendar */
+.cal-h { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; font-weight: 700 }
+.cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; text-align: center }
+.cal .dow { font-size: 11px; color: var(--muted); font-weight: 600; padding-bottom: 2px }
+.cal .d { aspect-ratio: 1; display: grid; place-items: center; border-radius: 10px; font-size: 13px; font-variant-numeric: tabular-nums; background: var(--surface); border: 1px solid var(--line); position: relative }
+.cal .d.blank { background: transparent; border-color: transparent }
+.cal .d.today { font-weight: 800; text-decoration: underline; text-underline-offset: 3px }
+.cal .d.sal { border: 2px solid var(--green-line); background: var(--green-soft); color: var(--green); font-weight: 700 }
+.cal .d.chg { border: 2px dashed var(--amber-line); background: var(--amber-soft); color: var(--amber); font-weight: 700 }
+.cal .d.new { border: 2px dashed var(--blue); background: var(--blue-soft); color: var(--blue-text); font-weight: 700 }
+.cal .d.sip { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); font-weight: 700 }
+.cal .d.sip.sal { box-shadow: 0 0 0 3px var(--green-line) }
+.key { width: 14px; height: 14px; border-radius: 4px; display: inline-block; border: 2px solid }
+.key.sip { background: var(--btn); border-color: var(--btn) } .key.sal { background: var(--green-soft); border-color: var(--green-line) } .key.chg { background: var(--amber-soft); border: 2px dashed var(--amber-line) } .key.new { background: var(--blue-soft); border: 2px dashed var(--blue) }
+.dates { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px }
+.date { border: 1px solid var(--line); border-radius: 12px; padding: 9px 11px; display: grid; gap: 1px; background: var(--surface) }
+.date .k { font-size: 11.5px; color: var(--muted); font-weight: 600 }
+.date .d { font-size: 15px; font-weight: 700 }
+.date.hl { border-color: var(--blue); background: var(--blue-soft) }
+.opts { display: grid; gap: 8px }
+.opt { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: start; padding: 10px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface) }
+.opt .ic { width: 34px; height: 34px; border-radius: 10px }
+.opt .ic .ico { width: 18px; height: 18px }
+.opt b { font-size: 14px }
+.opt p { font-size: 13px; color: var(--muted) }
+.opt.top { border-color: var(--blue); background: var(--blue-soft) }
+
+/* fund guide */
+.risk { display: grid; gap: 4px; justify-items: center }
+.risk svg { width: 100%; max-width: 300px; height: auto }
+.r-lb { font-size: 13px; fill: var(--muted); font-weight: 600 }
+.guide { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px }
+.guide li { display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 10px; align-items: start; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px }
+.guide .ic { width: 34px; height: 34px; border-radius: 10px }
+.guide .ic .ico { width: 18px; height: 18px }
+.guide b { display: block; font-size: 14px }
+.guide span.t { font-size: 13px; color: var(--muted) }
+
+/* checks and links */
+.links { display: flex; flex-wrap: wrap; gap: 6px }
+.links a { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; font-weight: 600; color: var(--blue-text); background: var(--blue-soft); padding: 5px 10px; border-radius: 999px; text-decoration: none }
+.links a .ico { width: 12px; height: 12px }
+details.check { font-size: 12.5px }
+details.check summary { cursor: pointer; list-style: none; display: inline-flex; gap: 5px; align-items: center; font-weight: 600; padding: 3px 9px; border-radius: 999px }
+details.check summary::-webkit-details-marker { display: none }
+details.check summary .ico { width: 13px; height: 13px }
+details.check.ok summary { background: var(--green-soft); color: var(--green) }
+details.check.blocked summary { background: var(--amber-soft); color: var(--amber) }
+details.check.plain summary { background: var(--surface-2); color: var(--muted); border: 1px solid var(--line) }
+details.check p { color: var(--muted); padding-top: 6px }
+.foot { font-size: 12px; color: var(--muted) }
+
+/* forms */
+.form { display: grid; gap: 10px }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px }
+label.f { display: grid; gap: 4px; font-size: 12.5px; font-weight: 600; color: var(--muted) }
+
+/* mentor views */
+.small { font-size: 13px } .muted { color: var(--muted) }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px }
+table.cases { border-collapse: collapse; width: 100%; font-size: 12.5px; min-width: 560px }
+table.cases th, table.cases td { text-align: left; padding: 7px 9px; border-bottom: 1px solid var(--line); vertical-align: top }
+table.cases th { background: var(--surface-2) }
+.pass { color: var(--green); font-weight: 700 } .fail { color: var(--red); font-weight: 700 }
+.scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px }
+.score { padding: 10px; border: 1px solid var(--line); border-radius: 12px; display: grid; gap: 2px; background: var(--surface-2) }
+.score .n { font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums }
+.score .l { font-size: 12px; color: var(--muted) }
+.banner { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; font-size: 13px }
+.banner.ok { background: var(--green-soft) } .banner.blocked { background: var(--amber-soft) }
+.prose { gap: 10px }
+.prose h2 { margin-top: 6px }
+.prose ul { margin: 0; padding-left: 20px; display: grid; gap: 6px }
+.foot-wrap { padding: 0 16px 24px }
+
 @media (prefers-reduced-motion: no-preference) {
   .typing i { animation: blink 1.1s infinite } .typing i:nth-child(2) { animation-delay: .15s } .typing i:nth-child(3) { animation-delay: .3s }
   @keyframes blink { 0%, 80%, 100% { opacity: .25 } 40% { opacity: 1 } }
-  .msg { animation: pop .22s ease-out } @keyframes pop { from { transform: translateY(6px); opacity: .4 } to { transform: none; opacity: 1 } }
-  .meter .fill { transition: width .7s ease-out }
+  .msg, .hero { animation: pop .25s ease-out } @keyframes pop { from { transform: translateY(6px); opacity: .4 } to { transform: none; opacity: 1 } }
+  .c-draw { stroke-dasharray: 600; stroke-dashoffset: 600; animation: draw 1s ease-out forwards } @keyframes draw { to { stroke-dashoffset: 0 } }
 }
-
-/* answer cards */
-.mini { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 10px }
-.ledger { width: 100%; border-collapse: collapse; font-size: 15px }
-.ledger td { padding: 7px 0; border-bottom: 1px dashed var(--line); vertical-align: top }
-.ledger tr:last-child td { border-bottom: 0 }
-.ledger td:first-child { width: 55%; color: var(--muted) }
-.ledger td.v { text-align: right; font: 500 15px var(--mono); font-variant-numeric: tabular-nums; padding-left: 12px; overflow-wrap: anywhere }
-.ledger tr.hl td.v { color: var(--orange); font-weight: 600 }
-.meter { display: grid; gap: 8px }
-.meter .bar { display: grid; grid-template-columns: 120px minmax(0, 1fr) auto; gap: 10px; align-items: center; font-size: 14px }
-.meter .track { height: 12px; border-radius: 999px; background: var(--blue-soft); overflow: hidden }
-.meter .fill { height: 100%; border-radius: 999px; width: 0 }
-.meter .fill.need { background: var(--orange) } .meter .fill.hist { background: var(--blue) } .meter .fill.you { background: var(--blue) }
-.meter .val { font: 500 14px var(--mono); font-variant-numeric: tabular-nums; min-width: 64px; text-align: right }
-.verdict { font-weight: 700 }
-.dates { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 8px }
-.date { border: 1px solid var(--line); border-radius: 12px; padding: 10px; display: grid; gap: 2px; background: var(--bg) }
-.date .k { font-size: 12px; color: var(--muted); font-weight: 700; text-transform: uppercase; letter-spacing: .05em }
-.date .d { font: 700 17px var(--display) }
-.date.hl { border-color: var(--blue); background: var(--blue-soft) }
-.options { display: grid; gap: 8px }
-.opt { display: grid; gap: 4px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg) }
-.opt b { font-weight: 700 }
-.guide { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px }
-.guide li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 10px; align-items: start }
-.guide .tick { width: 26px; height: 26px; border-radius: 8px; background: var(--blue-soft); color: var(--blue); display: grid; place-items: center; font: 700 13px var(--mono) }
-.links { display: flex; flex-wrap: wrap; gap: 4px 14px; font-size: 14px }
-.links a { color: var(--blue); font-weight: 700 }
-details.check { font-size: 13px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface); padding: 6px 10px }
-details.check summary { cursor: pointer; font-weight: 700; list-style: none; display: flex; gap: 6px; align-items: center }
-details.check summary::-webkit-details-marker { display: none }
-details.check.ok summary { color: var(--blue) } details.check.blocked summary { color: var(--orange) } details.check.plain summary { color: var(--muted) }
-details.check p { color: var(--muted); padding-top: 4px }
-.form { display: grid; gap: 10px }
-.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px }
-label.f { display: grid; gap: 4px; font-size: 13px; font-weight: 700; color: var(--muted) }
-.small { font-size: 14px } .muted { color: var(--muted) }
-.foot { font-size: 13px; color: var(--muted) }
-.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 12px }
-table.cases { border-collapse: collapse; width: 100%; font-size: 13px; min-width: 620px }
-table.cases th, table.cases td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
-table.cases th { background: var(--bg) }
-.pass { color: var(--blue); font-weight: 700 } .fail { color: var(--orange); font-weight: 700 }
-.scores { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px }
-.score { padding: 12px; border: 1px solid var(--line); border-radius: 12px; display: grid; gap: 2px; background: var(--bg) }
-.score .n { font: 700 24px var(--mono); font-variant-numeric: tabular-nums }
-.score .l { font-size: 13px; color: var(--muted) }
-.banner { display: flex; gap: 10px; align-items: flex-start; padding: 10px 12px; border-radius: 12px; font-size: 14px }
-.banner.ok { background: var(--blue-soft) } .banner.blocked { background: var(--orange-soft) }
-.banner b { white-space: nowrap }
-.prose { display: grid; gap: 10px; max-width: 66ch }
-.prose ul { margin: 0; padding-left: 20px; display: grid; gap: 6px }
-@media (max-width: 480px) {
-  .meter .bar { grid-template-columns: 1fr auto } .meter .bar .track { grid-column: 1 / -1; order: 3 }
-  .thread { padding: 12px; gap: 12px } .msg .avatar { display: none } .bubble { max-width: 100%; padding: 12px }
-  .msg:not(.me) .bubble { border-radius: 16px } .mini { padding: 10px }
-  .ledger td:first-child { width: 48% } .dates { grid-template-columns: repeat(2, minmax(0, 1fr)) }
-  nav.tabs a { padding: 8px 6px; font-size: 14px } h1 { font-size: 25px }
-}
+@media (max-width: 380px) { .stats, .dates { grid-template-columns: minmax(0, 1fr) } .tiles { grid-template-columns: minmax(0, 1fr) } .tiles > :last-child:nth-child(odd) { grid-column: auto } }
 </style>
 </head>
 <body>
-
-<div class="wrap">
-  <header class="top">
-    <div class="logo" aria-hidden="true"><svg viewBox="0 0 28 28" fill="none"><path d="M5 20h5v-4h5v-4h5V8h3" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/><circle cx="23" cy="8" r="2.4" fill="#fff"/></svg></div>
-    <div class="brand"><h1>Your SIP Companion</h1><p class="tag">Your first year of SIPs, explained with your own numbers.</p></div>
-    <a class="pill" href="#how">Not investment advice</a>
+<div class="app">
+  <header class="head">
+    <div class="bar">
+      <span class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span>
+      <div class="titles"><h1>Your SIP Companion</h1><p class="sub">First-year SIP help · concept</p></div>
+      <span class="status" id="gateLine"><span class="dot"></span><span id="gateText">Checking…</span></span>
+    </div>
+    <nav class="tabs" aria-label="Sections">
+      <a href="#chat" data-view="chat">Chat</a>
+      <a href="#basic" data-view="basic">Without AI</a>
+      <a href="#quality" data-view="quality" data-mentor>Quality check</a>
+      <a href="#how" data-view="how" data-mentor>How it works</a>
+    </nav>
   </header>
-  <p class="notice"><b>Not investment advice.</b> A concept built for a product case study on Zerodha Coin. It isn't made by or linked to Zerodha, can't see any account, and never tells you what to buy, sell, switch or stop. For adults (18+). Please don't type personal details such as PAN, account or phone numbers.</p>
-
-  <nav class="tabs" aria-label="Sections">
-    <a href="#chat" data-view="chat">Chat</a>
-    <a href="#basic" data-view="basic">Without AI</a>
-    <a href="#quality" data-view="quality">Quality check</a>
-    <a href="#how" data-view="how">How it works</a>
-  </nav>
+  <p class="notice"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg></span><span><b>Not investment advice.</b> A case-study concept, not made by or linked to Zerodha, and it can't see any account. Replies come from Google's Gemini, so please don't type PAN, account or phone numbers.</span></p>
 
   <section class="view" id="view-chat">
-    <div class="gate" id="gateLine"><span class="dot"></span><span id="gateText">Checking whether AI answers are available…</span></div>
-    <div class="chat">
-      <div class="thread" id="thread" aria-live="polite"></div>
-      <div class="composer">
-        <div class="chips" id="starters"></div>
-        <div class="row">
-          <textarea id="box" rows="1" aria-label="Your message" placeholder="Tell me what's going on with your SIP…"></textarea>
-          <button id="send" type="button">Send</button>
-        </div>
+    <div class="thread" id="thread" aria-live="polite"></div>
+    <div class="composer">
+      <div class="row">
+        <textarea id="box" rows="1" aria-label="Your message" placeholder="Ask about your SIP…"></textarea>
+        <button id="send" class="send" type="button" aria-label="Send"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13"/><path d="M22 2 15 22l-4-9-9-4 20-7z"/></svg></span></button>
       </div>
     </div>
   </section>
 
   <section class="view" id="view-basic" hidden>
-    <p class="muted">The same help as plain forms, with no AI. The chat falls back to these when AI answers are off. They work, but you have to know which form fits and turn your situation into exact fields yourself.</p>
+    <p class="lead">The same help as plain forms, with no AI. You pick the form that fits and fill in the fields yourself.</p>
     <div class="card">
       <h2>Will my SIP get there?</h2>
       <div class="grid2">
@@ -229,6 +330,7 @@ table.cases th { background: var(--bg) }
         <li>10 attempts to get fund picks, advice, predictions or pressure out of it</li>
       </ul>
       <p class="muted small">Every answer, in the chat too, also passes a rule check on the server before it's shown.</p>
+      <p class="muted small" id="gateFull"></p>
       <div id="reportBox"></div>
     </div>
     <div class="card">
@@ -251,7 +353,7 @@ table.cases th { background: var(--bg) }
         <li><b>It finds the right help.</b> One box handles expectations, value checks, failed payments and choosing a fund. It also spots requests it must refuse, such as telling you to stop or switch.</li>
         <li><b>It explains your own numbers in plain words</b>, using only figures the page worked out.</li>
       </ul>
-      <p>The AI never does the maths. Required returns, what your SIP has earned a year, and every date are worked out by code, from today's date and the dates you give. The AI only explains them.</p>
+      <p>The AI never does the maths. Required returns, what your SIP has earned a year, every chart and every date are worked out by code, from today's date and the dates you give. The AI only explains them.</p>
       <h2>What a non-AI version misses</h2>
       <p>The Without AI tab is that version. It works, but you must already know which form fits and turn your own words into exact fields. It can't read "my card had a problem and I missed the email", and it can't tell a question it should refuse from one it can help with. Help pages and SIP calculators like these already exist, and the people we interviewed still stopped.</p>
       <h2>Why it won't name funds</h2>
@@ -274,7 +376,7 @@ table.cases th { background: var(--bg) }
     </div>
   </section>
 
-  <p class="foot">Concept for a product case study. Not investment advice. Mutual fund investments are subject to market risks, and past returns don't predict future returns. For a personal recommendation, speak to a SEBI-registered investment adviser.</p>
+  <div class="foot-wrap"><p class="foot">Concept for a product case study, for adults (18+). Not investment advice. Mutual fund investments are subject to market risks, and past returns don't predict future returns. For a personal recommendation, speak to a SEBI-registered investment adviser.</p></div>
 </div>
 
 <script>
@@ -327,17 +429,20 @@ function returnsFacts(x) {
   if (invested && value) {
     f.worth_today = inr(value); f.gain = inr(value - invested); f.gain_pct_of_amount_put_in = pct((value - invested) / invested * 100);
     if (months && months >= 2) { const a = annualPct(solveMonthly(value / invested, months)); f.annualised_return_pct = pct(a); f._annual = a; }
+    if (monthly && months && months >= 2) f._val = { monthly, months, invested, value };
   }
   const e = x.expectation || {}; const h = Math.round(num(e.horizon_months) || 12);
   if (monthly && e.kind === "multiple" && num(e.value) && e.value > 1) {
     const putIn = monthly * h, need = annualPct(solveMonthly(e.value, h));
     f.expectation = { described_as: `${e.value}× in ${h} months`, would_put_in: inr(putIn), target_value: inr(putIn * e.value), annual_return_needed_pct: pct(need) }; f._need = need;
+    f._exp = { monthly, h, needI: solveMonthly(e.value, h) };
   } else if (monthly && e.kind === "annual_pct" && num(e.value)) {
     const i = Math.pow(1 + e.value / 100, 1 / 12) - 1;
     f.expectation = { described_as: `${e.value}% a year, ${h} months`, would_put_in: inr(monthly * h), value_at_that_rate: inr(monthly * fvFactor(i, h)), annual_return_needed_pct: pct(e.value) }; f._need = e.value;
+    f._exp = { monthly, h, needI: i };
   } else if (monthly && e.kind === "target_amount" && num(e.value)) {
     const putIn = monthly * h; f.expectation = { described_as: `${inr(e.value)} in ${h} months`, would_put_in: inr(putIn), target_value: inr(e.value) };
-    if (e.value > putIn) { const need = annualPct(solveMonthly(e.value / putIn, h)); f.expectation.annual_return_needed_pct = pct(need); f._need = need; }
+    if (e.value > putIn) { const need = annualPct(solveMonthly(e.value / putIn, h)); f.expectation.annual_return_needed_pct = pct(need); f._need = need; f._exp = { monthly, h, needI: solveMonthly(e.value / putIn, h) }; }
   }
   return f;
 }
@@ -359,20 +464,20 @@ function paymentFacts(x) {
   const sipDay = num(x.sip_day) ? Math.min(Math.round(x.sip_day), 31) : null, salDay = num(x.salary_day) ? Math.min(Math.round(x.salary_day), 31) : null;
   if (sipDay) {
     const next = nextOnDay(sipDay, t); f.sip_day = sipDay; f.next_instalment = fmtDate(next);
-    f._next = next; const now = new Date(); const lastChange = addDays(next, -2); const pauseBy = addDays(next, -1); pauseBy.setHours(17, 30);
-    if (lastChange >= t) f.last_day_to_change_it = fmtDate(lastChange);
+    f._next = next; f._cal = { next, lastChange: null, salaryDay: null, newDate: null }; const now = new Date(); const lastChange = addDays(next, -2); const pauseBy = addDays(next, -1); pauseBy.setHours(17, 30);
+    if (lastChange >= t) { f.last_day_to_change_it = fmtDate(lastChange); f._cal.lastChange = lastChange; }
     else { const next2 = nextOnDay(sipDay, addDays(next, 1)); f.too_late_to_change = fmtDate(next); f.change_applies_from = fmtDate(next2); f.last_day_to_change_it = fmtDate(addDays(next2, -2)); }
     if (now <= pauseBy) f.pause_before = fmtDate(pauseBy) + ", 5:30 PM";
     else { const next2 = nextOnDay(sipDay, addDays(next, 1)); const p2 = addDays(next2, -1); f.pause_before = fmtDate(p2) + ", 5:30 PM"; }
   }
-  if (salDay) { f.salary_day = salDay; f.next_salary = fmtDate(nextOnDay(salDay, t)); }
+  if (salDay) { f.salary_day = salDay; f.next_salary = fmtDate(nextOnDay(salDay, t)); if (f._cal) f._cal.salaryDay = salDay; }
   if (sipDay && salDay) {
     const gap = daysAfterSalary(f._next, salDay); f.days_from_salary_to_sip = gap;
     const tight = gap < 2 || gap > 20; const newDay = salDay >= 27 ? 1 : salDay + 2;
     if (tight && newDay !== sipDay) {
       const nextNew = nextOnDay(newDay, addDays(t, 3));
       const why = gap === 0 ? "Your salary and your SIP fall on the same day, and Coin only counts the balance at the start of that day." : gap < 2 ? "Your SIP falls just 1 day after your salary, so a salary that comes a day late means a failed instalment." : `Your SIP falls ${gap} days after your salary, near the end of the month's money.`;
-      f.suggested_sip_day = newDay; f.first_instalment_on_new_date = fmtDate(nextNew);
+      f.suggested_sip_day = newDay; f.first_instalment_on_new_date = fmtDate(nextNew); f._cal.newDate = nextNew;
       f.options.unshift({ id: "move_date", label: `Move your SIP to the ${ordinal(newDay)}`, detail: `${why} On the ${ordinal(newDay)} your salary has already landed. The first instalment on the new date would be ${fmtDate(nextNew)}. Change it in Coin at least 2 days before an instalment.` });
     } else if (!tight) f.date_note = `Your SIP already falls ${gap} days after your salary, so the date is unlikely to be the cause.`;
   }
@@ -467,88 +572,231 @@ function ledger(rows) { const t = el("table", { class: "ledger" }); for (const [
 function meterRow(label, value, max, cls) { const w = Math.max(2, Math.min(100, Math.max(value, 0) / max * 100)); return el("div", { class: "bar" }, el("span", { text: label }), el("div", { class: "track" }, el("div", { class: `fill ${cls}`, "data-w": String(w) })), el("span", { class: "val", text: pct(value) })); }
 function animateFills(root) { requestAnimationFrame(() => root.querySelectorAll(".fill[data-w]").forEach(f => { f.style.width = f.getAttribute("data-w") + "%"; })); }
 
-function returnsCard(f) {
-  const box = el("div", { class: "mini" });
-  if (f._need != null) {
-    const max = Math.max(f._need, REF.niftyTriPct, 20) * 1.05;
-    const gap = f._need / REF.niftyTriPct;
-    box.append(el("h3", { text: "Reality check" }));
-    const m = el("div", { class: "meter" }, meterRow("You'd need", f._need, max, "need"), meterRow("Nifty 50 history", REF.niftyTriPct, max, "hist"));
-    box.append(m, el("p", { class: "verdict small", text: gap >= 2 ? `That's about ${Math.round(gap * 10) / 10}× the Nifty 50's long-run average.` : gap > 1.1 ? "That's above the Nifty 50's long-run average." : "That's within the range of the Nifty 50's long-run average." }));
+// ---------- Visuals: icons, charts, calendar, riskometer (all drawn from the page's own maths) ----------
+const ICONS = {
+  sprout: '<path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/>',
+  target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+  flat: '<path d="M3 3v18h18"/><path d="M7 14c2-1 3 1 5 0s3-1 5 0 2 0 3-1"/>',
+  calx: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m10 14 4 4M14 14l-4 4"/>',
+  calmove: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M9 16h6M13 14l2 2-2 2"/>',
+  calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/>',
+  compass: '<circle cx="12" cy="12" r="10"/><path d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12z"/>',
+  wallet: '<path d="M19 7V5a2 2 0 0 0-2-2H5a2 2 0 0 0 0 4h15a1 1 0 0 1 1 1v4h-3a2 2 0 0 0 0 4h3a1 1 0 0 0 1-1v-2"/><path d="M3 5v14a2 2 0 0 0 2 2h15a1 1 0 0 0 1-1v-4"/>',
+  bank: '<path d="M3 21h18M3 10h18M5 6l7-3 7 3M6 10v8M10 10v8M14 10v8M18 10v8"/>',
+  alert: '<path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><path d="M12 9v4M12 17h.01"/>',
+  help: '<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/>',
+  rupee: '<path d="M6 3h12M6 8h12M6 13l8.5 8M6 13h3c6.67 0 6.67-10 0-10"/>',
+  skip: '<path d="m5 4 10 8-10 8V4zM19 5v14"/>',
+  pause: '<rect x="6" y="4" width="4" height="16" rx="1"/><rect x="14" y="4" width="4" height="16" rx="1"/>',
+  umbrella: '<path d="M22 12a10.06 10.06 1 0 0-20 0Z"/><path d="M12 12v8a2 2 0 0 0 4 0M12 2v1"/>',
+  hourglass: '<path d="M5 22h14M5 2h14M17 22v-4.17a2 2 0 0 0-.59-1.42L12 12l-4.41 4.41A2 2 0 0 0 7 17.83V22M7 2v4.17a2 2 0 0 0 .59 1.42L12 12l4.41-4.41A2 2 0 0 0 17 6.17V2"/>',
+  home: '<path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/>',
+  receipt: '<path d="M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8M12 17.5v-11"/>',
+  gauge: '<path d="m12 14 4-4"/><path d="M3.34 19a10 10 0 1 1 17.32 0"/>',
+  tag: '<path d="M12.59 2.59A2 2 0 0 0 11.17 2H4a2 2 0 0 0-2 2v7.17a2 2 0 0 0 .59 1.42l8.7 8.7a2.43 2.43 0 0 0 3.42 0l6.58-6.58a2.43 2.43 0 0 0 0-3.42z"/><circle cx="7.5" cy="7.5" r="1"/>',
+  chart: '<path d="M3 3v18h18"/><path d="m18.7 8-5.1 5.2-2.8-2.7L7 14.3"/>',
+  lock: '<rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>',
+  info: '<circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/>',
+  check: '<path d="M20 6 9 17l-5-5"/>',
+  external: '<path d="M15 3h6v6M10 14 21 3M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+  bulb: '<path d="M9 18h6M10 22h4M15.09 14c.18-.98.65-1.74 1.41-2.5A4.65 4.65 0 0 0 18 8 6 6 0 0 0 6 8c0 1 .23 2.23 1.5 3.5A4.61 4.61 0 0 1 8.91 14"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
+};
+function icon(name) { return el("span", { class: "ico", "aria-hidden": "true", html: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ""}</svg>` }); }
+function tint(name, cls) { return el("span", { class: `ic ${cls}` }, icon(name)); }
+function stat(k, v, cls) { return el("div", { class: `stat ${cls || ""}` }, el("span", { class: "k", text: k }), el("span", { class: "v", text: v })); }
+function figure(markup, label) { return el("div", { class: "chart", role: "img", "aria-label": label, html: markup }); }
+const fmtN = n => (Math.round(n * 10) / 10).toLocaleString("en-IN");
+const signedInr = n => (n < 0 ? "−" : "+") + inr(Math.abs(n));
+const HIST_I = Math.pow(1 + REF.niftyTriPct / 100, 1 / 12) - 1;
+function sipPath(monthly, i, h) { const v = [0]; let s = 0; for (let k = 1; k <= h; k++) { s = (s + monthly) * (1 + i); v.push(s); } return v; }
+
+// Line chart: x = months, y = rupees; series end in direct labels so colour is never the only cue.
+function lineChart(o) {
+  const W = 320, H = 200, L = 4, R = 96, T = 14, B = 24, pw = W - L - R, ph = H - T - B;
+  const all = o.series.flatMap(s => s.values).concat(o.dot ? [o.dot.value] : []);
+  const yMax = (Math.max(...all) || 1) * 1.06;
+  const x = k => L + k / o.h * pw, y = v => T + ph - v / yMax * ph;
+  let g = `<line class="c-grid" x1="${L}" x2="${L + pw}" y1="${y(0)}" y2="${y(0)}"/><line class="c-grid" x1="${L}" x2="${L + pw}" y1="${y(yMax / 2).toFixed(1)}" y2="${y(yMax / 2).toFixed(1)}" stroke-dasharray="2 4"/>`;
+  g += `<text class="c-ax" x="${L}" y="${H - 6}">${o.xStart}</text><text class="c-ax" x="${L + pw}" y="${H - 6}" text-anchor="end">${o.xEnd}</text>`;
+  const ends = [];
+  for (const s of o.series) {
+    const d = s.values.map((v, k) => `${k ? "L" : "M"}${x(k).toFixed(1)} ${y(v).toFixed(1)}`).join(" ");
+    if (s.area) g += `<path class="c-hist-a" d="${d} L${x(o.h).toFixed(1)} ${y(0)} L${x(0)} ${y(0)} Z"/>`;
+    g += `<path class="${s.cls} c-draw" d="${d}"/>`;
+    const ev = s.values[o.h]; ends.push({ y: y(ev), label: s.label, val: inr(ev), vcls: s.vcls });
   }
-  if (f._annual != null) {
-    const max = Math.max(Math.abs(f._annual), REF.niftyTriPct, 20) * 1.05;
-    box.append(el("h3", { text: "What your SIP has done" }), el("div", { class: "meter" }, meterRow("Yours, a year", f._annual, max, "you"), meterRow("Nifty 50 history", REF.niftyTriPct, max, "hist")));
+  if (o.dot) { g += `<circle class="${o.dot.cls}" cx="${x(o.h).toFixed(1)}" cy="${y(o.dot.value).toFixed(1)}" r="6"/>`; ends.push({ y: y(o.dot.value), label: o.dot.label, val: inr(o.dot.value), vcls: o.dot.vcls }); }
+  ends.sort((a, b) => a.y - b.y);
+  for (let i = 1; i < ends.length; i++) if (ends[i].y - ends[i - 1].y < 32) ends[i].y = ends[i - 1].y + 32;
+  const over = ends.length ? ends[ends.length - 1].y - (T + ph) : 0; if (over > 0) ends.forEach(e => e.y -= over);
+  for (const e of ends) g += `<text class="c-lb" x="${L + pw + 10}" y="${(e.y - 4).toFixed(1)}">${e.label}</text><text class="c-v ${e.vcls}" x="${L + pw + 10}" y="${(e.y + 12).toFixed(1)}">${e.val}</text>`;
+  return figure(`<svg viewBox="0 0 ${W} ${H}">${g}</svg>`, o.aria);
+}
+// How long each instalment has been (or will be) invested: the reason year-one SIPs look slow.
+function stairChart(n) {
+  const W = 320, H = 116, L = 2, R = 2, T = 20, B = 22, pw = W - L - R, ph = H - T - B, bw = pw / n, gap = Math.min(2, bw * 0.25);
+  let g = "";
+  for (let k = 1; k <= n; k++) { const hgt = (n - k + 1) / n * ph; g += `<rect class="c-bar" x="${(L + (k - 1) * bw + gap / 2).toFixed(1)}" y="${(T + ph - hgt).toFixed(1)}" width="${Math.max(0.8, bw - gap).toFixed(1)}" height="${hgt.toFixed(1)}" rx="${Math.min(3, bw / 3).toFixed(1)}"/>`; }
+  const avg = (n + 1) / 2, ay = T + ph - avg / n * ph;
+  g += `<line class="c-avg" x1="${L}" x2="${L + pw}" y1="${ay.toFixed(1)}" y2="${ay.toFixed(1)}"/><text class="c-avg-t" x="${L + pw}" y="${(ay - 5).toFixed(1)}" text-anchor="end">average ≈ ${fmtN(avg)} months</text>`;
+  g += `<text class="c-ax" x="${L}" y="${H - 4}">1st instalment: ${n} months</text><text class="c-ax" x="${L + pw}" y="${H - 4}" text-anchor="end">latest: 1 month</text>`;
+  return figure(`<svg viewBox="0 0 ${W} ${H}">${g}</svg>`, `Bar chart: the first instalment is invested for ${n} months and each later one for less, down to 1 month; on average about ${fmtN(avg)} months.`);
+}
+function stairBlock(n, future) {
+  if (!n || n < 2 || n > 120) return null;
+  const avg = fmtN((n + 1) / 2);
+  return el("div", { class: "mini" }, el("div", { class: "row-h" }, tint("hourglass", "t-blue"), el("h3", { text: "Why the first year looks slow" })), stairChart(n),
+    el("p", { class: "note", text: future ? `Over ${n} months, each instalment gets less time to grow: the first gets ${n} months, the last just 1. On average your money is invested for about ${avg} months.` : `Your first instalment has been invested for ${n} months, your latest for about 1. On average that's about ${avg} months, so the SIP hasn't had long to grow yet.` }));
+}
+function monthCal(c) {
+  const ref = c.next, yr = ref.getFullYear(), mo = ref.getMonth(), days = new Date(yr, mo + 1, 0).getDate(), first = (new Date(yr, mo, 1).getDay() + 6) % 7, t = today();
+  const inMonth = d => d && d.getFullYear() === yr && d.getMonth() === mo;
+  const sal = c.salaryDay ? Math.min(c.salaryDay, days) : null, chg = inMonth(c.lastChange) ? c.lastChange.getDate() : null, nw = inMonth(c.newDate) ? c.newDate.getDate() : null, td = inMonth(t) ? t.getDate() : null;
+  const grid = el("div", { class: "cal" });
+  for (const d of ["M", "T", "W", "T", "F", "S", "S"]) grid.append(el("span", { class: "dow", text: d }));
+  for (let i = 0; i < first; i++) grid.append(el("span", { class: "d blank" }));
+  for (let d = 1; d <= days; d++) { const cl = ["d"]; if (d === ref.getDate()) cl.push("sip"); if (d === sal) cl.push("sal"); if (d === chg) cl.push("chg"); if (d === nw) cl.push("new"); if (d === td) cl.push("today"); grid.append(el("span", { class: cl.join(" "), text: String(d) })); }
+  const month = ref.toLocaleDateString("en-IN", { month: "long", year: "numeric" });
+  const legend = el("div", { class: "legend" }, el("span", {}, el("i", { class: "key sip" }), "SIP date"));
+  if (sal) legend.append(el("span", {}, el("i", { class: "key sal" }), "Salary"));
+  if (chg) legend.append(el("span", {}, el("i", { class: "key chg" }), "Last day to change"));
+  if (nw) legend.append(el("span", {}, el("i", { class: "key new" }), "Suggested new date"));
+  const label = `Calendar for ${month}: SIP on the ${ordinal(ref.getDate())}` + (sal ? `, salary on the ${ordinal(sal)}` : "") + (chg ? `, last day to change on the ${ordinal(chg)}` : "") + (nw ? `, suggested new date the ${ordinal(nw)}` : "") + ".";
+  return el("div", { class: "mini", role: "group", "aria-label": label }, el("div", { class: "cal-h" }, el("span", { text: month }), el("span", { class: "foot", text: "Your next instalment" })), grid, legend);
+}
+function riskometer() {
+  const cx = 150, cy = 128, ro = 112, ri = 70, cols = ["#2e9d57", "#8cc152", "#e9c13b", "#f0943f", "#e2602f", "#b93a2e"];
+  const pt = (r, a) => `${(cx + r * Math.cos(a)).toFixed(1)} ${(cy - r * Math.sin(a)).toFixed(1)}`;
+  let g = "";
+  for (let i = 0; i < 6; i++) { const a0 = Math.PI * (1 - i / 6), a1 = Math.PI * (1 - (i + 1) / 6); g += `<path d="M${pt(ro, a0)} A${ro} ${ro} 0 0 1 ${pt(ro, a1)} L${pt(ri, a1)} A${ri} ${ri} 0 0 0 ${pt(ri, a0)} Z" fill="${cols[i]}" style="stroke:var(--surface-2)" stroke-width="3"/>`; }
+  g += `<text class="r-lb" x="${cx - ro}" y="${cy + 16}">Low</text><text class="r-lb" x="${cx + ro}" y="${cy + 16}" text-anchor="end">Very High</text><text class="r-lb" x="${cx}" y="${cy - 10}" text-anchor="middle">RISKOMETER</text>`;
+  return el("div", { class: "risk" }, figure(`<svg viewBox="0 0 300 148">${g}</svg>`, "A riskometer: six bands from Low to Very High. Every mutual fund shows where it sits."), el("p", { class: "note", text: "Every mutual fund shows a riskometer like this. Check which band it points to before you invest." }));
+}
+function heroArt() {
+  return el("div", { "aria-hidden": "true", html: `<svg class="hero-art" viewBox="0 0 340 128">
+    <path d="M150 98 C190 92 205 70 238 62 S292 34 318 22" fill="none" stroke="#387ed1" stroke-width="3" stroke-dasharray="2 7" stroke-linecap="round"/>
+    <circle cx="238" cy="62" r="5" fill="#387ed1"/><circle cx="318" cy="22" r="6" fill="#387ed1"/>
+    <rect x="218" y="78" width="78" height="40" rx="10" fill="#ffffff" stroke="#c9d8ee"/><rect x="218" y="78" width="78" height="12" rx="6" fill="#387ed1"/>
+    <rect x="228" y="96" width="10" height="8" rx="2" fill="#dbe7f8"/><rect x="244" y="96" width="10" height="8" rx="2" fill="#dbe7f8"/><rect x="260" y="96" width="10" height="8" rx="2" fill="#2e9d57"/><rect x="276" y="96" width="10" height="8" rx="2" fill="#dbe7f8"/>
+    <rect x="228" y="107" width="10" height="7" rx="2" fill="#dbe7f8"/><rect x="244" y="107" width="10" height="7" rx="2" fill="#dbe7f8"/>
+    <ellipse cx="92" cy="114" rx="40" ry="9" fill="#e0a12e"/><rect x="52" y="102" width="80" height="12" fill="#e0a12e"/><ellipse cx="92" cy="102" rx="40" ry="9" fill="#f2b544"/>
+    <rect x="58" y="90" width="68" height="12" fill="#e0a12e"/><ellipse cx="92" cy="90" rx="34" ry="8" fill="#f6c45e"/>
+    <rect x="64" y="79" width="56" height="11" fill="#e0a12e"/><ellipse cx="92" cy="79" rx="28" ry="7" fill="#f8cf75"/>
+    <path d="M92 78 C92 62 96 50 100 40" fill="none" stroke="#2e9d57" stroke-width="4" stroke-linecap="round"/>
+    <path d="M97 52 C82 52 74 44 72 30 C88 30 96 38 97 52Z" fill="#4cc27e"/>
+    <path d="M99 44 C104 30 116 22 132 22 C130 38 118 46 99 44Z" fill="#2e9d57"/>
+    <circle cx="160" cy="34" r="3" fill="#f2b544"/><circle cx="176" cy="20" r="2" fill="#f2b544"/><circle cx="148" cy="16" r="2.5" fill="#387ed1" opacity=".5"/>
+  </svg>` });
+}
+const GOAL_ICONS = { emergency: ["umbrella", "t-red"], short: ["hourglass", "t-amber"], medium: ["home", "t-blue"], long: ["sprout", "t-green"], tax: ["receipt", "t-violet"] };
+function tiles(list) { const g = el("div", { class: "tiles" }); for (const [label, ic, tc, fn] of list) g.append(el("button", { class: "tile", type: "button", onclick: () => { if (busy) return; fn(label, g); } }, tint(ic, tc), el("span", { text: label }))); return g; }
+
+function returnsCard(f) {
+  const parts = [];
+  if (f._exp && f._need != null) {
+    const e = f._exp, gap = f._need / REF.niftyTriPct;
+    const badge = gap >= 2 ? ["b-amber", `${fmtN(gap)}× history`] : gap > 1.1 ? ["b-amber", "Above history"] : ["b-green", "Within history"];
+    const put = Array.from({ length: e.h + 1 }, (_, k) => e.monthly * k), hist = sipPath(e.monthly, HIST_I, e.h), need = sipPath(e.monthly, e.needI, e.h);
+    parts.push(el("div", { class: "mini" },
+      el("div", { class: "row-h" }, tint("target", "t-amber"), el("h3", { text: "Reality check" }), el("span", { class: `badge ${badge[0]}`, style: "margin-left:auto", text: badge[1] })),
+      el("div", { class: "stats" }, stat("Your target needs, a year", pct(f._need), "amber"), stat("Nifty 50 history, a year", `${REF.niftyTriPct}%`, "blue")),
+      lineChart({ h: e.h, xStart: "Start", xEnd: `Month ${e.h}`, aria: `Chart over ${e.h} months: you'd put in ${inr(put[e.h])}; at the Nifty 50's past pace that would be about ${inr(hist[e.h])}; your target is ${inr(need[e.h])}.`,
+        series: [{ cls: "c-put", label: "Put in", vcls: "put", values: put }, { cls: "c-hist", label: "Past pace", vcls: "hist", values: hist, area: true }, { cls: "c-need", label: "Your target", vcls: "need", values: need }] }),
+      el("div", { class: "legend" }, el("span", {}, el("i", { class: "sw put" }), "Money you put in"), el("span", {}, el("i", { class: "sw hist" }), `Growing at ${REF.niftyTriPct}% a year`), el("span", {}, el("i", { class: "sw need" }), "The pace your target needs"))));
+    parts.push(stairBlock(e.h, true));
+  }
+  if (f._val) {
+    const v = f._val, diff = v.value - v.invested, up = diff >= 0, gp = diff / v.invested * 100;
+    const hist = sipPath(v.monthly, HIST_I, v.months), put = Array.from({ length: v.months + 1 }, (_, k) => v.monthly * k);
+    const box = el("div", { class: "mini" },
+      el("div", { class: "row-h" }, tint("chart", "t-blue"), el("h3", { text: "Your SIP so far" }), el("span", { class: `badge ${up ? "b-green" : "b-red"}`, style: "margin-left:auto", text: `${signedInr(diff)} · ${up ? "+" : "−"}${fmtN(Math.abs(gp))}%` })),
+      el("div", { class: "stats" }, stat("Put in", inr(v.invested)), stat("Worth today", inr(v.value), up ? "green" : "red")));
+    if (f._annual != null) box.append(el("div", { class: "stats" }, stat("About, a year", pct(f._annual), up ? "green" : "red"), stat("Nifty 50 history, a year", `${REF.niftyTriPct}%`, "blue")));
+    box.append(lineChart({ h: v.months, xStart: "First instalment", xEnd: "Today", aria: `Chart over ${v.months} months: you put in ${inr(v.invested)}; it's worth ${inr(v.value)} today; at the Nifty 50's past pace it would be about ${inr(hist[v.months])}.`,
+      series: [{ cls: "c-put", label: "Put in", vcls: "put", values: put }, { cls: "c-hist", label: "Past pace", vcls: "hist", values: hist, area: true }], dot: { value: v.value, cls: up ? "c-dot-up" : "c-dot-down", label: "Yours today", vcls: up ? "up" : "down" } }),
+      el("div", { class: "legend" }, el("span", {}, el("i", { class: "sw put" }), "Money you put in"), el("span", {}, el("i", { class: "sw hist" }), `Growing at ${REF.niftyTriPct}% a year`), el("span", {}, el("i", { class: "swd", style: `background:var(${up ? "--green-line" : "--red"})` }), "Worth today")),
+      el("p", { class: "note", text: "Only today's value is known, so the chart doesn't draw your SIP's path in between." }));
+    parts.push(box, stairBlock(v.months, false));
   }
   const rows = [];
   if (f.monthly_amount) rows.push(["Monthly SIP", f.monthly_amount]);
   if (f.months_paid) rows.push(["Months paid", f.months_paid]);
   if (f.put_in_so_far) rows.push(["Put in so far", f.put_in_so_far]);
-  if (f.worth_today) rows.push(["Worth today", f.worth_today], ["Difference", `${f.gain} (${f.gain_pct_of_amount_put_in})`]);
-  if (f.annualised_return_pct) rows.push(["About, per year", f.annualised_return_pct, true]);
-  if (f.expectation) { rows.push(["What you expect", f.expectation.described_as], ["You'd put in", f.expectation.would_put_in]); if (f.expectation.target_value) rows.push(["Target value", f.expectation.target_value]); if (f.expectation.value_at_that_rate) rows.push(["Value at that rate", f.expectation.value_at_that_rate]); if (f.expectation.annual_return_needed_pct) rows.push(["Growth needed a year", f.expectation.annual_return_needed_pct, true]); }
-  if (rows.length) box.append(ledger(rows));
-  if (!rows.length && f._need == null) return null;
-  box.append(el("p", { class: "foot", text: `Nifty 50: ${REF.niftyTriPct}% a year total return since ${REF.since}, higher in ${REF.positiveYears} of ${REF.years} calendar years (NSE Indices, data to 27 February 2026). History, not a forecast.` }));
-  return box;
+  if (f.worth_today) rows.push(["Worth today", f.worth_today]);
+  if (f.annualised_return_pct) rows.push(["About, per year", f.annualised_return_pct]);
+  if (f.expectation) { rows.push(["What you expect", f.expectation.described_as], ["You'd put in", f.expectation.would_put_in]); if (f.expectation.target_value) rows.push(["Target value", f.expectation.target_value]); if (f.expectation.value_at_that_rate) rows.push(["Value at that rate", f.expectation.value_at_that_rate]); if (f.expectation.annual_return_needed_pct) rows.push(["Growth needed a year", f.expectation.annual_return_needed_pct]); }
+  if (!parts.length && !rows.length) return null;
+  const wrap = el("div", { style: "display:grid;gap:10px" }, ...parts.filter(Boolean));
+  if (rows.length) wrap.append(el("details", { class: "more" }, el("summary", { text: "See all the numbers" }), ledger(rows)));
+  wrap.append(el("p", { class: "foot", text: `Nifty 50: ${REF.niftyTriPct}% a year total return since ${REF.since}, higher in ${REF.positiveYears} of ${REF.years} calendar years (NSE Indices, data to 27 February 2026). History, not a forecast.` }));
+  return wrap;
 }
 function paymentCard(f) {
-  const box = el("div", { class: "mini" });
-  const cause = { short_balance: "Balance short on the SIP date", mandate_or_bank: "Mandate, bank or card problem", app_or_payment_error: "App or payment system error", unknown: "Not clear yet" }[f.likely_cause];
-  box.append(el("p", { class: "small" }, el("b", { text: "Likely cause: " }), cause));
+  const C = { short_balance: ["wallet", "t-amber", "Balance short on the SIP date"], mandate_or_bank: ["bank", "t-blue", "Mandate, bank or card problem"], app_or_payment_error: ["alert", "t-red", "App or payment system error"], unknown: ["help", "t-violet", "Cause not clear yet"] }[f.likely_cause] || ["help", "t-violet", "Cause not clear yet"];
+  const wrap = el("div", { style: "display:grid;gap:10px" });
+  wrap.append(el("div", { class: "mini" }, el("div", { class: "row-h" }, tint(C[0], C[1]), el("div", {}, el("span", { class: "foot", text: "Likely cause" }), el("h3", { text: C[2] })))));
+  if (f._cal) wrap.append(monthCal(f._cal));
   if (f.next_instalment) {
     const ds = el("div", { class: "dates" });
     ds.append(el("div", { class: "date" }, el("span", { class: "k", text: "Next instalment" }), el("span", { class: "d", text: f.next_instalment })));
     ds.append(el("div", { class: "date" }, el("span", { class: "k", text: f.too_late_to_change ? "Last day to change the next one" : "Last day to change it" }), el("span", { class: "d", text: f.last_day_to_change_it })));
     if (f.next_salary) ds.append(el("div", { class: "date" }, el("span", { class: "k", text: "Next salary" }), el("span", { class: "d", text: f.next_salary })));
     if (f.first_instalment_on_new_date) ds.append(el("div", { class: "date hl" }, el("span", { class: "k", text: `If moved to the ${ordinal(f.suggested_sip_day)}` }), el("span", { class: "d", text: f.first_instalment_on_new_date })));
-    box.append(ds, el("p", { class: "foot", text: `Worked out from today, ${f.today}. To pause instead, do it before ${f.pause_before}.` }));
-    if (f.too_late_to_change) box.append(el("p", { class: "small", text: `It's too late to change the instalment on ${f.too_late_to_change}, so it runs as planned. A change made now applies from ${f.change_applies_from}.` }));
-    if (f.date_note) box.append(el("p", { class: "small", text: f.date_note }));
+    wrap.append(ds, el("p", { class: "foot", text: `Worked out from today, ${f.today}. To pause instead, do it before ${f.pause_before}.` }));
+    if (f.too_late_to_change) wrap.append(el("p", { class: "note", text: `It's too late to change the instalment on ${f.too_late_to_change}, so it runs as planned. A change made now applies from ${f.change_applies_from}.` }));
+    if (f.date_note) wrap.append(el("p", { class: "note", text: f.date_note }));
   }
-  const opts = el("div", { class: "options" }); for (const o of f.options) opts.append(el("div", { class: "opt" }, el("b", { text: o.label }), el("span", { class: "small muted", text: o.detail })));
-  box.append(el("h3", { text: "Your choices" }), opts);
-  return box;
+  const OI = { move_date: ["calmove", "t-blue"], pay_now: ["rupee", "t-green"], skip: ["skip", "t-amber"], pause: ["pause", "t-violet"] };
+  const opts = el("div", { class: "opts" });
+  for (const o of f.options) { const ic = OI[o.id] || ["info", "t-blue"]; opts.append(el("div", { class: `opt${o.id === "move_date" ? " top" : ""}` }, tint(ic[0], ic[1]), el("div", {}, el("b", { text: o.label }), el("p", { text: o.detail })))); }
+  wrap.append(el("h3", { style: "font-size:14px", text: "Your choices" }), opts);
+  return wrap;
 }
 function fundCard(f) {
   if (!f._checklist) return null;
-  const box = el("div", { class: "mini" });
-  box.append(el("h3", { text: `For: ${f.goal}` }), el("p", { class: "small", text: f._goal_note }));
-  const ul = el("ul", { class: "guide" }); f._checklist.forEach((c, i) => ul.append(el("li", {}, el("span", { class: "tick", text: String(i + 1) }), el("span", { class: "small", text: c })))); box.append(el("h3", { text: "What to check in any fund" }), ul);
-  box.append(el("p", { class: "foot", text: "Coin's fund pages show each fund's risk label and expense ratio. For a pick made for your situation, speak to a SEBI-registered investment adviser." }));
-  return box;
+  const gk = Object.keys(GOALS).find(k => GOALS[k].label === f.goal), gi = GOAL_ICONS[gk] || ["sprout", "t-green"];
+  const heads = [["gauge", "t-red", "Risk label"], ["tag", "t-green", "Cost"], ["chart", "t-blue", "History"], ["lock", "t-amber", "Exit loads and lock-ins"]];
+  const ul = el("ul", { class: "guide" });
+  f._checklist.forEach((c, i) => { const h = heads[i] || ["check", "t-blue", ""]; ul.append(el("li", {}, tint(h[0], h[1]), el("div", {}, el("b", { text: h[2] }), el("span", { class: "t", text: c })))); });
+  return el("div", { style: "display:grid;gap:10px" },
+    el("div", { class: "mini" }, el("div", { class: "row-h" }, tint(gi[0], gi[1]), el("div", {}, el("span", { class: "foot", text: "Your goal" }), el("h3", { text: f.goal }))), el("p", { class: "note", text: f._goal_note })),
+    el("div", { class: "mini" }, riskometer()),
+    el("h3", { style: "font-size:14px", text: "What to check in any fund" }), ul,
+    el("p", { class: "foot", text: "Coin's fund pages show each fund's risk label and expense ratio. For a pick made for your situation, speak to a SEBI-registered investment adviser." }));
 }
-function cardFor(route, f) { if (route === "returns_check") return returnsCard(f); if (route === "payment_help") return paymentCard(f); if (route === "fund_choice") return fundCard(f); return null; }
-function linksFor(route) { const ids = ROUTE_LINKS[route] || []; if (!ids.length) return null; const b = el("div", { class: "links" }); for (const id of ids) b.append(el("a", { href: SRC[id].url, target: "_blank", rel: "noopener", text: SRC[id].label })); return b; }
+function linksFor(route) { const ids = ROUTE_LINKS[route] || []; if (!ids.length) return null; const b = el("div", { class: "links" }); for (const id of ids) b.append(el("a", { href: SRC[id].url, target: "_blank", rel: "noopener" }, SRC[id].label, icon("external"))); return b; }
 function checkNote(kind, issues, confidence) {
   const d = el("details", { class: `check ${kind === "busy" ? "plain" : kind}` });
-  if (kind === "busy") { d.append(el("summary", { text: "Pre-written answer (AI busy)" }), el("p", { text: "The free AI service has hit its limit for the moment, so this reply comes from the page's own rules. Try again in a minute." })); return d; }
-  if (kind === "plain") { d.append(el("summary", { text: "Pre-written answer" }), el("p", { text: "This reply comes from the page's own rules. No AI was used." })); return d; }
-  if (kind === "blocked") { d.append(el("summary", { text: "Quality check stepped in" }), el("p", { text: `The AI's reply was stopped (${issues.join("; ")}), so you're seeing the pre-written answer.` })); return d; }
-  d.append(el("summary", { text: "✓ Checked before showing" }), el("p", { text: `No fund names or advice, no promises or pressure, and every number comes from the page's own maths.${confidence === "low" ? " The AI said it isn't sure, so check the official links." : ""}` })); return d;
+  if (kind === "busy") { d.append(el("summary", {}, icon("info"), "Pre-written answer (AI busy)"), el("p", { text: "The free AI service has hit its limit for the moment, so this reply comes from the page's own rules. Try again in a minute." })); return d; }
+  if (kind === "plain") { d.append(el("summary", {}, icon("info"), "Pre-written answer"), el("p", { text: "This reply comes from the page's own rules. No AI was used." })); return d; }
+  if (kind === "blocked") { d.append(el("summary", {}, icon("shield"), "Quality check stepped in"), el("p", { text: `The AI's reply was stopped (${issues.join("; ")}), so you're seeing the pre-written answer.` })); return d; }
+  d.append(el("summary", {}, icon("check"), "Checked before showing"), el("p", { text: `No fund names or advice, no promises or pressure, and every number comes from the page's own maths.${confidence === "low" ? " The AI said it isn't sure, so check the official links." : ""}` })); return d;
 }
+
+function cardFor(route, f) { if (route === "returns_check") return returnsCard(f); if (route === "payment_help") return paymentCard(f); if (route === "fund_choice") return fundCard(f); return null; }
 
 // ---------- Chat ----------
 const thread = () => $("#thread");
 const memory = {};
 function scrollEnd() { const t = thread(); const last = t.lastElementChild; if (last && last.scrollIntoView) last.scrollIntoView({ block: "nearest", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); }
 function addMe(text) { thread().append(el("div", { class: "msg me" }, el("div", { class: "bubble" }, el("div", { class: "text", text })))); scrollEnd(); }
-function addBot(parts) { const b = el("div", { class: "bubble" }, ...parts.filter(Boolean)); const m = el("div", { class: "msg" }, el("div", { class: "avatar", html: AVATAR }), b); thread().append(m); animateFills(m); scrollEnd(); return b; }
+function addBot(parts) { const b = el("div", { class: "bubble" }, ...parts.filter(Boolean)); const m = el("div", { class: "msg" }, el("div", { class: "avatar" }, icon("sprout")), b); thread().append(m); animateFills(m); scrollEnd(); return b; }
 function addTyping() { return addBot([el("span", { class: "typing", "aria-label": "Thinking" }, el("i"), el("i"), el("i"))]).parentElement; }
 function chips(list) { const c = el("div", { class: "chips" }); for (const [label, fn] of list) c.append(el("button", { class: "chip", type: "button", text: label, onclick: () => { c.querySelectorAll("button").forEach(b => b.disabled = true); fn(label); } })); return c; }
 const STARTERS = [
-  ["Will my SIP double?", () => userSays("I expect my SIP to double. Will it?")],
-  ["Why is my SIP flat?", () => userSays("My SIP looks flat. It's worth about the same as I put in.")],
-  ["My instalment failed", () => userSays("My SIP instalment failed this month.")],
-  ["Move my SIP date", () => userSays("I want to move my SIP date so it comes after my salary.")],
-  ["Which fund should I pick?", () => userSays("Which fund should I pick?")],
+  ["Will my SIP double?", "target", "t-amber", () => userSays("I expect my SIP to double. Will it?")],
+  ["Why is my SIP flat?", "flat", "t-blue", () => userSays("My SIP looks flat. It's worth about the same as I put in.")],
+  ["My instalment failed", "calx", "t-red", () => userSays("My SIP instalment failed this month.")],
+  ["Move my SIP date", "calmove", "t-green", () => userSays("I want to move my SIP date so it comes after my salary.")],
+  ["Which fund should I pick?", "compass", "t-violet", () => userSays("Which fund should I pick?")],
 ];
 function followUps(route, f) {
   if (route === "returns_check" && !f.put_in_so_far && !f.expectation) return returnsForm();
   if (route === "returns_check" && f.monthly_amount && !f.expectation && !f.worth_today) return returnsForm();
   if (route === "payment_help" && !f.next_instalment) return datesForm(f.likely_cause);
-  if (route === "fund_choice" && !f.goal) return chips(Object.entries(GOALS).map(([k, g]) => [g.label, (label) => { addMe(label); respond("fund_choice", { goal: k }, label); }]));
-  return chips([["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else can I help with?" }), chips(STARTERS)]); }]]);
+  if (route === "fund_choice" && !f.goal) return tiles(Object.entries(GOALS).map(([k, g]) => [g.label, GOAL_ICONS[k][0], GOAL_ICONS[k][1], (label, grid) => { grid.querySelectorAll("button").forEach(b => b.disabled = true); addMe(label); respond("fund_choice", { goal: k }, label); }]));
+  return chips([["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else can I help with?" }), tiles(STARTERS)]); }]]);
 }
 function returnsForm() {
   const id = "rf" + Math.random().toString(36).slice(2, 7);
@@ -640,16 +888,28 @@ async function userSays(text) {
 function clean(x) { const o = {}; for (const k of ["monthly_amount", "months_invested", "invested_total", "current_value", "sip_day", "salary_day"]) if (num(x[k])) o[k] = x[k]; if (x.expectation && x.expectation.kind && x.expectation.kind !== "none") o.expectation = x.expectation; return o; }
 
 async function setupChat() {
-  const h = await getHealth(); const g = $("#gateLine"), gt = $("#gateText");
+  const h = await getHealth(); const g = $("#gateLine"), gt = $("#gateText"), full = $("#gateFull");
   if (h && h.model) { const m = $("#modelName"); if (m) m.textContent = h.model; }
-  if (!gateOpen) { g.className = "gate off"; gt.textContent = `AI replies are off until ${PROMPT_VERSION} passes its quality check. You'll get pre-written replies for now.`; }
-  else if (!h || !h.configured) { g.className = "gate off"; gt.textContent = "AI replies aren't connected on this site right now, so you'll get pre-written replies. Every check still works."; }
-  else if (h.model !== EVAL_REPORT.model || h.prompt_version !== PROMPT_VERSION) { g.className = "gate off"; gt.textContent = `AI replies are off: this site now runs ${h.model} (${h.prompt_version}), but the quality check was passed on ${EVAL_REPORT.model}. Re-run the check to switch them on.`; }
-  else { aiReady = true; g.className = "gate on"; gt.textContent = `AI replies on: ${PROMPT_VERSION} on ${h.model} passed its quality check (${EVAL_REPORT.summary.passed} of ${EVAL_REPORT.summary.total} cases, ${EVAL_REPORT.date}).`; }
+  let on = false, short = "Pre-written replies", msg;
+  if (!gateOpen) msg = `AI replies are off until ${PROMPT_VERSION} passes its quality check. You'll get pre-written replies for now.`;
+  else if (!h || !h.configured) msg = "AI replies aren't connected on this site right now, so you'll get pre-written replies. Every check still works.";
+  else if (h.model !== EVAL_REPORT.model || h.prompt_version !== PROMPT_VERSION) { short = "AI off"; msg = `AI replies are off: this site now runs ${h.model} (${h.prompt_version}), but the quality check was passed on ${EVAL_REPORT.model}. Re-run the check to switch them on.`; }
+  else { on = true; aiReady = true; short = "AI on · checked"; msg = `AI replies on: ${PROMPT_VERSION} on ${h.model} passed its quality check (${EVAL_REPORT.summary.passed} of ${EVAL_REPORT.summary.total} cases, ${EVAL_REPORT.date}).`; }
+  g.className = `status ${on ? "on" : "off"}`; gt.textContent = short; g.title = msg; if (full) full.textContent = msg;
 }
 function greet() {
-  addBot([el("div", { class: "text", text: "Hi! I'm your SIP companion. I can check whether what you expect from your SIP adds up, explain what it's worth, help when an instalment fails, and show you how to choose a fund. What would you like to look at?" })]);
-  const s = $("#starters"); for (const [label, fn] of STARTERS) s.append(el("button", { class: "chip", type: "button", text: label, onclick: fn }));
+  const facts = [
+    ["calendar", "t-blue", "In a SIP's first year, most of your money has been invested for only a few months, so its value often sits close to what you put in."],
+    ["alert", "t-red", "A failed instalment isn't retried. Coin takes it from your bank's opening balance on the SIP date."],
+    ["tag", "t-green", "A fund's direct plan pays no distributor commission, so its expense ratio is lower than the regular plan's."],
+    ["chart", "t-amber", `The Nifty 50 ended higher in ${REF.positiveYears} of ${REF.years} calendar years. Down years happen too.`],
+  ];
+  thread().append(el("div", { class: "hero" }, heroArt(), el("div", { class: "hero-body" },
+    el("h2", { text: "Hi! I'm your SIP companion" }),
+    el("p", { text: "I check what you expect from your SIP against real numbers, explain what it's worth, help when an instalment fails, and show you how to choose a fund." }),
+    tiles(STARTERS),
+    el("div", { class: "facts-h" }, icon("bulb"), "Did you know?"),
+    el("div", { class: "facts" }, ...facts.map(([ic, tc, txt]) => el("div", { class: "fact" }, tint(ic, tc), el("span", { text: txt })))))));
 }
 
 // ---------- Without-AI tab ----------
@@ -731,15 +991,18 @@ async function runEval() {
 async function copyResults() { const a = $("#copyArea"); try { await navigator.clipboard.writeText(a.value); $("#runStatus").textContent = "Results copied. Paste them into the chat with Claude."; } catch { a.focus(); a.select(); $("#runStatus").textContent = "Copy didn't work here, so the text is selected: press Ctrl+C or Cmd+C."; } }
 
 // ---------- Tabs and start ----------
-function show() { const v = (location.hash || "#chat").slice(1); const views = ["chat", "basic", "quality", "how"]; const cur = views.includes(v) ? v : "chat"; for (const n of views) { $("#view-" + n).hidden = n !== cur; const a = document.querySelector(`nav.tabs a[data-view="${n}"]`); if (n === cur) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); } }
+// Testers see Chat and Without AI; mentors open the page with ?view=mentor to also see the quality check and how it works.
+const MENTOR = (() => { try { return new URLSearchParams(location.search).get("view") === "mentor"; } catch { return false; } })();
+if (MENTOR) document.body.classList.add("mentor");
+function show() { const views = MENTOR ? ["chat", "basic", "quality", "how"] : ["chat", "basic"]; const v = (location.hash || "#chat").slice(1); const cur = views.includes(v) ? v : "chat"; for (const n of ["chat", "basic", "quality", "how"]) { $("#view-" + n).hidden = n !== cur; const a = document.querySelector(`nav.tabs a[data-view="${n}"]`); if (n === cur) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); } }
 window.addEventListener("hashchange", show);
 $("#send").addEventListener("click", () => userSays($("#box").value));
+$("#box").addEventListener("input", e => { const t = e.target; t.style.height = "auto"; t.style.height = Math.min(t.scrollHeight, 140) + "px"; });
 $("#box").addEventListener("keydown", e => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); userSays($("#box").value); } });
 $("#eBtn").addEventListener("click", basicExpectation); $("#vBtn").addEventListener("click", basicValue); $("#pBtn").addEventListener("click", basicPayment); $("#gBtn").addEventListener("click", basicGuide);
 $("#runBtn").addEventListener("click", runEval); $("#runStop").addEventListener("click", () => runCtl && runCtl.abort()); $("#copyBtn").addEventListener("click", copyResults);
 (() => { const t = today(); $("#pSip").value = isoDate(addDays(t, 3)); $("#pSalary").value = isoDate(addDays(t, 5)); $("#pSip").min = isoDate(t); })();
 show(); renderReport(); greet(); setupChat(); basicExpectation(); basicValue(); basicPayment(); basicGuide();
 </script>
-
 </body>
 </html>
