@@ -326,19 +326,62 @@ details.check summary { font-size: 12px }
 .tile .ic { width: 34px; height: 34px; border-radius: 10px } .tile .ic .ico { width: 18px; height: 18px }
 .calc .grid2 { grid-template-columns: repeat(2, minmax(0, 1fr)) }
 .msg { scroll-margin-top: 64px }
+
+/* v6.1: Coin-style app bar, banner illustrations, colour */
+.appbar { display: flex; align-items: center; gap: 10px }
+.appbar b { flex: 1; font-size: 17px; font-weight: 700; letter-spacing: -0.01em }
+.mark-sm { width: 32px; height: 32px; border-radius: 10px; background: var(--blue); color: #fff; display: grid; place-items: center; flex: none; text-decoration: none }
+.mark-sm .ico { width: 19px; height: 19px }
+.pill { font-size: 12px; font-weight: 600; color: var(--blue-text); background: var(--blue-soft); border-radius: 999px; padding: 4px 10px; white-space: nowrap }
+.banner { background: var(--blue-soft); border-radius: 20px; padding: 14px 16px 18px; display: grid; gap: 6px }
+.banner h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.02em }
+.banner .tagline { max-width: none }
+.hero-art { display: block; width: 100%; height: auto; max-height: 130px }
+.concept { display: grid; gap: 8px }
+.sipcard { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 14px; display: grid; gap: 12px; box-shadow: var(--shadow) }
+.sc-top { display: grid; grid-template-columns: 38px minmax(0, 1fr) auto; gap: 12px; align-items: center }
+.sc-t b { display: block; font-size: 15px } .sc-t span { display: block; font-size: 13px; color: var(--muted) }
+.sc-status { font-size: 12px; font-weight: 600; color: var(--green); background: var(--green-soft); border-radius: 999px; padding: 3px 9px }
+.sc-dots { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 5px }
+.sc-dots i { height: 8px; border-radius: 999px; background: var(--line) } .sc-dots i.on { background: var(--green-line) }
+.sc-meta { display: flex; justify-content: space-between; gap: 10px; font-size: 13px; color: var(--muted) }
+.sc-meta b { color: var(--ink) }
+.sc-ask { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 11px; border-radius: 12px; border: 1.5px solid var(--blue); background: var(--surface); color: var(--blue-text); font: 600 14.5px/1.2 var(--font); cursor: pointer }
+.sc-ask:hover { background: var(--blue-soft) }
+.sc-ask .ico { width: 18px; height: 18px }
+.cap { font-size: 12.5px; color: var(--muted) }
+.chat-head .mark-sm { width: 34px; height: 34px }
+.hello { background: var(--blue-soft); border-radius: 18px; padding: 12px 14px 14px; display: grid; gap: 4px }
+.hello .hero-art { max-height: 104px }
+.hello h2 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em }
+.hello p { font-size: 14px; color: var(--muted) }
+.visual .row-h { display: flex; align-items: center; gap: 10px }
+.visual .row-h .headline { flex: 1 }
+.row-h > div > .foot, .row-h > div > b { display: block }
 </style>
 </head>
 <body>
 <div class="app">
   <section id="view-start" class="start" aria-labelledby="startTitle">
-    <div class="start-top">
-      <span class="mark"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span></span>
-      <h1 id="startTitle">My SIP Buddy</h1>
+    <div class="appbar"><span class="mark-sm"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span></span><b>My SIP Buddy</b><span class="pill">Case-study concept</span></div>
+    <div class="banner">
+      <div id="startHero"></div>
+      <h1 id="startTitle">Hi! I'm your SIP Buddy</h1>
       <p class="tagline">Your helper for the first year of a SIP on Coin.</p>
     </div>
     <div class="who"><b>Who it's for</b><p>You started a SIP in the last year, or you're about to. Investing for years already? Some answers may feel basic.</p></div>
     <p class="sec">What you can ask</p>
     <div class="asks" id="asks"></div>
+    <p class="sec">Where it would live</p>
+    <div class="concept">
+      <div class="sipcard">
+        <div class="sc-top"><span class="ic t-blue"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span></span><div class="sc-t"><b>Monthly SIP</b><span>₹3,000 on the 5th of every month</span></div><span class="sc-status">Active</span></div>
+        <div class="sc-dots" role="img" aria-label="9 of 12 instalments paid in year one"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+        <div class="sc-meta"><span>9 of 12 paid in year one</span><span>Next: <b id="cNext">5th</b></span></div>
+        <button class="sc-ask" type="button" id="conceptAsk"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span>Ask SIP Buddy about this SIP</button>
+      </div>
+      <p class="cap">Example only. A button like this on Coin's SIP screen would open the chat with that SIP's details filled in. Try it.</p>
+    </div>
     <div class="good">
       <h2>Good to know</h2>
       <ul>
@@ -355,7 +398,7 @@ details.check summary { font-size: 12px }
 
   <section id="view-chat" hidden>
     <header class="chat-head">
-      <a class="iconbtn" href="#start" aria-label="About My SIP Buddy"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span></a>
+      <a class="mark-sm" href="#start" aria-label="About My SIP Buddy"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span></a>
       <div class="t" id="gateLine"><b>My SIP Buddy</b><span><i class="dot"></i><span id="gateText">Checking…</span></span></div>
       <a class="linkbtn" href="#basic">Without AI</a>
     </header>
@@ -398,7 +441,7 @@ details.check summary { font-size: 12px }
     <div class="view" style="padding-top:14px;display:grid;gap:14px">
     <div class="card">
       <h2>The quality gate</h2>
-      <p class="muted small">AI answers switch on only when this prompt version has passed a 46-case test set on the same model the site uses. The set has three parts:</p>
+      <p class="muted small">AI answers switch on only when this prompt version has passed a 46-case test set on the same model the site uses. The set has four parts:</p>
       <ul class="small muted" style="margin:0;padding-left:20px;display:grid;gap:4px">
         <li>the 20 hand-labelled posts from the AI Evidence Log</li>
         <li>8 situations from our interviews</li>
@@ -1083,10 +1126,15 @@ function explainCard(topic) {
   if (topic === "fund_types") return el("div", { style: "display:grid;gap:12px" }, v, fundChoiceCard({}));
   return v;
 }
+function withArt(node, ic, tc) {
+  const h = node && node.querySelector ? node.querySelector(".visual > .headline") : null;
+  if (h) { const r = el("div", { class: "row-h" }, tint(ic, tc)); h.replaceWith(r); r.append(h); }
+  return node;
+}
 function cardFor(route, f) {
-  if (route === "returns_check") return returnsCard(f);
-  if (route === "payment_help") return paymentCard(f);
-  if (route === "fund_choice") return fundChoiceCard(f);
+  if (route === "returns_check") return f.expectation ? withArt(returnsCard(f), "target", "t-amber") : withArt(returnsCard(f), "flat", "t-blue");
+  if (route === "payment_help") return withArt(paymentCard(f), "calx", "t-red");
+  if (route === "fund_choice") return withArt(fundChoiceCard(f), "compass", "t-violet");
   if ((route === "explain" || route === "decline_advice") && f._topic) return explainCard(f._topic);
   return null;
 }
@@ -1100,8 +1148,13 @@ const ASKS = [
   ["compass", "How do fund types compare?", "Large, mid and small cap, ELSS and more", "How do the main fund types compare?"],
   ["bulb", "What does a term mean?", "Expense ratio, NAV, exit load, switching", "What is an expense ratio?"],
 ];
+const ASK_TINT = { target: "t-amber", flat: "t-blue", calx: "t-red", compass: "t-violet", bulb: "t-green", tag: "t-green" };
 function suggestions(list) { const g = el("div", { class: "suggest" }); for (const [ic, title, , q] of list) g.append(el("button", { class: "sug", type: "button", onclick: () => { if (!busy) userSays(q); } }, icon(ic), el("span", { text: title }))); return g; }
-function greet() { thread().append(el("div", { class: "empty" }, el("h2", { text: "What would you like to check?" }), suggestions(ASKS))); }
+function greet() {
+  thread().append(el("div", { class: "empty" },
+    el("div", { class: "hello" }, heroArt(), el("h2", { text: "Hi! What would you like to check?" }), el("p", { text: "Tap one, or type your own question below." })),
+    tiles(ASKS.map(([ic, title, , q]) => [title, ic, ASK_TINT[ic] || "t-blue", () => { if (!busy) userSays(q); }]))));
+}
 const TERM_CHIPS = [["Expense ratio", "expense_ratio"], ["NAV", "nav"], ["Exit load", "exit_load"], ["Direct vs regular", "direct_vs_regular"], ["Switching funds", "switching"], ["Tax-saving options", "tax_options"]];
 function followUps(route, f) {
   if (route === "returns_check" && !f.put_in_so_far && !f.expectation) return returnsForm();
@@ -1169,15 +1222,18 @@ async function setupChat() {
 let chatReady = null;
 function initStart() {
   const box = $("#asks");
-  for (const [ic, title, ex, q] of ASKS) box.append(el("button", { class: "ask", type: "button", onclick: async () => { location.hash = "#chat"; await chatReady; userSays(q); } }, tint(ic, "t-blue"), el("span", {}, el("b", { text: title }), el("span", { class: "ex", text: ex })), el("span", { class: "chev", html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' })));
+  for (const [ic, title, ex, q] of ASKS) box.append(el("button", { class: "ask", type: "button", onclick: async () => { location.hash = "#chat"; await chatReady; userSays(q); } }, tint(ic, ASK_TINT[ic] || "t-blue"), el("span", {}, el("b", { text: title }), el("span", { class: "ex", text: ex })), el("span", { class: "chev", html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' })));
   $("#startBtn").addEventListener("click", () => { location.hash = "#chat"; });
+  $("#startHero").append(heroArt());
+  $("#cNext").textContent = fmtDate(nextOnDay(5));
+  $("#conceptAsk").addEventListener("click", async () => { location.hash = "#chat"; await chatReady; userSays("My SIP is ₹3,000 a month for 9 months and it's worth ₹27,300 now. Why does it look flat?"); });
 }
 const TOOLS = [["goal", "target", "Is my goal realistic?", "Monthly amount, target and years"], ["value", "flat", "What is my SIP doing?", "Put in vs worth today"], ["pay", "calx", "My instalment failed", "Dates and choices"], ["types", "compass", "How do fund types compare?", "Index returns and what to check"], ["fees", "tag", "What do fees cost me?", "Compare two expense ratios"]];
 function initTools() {
   const list = $("#toolList");
   const open = k => { list.hidden = true; for (const [t] of TOOLS) $("#panel-" + t).hidden = t !== k; window.scrollTo(0, 0); };
   const back = () => { list.hidden = false; for (const [t] of TOOLS) $("#panel-" + t).hidden = true; };
-  for (const [k, ic, title, ex] of TOOLS) list.append(el("button", { class: "tool", type: "button", onclick: () => open(k) }, tint(ic, "t-blue"), el("span", {}, el("b", { text: title }), el("span", { class: "ex", text: ex })), el("span", { class: "chev", html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' })));
+  for (const [k, ic, title, ex] of TOOLS) list.append(el("button", { class: "tool", type: "button", onclick: () => open(k) }, tint(ic, ASK_TINT[ic] || "t-blue"), el("span", {}, el("b", { text: title }), el("span", { class: "ex", text: ex })), el("span", { class: "chev", html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' })));
   document.querySelectorAll("[data-back]").forEach(b => b.addEventListener("click", back));
   $("#fOut").append(feeCalc());
 }
