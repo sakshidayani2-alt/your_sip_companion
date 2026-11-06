@@ -6,6 +6,7 @@
 <meta name="description" content="A concept for a product case study: help for people in their first year of SIPs. Not investment advice.">
 <meta name="robots" content="noindex">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23387ed1'/%3E%3Cpath d='M11 23h10M14 23c5-2.3.7-5.8 2.7-9.1M13.6 13.4c1 .7 1.6 2 2.1 3.4-1.8.4-3.2.4-4.4-.3-1.1-.5-2.1-1.7-2.7-3.8 2.5-.5 4 0 5 .7zM17.8 10.6a6.4 6.4 0 0 0-1 3.6c1.7-.1 3-.5 3.9-1.3.9-.9 1.5-2.1 1.6-4.2-2.5.1-3.6.9-4.5 1.9z' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<meta name="color-scheme" content="light">
 <title>My SIP Buddy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,18 +21,7 @@
   --grey-line: #97a3b1; --shadow: 0 1px 2px rgba(16, 24, 40, .05), 0 2px 6px rgba(16, 24, 40, .06);
   --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-  --page: #090d12; --bg: #0e131a; --surface: #161d27; --surface-2: #1a2330; --ink: #e7ecf2; --muted: #9ea9b8; --line: #283345;
-  --blue: #5b9cea; --btn: #2f6fbd; --btn-ink: #ffffff; --blue-text: #86b6f2; --blue-soft: #1a2a40;
-  --green: #5fcf8d; --green-line: #4cc27e; --green-soft: #15301f; --red: #ff8a7f; --red-soft: #3a1e1b;
-  --amber: #f5b25d; --amber-line: #f2a649; --amber-soft: #3a2a12; --violet: #b3a5ff; --violet-soft: #2a2447;
-  --grey-line: #6f7c8d; --shadow: none; color-scheme: dark } }
-:root[data-theme="dark"] {
-  --page: #090d12; --bg: #0e131a; --surface: #161d27; --surface-2: #1a2330; --ink: #e7ecf2; --muted: #9ea9b8; --line: #283345;
-  --blue: #5b9cea; --btn: #2f6fbd; --btn-ink: #ffffff; --blue-text: #86b6f2; --blue-soft: #1a2a40;
-  --green: #5fcf8d; --green-line: #4cc27e; --green-soft: #15301f; --red: #ff8a7f; --red-soft: #3a1e1b;
-  --amber: #f5b25d; --amber-line: #f2a649; --amber-soft: #3a2a12; --violet: #b3a5ff; --violet-soft: #2a2447;
-  --grey-line: #6f7c8d; --shadow: none; color-scheme: dark }
+:root { color-scheme: light }
 * { box-sizing: border-box }
 [hidden] { display: none !important }
 html { -webkit-text-size-adjust: 100% }
@@ -358,6 +348,26 @@ details.check summary { font-size: 12px }
 .visual .row-h { display: flex; align-items: center; gap: 10px }
 .visual .row-h .headline { flex: 1 }
 .row-h > div > .foot, .row-h > div > b { display: block }
+
+/* v6.2: term list, market highlights */
+.tchips { display: flex; flex-wrap: wrap; gap: 8px }
+.tchip { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font: 500 14px/1.25 var(--font); cursor: pointer }
+.tchip:hover { border-color: var(--blue); color: var(--blue-text) }
+.termlist .sec { margin-top: 2px }
+.news { background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 12px 14px; display: grid; gap: 8px; box-shadow: var(--shadow) }
+.news-h { display: flex; align-items: center; gap: 8px }
+.news-h b { font-size: 14px; flex: 1 }
+.news-h .upd { font-size: 12px; color: var(--muted) }
+.news .live { width: 8px; height: 8px; border-radius: 50%; background: var(--green-line); box-shadow: 0 0 0 3px var(--green-soft) }
+@media (prefers-reduced-motion: no-preference) { .news .live { animation: pulse 2s ease-in-out infinite } @keyframes pulse { 50% { box-shadow: 0 0 0 5px var(--green-soft) } } }
+.news ul { list-style: none; margin: 0; padding: 0; display: grid }
+.news li + li { border-top: 1px solid var(--line) }
+.news a { display: grid; gap: 2px; padding: 8px 0; color: var(--ink); text-decoration: none }
+.news a:hover .nt { color: var(--blue-text) }
+.news .nt { font-size: 14px; font-weight: 600; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden }
+.news .ns { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 6px }
+.news .new { font-style: normal; font-size: 11px; font-weight: 700; color: var(--green); background: var(--green-soft); border-radius: 999px; padding: 1px 7px }
+.news .foot { font-size: 11.5px }
 </style>
 </head>
 <body>
@@ -830,8 +840,10 @@ async function respond(route, x, said) {
   let text = fallbackText(route, facts), kind = "plain", issues = [], conf;
   if (aiReady) {
     const typing = addTyping();
-    try { const y = await aiExplain(said, route, facts); issues = y.issues; conf = y.confidence; if (!issues.length && y.message) { text = y.message; kind = "ok"; } else kind = "blocked"; }
-    catch (e) { kind = isTransient(e) ? "busy" : "plain"; }
+    const ac = new AbortController(), cap = setTimeout(() => ac.abort(), REPLY_CAP_MS);
+    try { const y = await aiExplain(said, route, facts, ac.signal); issues = y.issues; conf = y.confidence; if (!issues.length && y.message) { text = y.message; kind = "ok"; } else kind = "blocked"; }
+    catch (e) { kind = ac.signal.aborted ? "slow" : isTransient(e) ? "busy" : "plain"; }
+    clearTimeout(cap);
     typing.remove();
   }
   addBot([el("div", { class: "text", text }), cardFor(route, facts), meta(route, facts, kind, issues, conf), followUps(route, facts)]);
@@ -850,7 +862,9 @@ async function userSays(text) {
   try {
     if (!aiReady) { plainReply(text); return; }
     const typing = addTyping(); let r;
-    try { r = await runCompanion(text, undefined, memory); } catch (e) { typing.remove(); plainReply(text, isTransient(e) ? "busy" : "plain"); return; }
+    const ac = new AbortController(), cap = setTimeout(() => ac.abort(), REPLY_CAP_MS);
+    try { r = await runCompanion(text, ac.signal, memory); } catch (e) { clearTimeout(cap); typing.remove(); plainReply(text, ac.signal.aborted ? "slow" : isTransient(e) ? "busy" : "plain"); return; }
+    clearTimeout(cap);
     typing.remove(); remember(r.extract);
     const blocked = r.issues.length > 0, route = r.extract.route;
     addBot([el("div", { class: "text", text: blocked ? fallbackText(route, r.facts) : r.message }), cardFor(route, r.facts), meta(route, r.facts, blocked ? "blocked" : "ok", r.issues, r.confidence), scrubNote(text), followUps(route, r.facts)]);
@@ -942,6 +956,9 @@ Object.assign(SRC, {
   toDirect: { label: "Zerodha: moving from regular to direct", url: "https://support.zerodha.com/category/mutual-funds/moving-to-coin/articles/how-do-i-convert-my-regular-mutual-fund-investments-to-direct" },
   directDefault: { label: "Cafemutual: direct plans default on AMC apps", url: "https://cafemutual.com/news/industry/39177-sebi-makes-direct-mutual-fund-plans-default-on-amc-digital-platforms-from-november-1" },
   tax123: { label: "Business Today: 80C becomes Section 123", url: "https://www.businesstoday.in/personal-finance/tax/story/income-tax-act-2025-section-80c-becomes-section-123-from-april-1-2026-heres-what-taxpayers-must-know-522120-2026-03-24" },
+  taxGains: { label: "DSP Mutual Fund: how each SIP instalment is taxed", url: "https://www.dspim.com/knowledge-hub/personal-finance-guide/tax-on-sip-investments-how-each-instalment-is-taxed" },
+  mfTax2026: { label: "Upstox: mutual fund tax rules in 2026", url: "https://upstox.com/news/personal-finance/mutual-funds/mutual-fund-tax-rules-you-can-t-ignore-in-2026-how-your-equity-debt-and-hybrid-gains-are-taxed/article-193461/" },
+  redemption: { label: "Business Standard: equity fund payouts in 2 working days", url: "https://www.business-standard.com/amp/article/markets/mutual-funds-adopt-t-2-settlement-cycle-for-redemption-payouts-123012700882_1.html" },
   taxRegime: { label: "Zee Business: old vs new tax regime", url: "https://www.zeebiz.com/personal-finance/income-tax/news-income-tax-2026-80c-80d-80e-gone-old-vs-new-tax-regime-which-saves-more-393066" },
 });
 SRC.nifty.label = "NSE: Nifty 50 white paper";
@@ -975,6 +992,32 @@ const GLOSSARY = {
   riskometer: { term: "Riskometer", icon: "gauge", links: ["sebiInvestor"], points: ["Every mutual fund shows a riskometer with six levels, from Low to Very High.", "It's on the fund's page, so you can check it before you invest.", "Share funds usually sit at the higher levels; liquid funds usually sit lower."] },
   sip_basics: { term: "How a SIP works", icon: "calendar", links: ["mandates"], points: ["A SIP puts a fixed amount into a fund on the same date each month.", "Each instalment buys units at that day's NAV.", "In the first year, most of your money has been invested for only a few months, so its value often stays close to what you put in."] },
 };
+Object.assign(GLOSSARY, {
+  mutual_fund: { term: "Mutual fund and fund house", icon: "bank", links: ["sebiInvestor", "amfi"], points: ["A mutual fund pools money from many investors and invests it in shares, bonds or both.", "It's run by a fund house (also called an AMC), which must be registered with SEBI.", "Coin is where you buy and track funds. The fund house runs the fund itself."] },
+  units: { term: "Units", icon: "chart", links: ["amfi"], points: ["Your money buys units of the fund at that day's NAV.", "What you hold is worth your number of units × the latest NAV.", "Example: ₹3,000 buys 60 units at a NAV of ₹50, or 50 units at a NAV of ₹60."] },
+  kyc: { term: "KYC", icon: "shield", links: ["sebiInvestor"], points: ["KYC (know your customer) is a one-time identity check, using documents such as your PAN and address proof, before you can invest in mutual funds.", "It's done once and then works across fund houses and apps.", "This page can't see your KYC status. Your app's support can check it."] },
+  sip_vs_lumpsum: { term: "SIP vs lump sum", icon: "calendar", links: ["amfi"], points: ["A SIP invests a fixed amount every month. A lump sum invests a larger amount once.", "Both buy the same fund's units, at the NAV of the day the money goes in.", "A SIP spreads your buying over many days' prices; a lump sum buys at one."] },
+  rupee_cost: { term: "Rupee cost averaging", icon: "rupee", links: ["amfi"], points: ["The same amount every month buys more units when the NAV is low and fewer when it's high.", "So your average cost per unit ends up at or below the average NAV of those months.", "It smooths the price you pay. It doesn't guarantee a profit."] },
+  xirr: { term: "Returns: absolute and XIRR", icon: "flat", links: ["amfi"], points: ["Absolute return is your total gain ÷ what you put in. A ₹600 gain on ₹45,000 is 1.3%.", "XIRR is a yearly rate that allows for when each instalment went in. It's the fair way to compare a SIP with a yearly figure, such as an index's.", "In the first year XIRR can swing a lot, because most of your money is only a few months old."] },
+  benchmark: { term: "Benchmark", icon: "target", links: ["amfi"], points: ["A benchmark is the index a fund compares itself with, such as the Nifty 50 for many large-cap funds.", "It's named on the fund's page and in its factsheet.", "A fund's record against its benchmark over 5 years or more says more than any single year."] },
+  index_fund: { term: "Index fund", icon: "target", links: ["sebiCat"], points: ["An index fund copies an index such as the Nifty 50, keeping at least 95% in that index's shares.", "Nobody picks the shares, so its expense ratio is usually lower than an actively managed fund's.", "Its return follows the index's, minus its costs."] },
+  elss: { term: "ELSS (tax-saving fund)", icon: "receipt", links: ["tax123", "taxRegime"], points: ["An ELSS fund keeps at least 80% in shares. It's the mutual fund type that counts towards the ₹1.5 lakh deduction (Section 80C, now Section 123).", "Each SIP instalment is locked in for 3 years from its own date.", "The deduction only applies under the old tax regime."] },
+  mandate: { term: "Mandate (autopay)", icon: "bank", links: ["mandates"], points: ["A mandate is a one-time permission that lets each SIP instalment be taken from your bank automatically.", "It's linked to one bank account, so a new bank account needs a new mandate.", "If the mandate isn't working on the SIP date, that instalment fails and isn't retried."] },
+  pause_stop: { term: "Pausing vs stopping a SIP", icon: "pause", links: ["pause"], points: ["Pausing skips instalments for a while. The SIP itself stays set up.", "Stopping (cancelling) ends the SIP. You'd start a new one to invest again.", "Either way, the units you already own stay invested until you sell them."] },
+  redemption: { term: "Selling (redemption)", icon: "rupee", links: ["redemption", "amfi"], points: ["Selling units is called redeeming. You get the NAV of the day your request is processed, minus any exit load.", "For equity funds the money usually reaches your bank within 2 working days. SEBI's limit is 3.", "Selling can mean tax on gains, and it doesn't stop the SIP itself."] },
+  tax_gains: { term: "Tax on gains", icon: "receipt", links: ["taxGains", "mfTax2026"], points: ["Equity funds sold within 12 months: gains are taxed at 20%.", "Held longer than 12 months: 12.5% on gains above ₹1.25 lakh in a year. Gains up to ₹1.25 lakh a year are tax-free.", "For a SIP, each instalment's 12 months count from its own date, and the oldest units are sold first.", "Debt funds bought since April 2023: gains are taxed at your income tax slab rate."] },
+});
+const TERM_GROUPS = [
+  ["Getting started", ["sip_basics", "mutual_fund", "units", "nav", "kyc", "sip_vs_lumpsum"]],
+  ["Costs", ["expense_ratio", "direct_vs_regular", "exit_load"]],
+  ["Returns", ["xirr", "rupee_cost", "benchmark"]],
+  ["Fund types and risk", ["fund_types", "index_fund", "elss", "riskometer"]],
+  ["Running your SIP", ["mandate", "pause_stop", "switching", "redemption"]],
+  ["Tax", ["tax_options", "tax_gains"]],
+];
+const TERM_SHORT = { sip_basics: "How a SIP works", mutual_fund: "Mutual fund", direct_vs_regular: "Direct vs regular", xirr: "Returns and XIRR", rupee_cost: "Rupee cost averaging", elss: "ELSS", mandate: "Mandate (autopay)", pause_stop: "Pause vs stop", switching: "Switching funds", redemption: "Selling (redemption)", tax_options: "Tax-saving options", nav: "NAV", riskometer: "Riskometer", fund_types: "Fund types" };
+const termLabel = k => TERM_SHORT[k] || GLOSSARY[k].term;
+const TERM_COUNT = TERM_GROUPS.reduce((n, [, ks]) => n + ks.length, 0);
 function topicOf(s) {
   s = s.toLowerCase();
   return /expense ratio|\bter\b|\bfees?\b/.test(s) ? "expense_ratio" : /\bnav\b/.test(s) ? "nav" : /exit load/.test(s) ? "exit_load" : /direct|regular plan/.test(s) ? "direct_vs_regular" : /switch/.test(s) ? "switching"
@@ -1015,7 +1058,7 @@ function fallbackText(route, f) {
   }
   if (route === "payment_help") return `${f.what_usually_happens} A failed instalment isn't retried. Here's what you can do.`;
   if (route === "fund_choice") return f.goal ? `I don't pick specific funds, but here's how the main fund types have done, plus tips for "${f.goal}".` : "I don't pick specific funds, but here's how the main fund types have done. Tell me what the money is for and I'll add tips for that goal.";
-  if (route === "explain") return f.term ? `Here's a quick guide: ${f.term}.` : "I can explain expense ratios, NAV, exit loads, direct and regular plans, switching funds and tax-saving options. Which one?";
+  if (route === "explain") return f.term ? `Here's a quick guide: ${f.term}.` : "Here are the terms I can explain. Tap one.";
   if (route === "decline_advice") return `I can't tell you whether to stop, switch or wait: that depends on your situation, and a SEBI-registered investment adviser can help with it.${f.term ? " Here's how it works, so you can decide." : " I can check your numbers, explain a term or help with a failed payment."}`;
   if (route === "support_redirect") return "This needs Zerodha's own support or help pages. I can't see your account, so I can't check orders, statements or portfolio data.";
   return "Hi! I can check whether your goal is realistic, explain what your SIP is worth, help when an instalment fails, compare fund types, or explain a term.";
@@ -1025,7 +1068,13 @@ function fallbackText(route, f) {
 function hbar(label, valueText, value, max, cls) { return el("div", { class: "hbar" }, el("div", { class: "lab" }, el("span", { text: label }), el("b", { text: valueText })), el("div", { class: "track" }, el("div", { class: `fill ${cls}`, "data-w": String(Math.max(3, Math.min(100, Math.max(0, value) / max * 100))) }))); }
 function more(label, ...kids) { return el("details", { class: "more" }, el("summary", { text: label }), el("div", { class: "in" }, ...kids.filter(Boolean))); }
 function linksFor(route, f) { const ids = routeLinks(route, f || {}); if (!ids.length) return null; const b = el("div", { class: "links" }); for (const id of ids) if (SRC[id]) b.append(el("a", { href: SRC[id].url, target: "_blank", rel: "noopener" }, SRC[id].label, icon("external"))); return el("details", { class: "src" }, el("summary", { text: "Sources" }), b); }
-function meta(route, f, kind, issues, conf) { return el("div", { class: "meta" }, checkNote(kind, issues || [], conf), linksFor(route, f)); }
+function pageNote(kind) {
+  const d = el("details", { class: "check plain" });
+  if (kind === "guide") d.append(el("summary", {}, icon("check"), "From the page's guide"), el("p", { text: "Written into the page from the sources linked, so it shows instantly. No AI was used." }));
+  else d.append(el("summary", {}, icon("info"), "Pre-written answer (AI slow)"), el("p", { text: "The free AI service took more than 10 seconds, so this reply comes from the page's own rules instead of making you wait." }));
+  return d;
+}
+function meta(route, f, kind, issues, conf) { return el("div", { class: "meta" }, kind === "guide" || kind === "slow" ? pageNote(kind) : checkNote(kind, issues || [], conf), linksFor(route, f)); }
 function numbersLedger(f) {
   const rows = [];
   if (f.monthly_amount) rows.push(["Monthly SIP", f.monthly_amount]);
@@ -1145,15 +1194,29 @@ const ASKS = [
   ["target", "Is my goal realistic?", "Will ₹3,000 a month double in 2 years?", "Will ₹3,000 a month double in 2 years?"],
   ["flat", "Why does my SIP look flat?", "It's worth about what I put in", "My SIP looks flat. It's worth about the same as I put in."],
   ["calx", "My instalment failed", "What happens now, and what can I change?", "My SIP instalment failed this month."],
-  ["compass", "How do fund types compare?", "Large, mid and small cap, ELSS and more", "How do the main fund types compare?"],
-  ["bulb", "What does a term mean?", "Expense ratio, NAV, exit load, switching", "What is an expense ratio?"],
+  ["compass", "How do fund types compare?", "Large, mid and small cap, ELSS and more", "@types"],
+  ["bulb", "What does a term mean?", "NAV, expense ratio, XIRR, exit load, tax and more", "@terms"],
 ];
 const ASK_TINT = { target: "t-amber", flat: "t-blue", calx: "t-red", compass: "t-violet", bulb: "t-green", tag: "t-green" };
-function suggestions(list) { const g = el("div", { class: "suggest" }); for (const [ic, title, , q] of list) g.append(el("button", { class: "sug", type: "button", onclick: () => { if (!busy) userSays(q); } }, icon(ic), el("span", { text: title }))); return g; }
+const REPLY_CAP_MS = 10000; // after this, the chat shows the pre-written answer instead of waiting on the free AI tier
+function askAction(q) { if (q === "@terms") return showTerms(); if (q === "@types") return showTypes(); return userSays(q); }
+function termListCard() {
+  const v = el("div", { class: "visual termlist" }, el("div", { class: "row-h" }, tint("bulb", "t-green"), el("p", { class: "headline", text: "Mutual fund and SIP terms" })), el("p", { class: "subline", text: `${TERM_COUNT} terms first-time investors meet most. Tap one to see what it means.` }));
+  for (const [group, keys] of TERM_GROUPS) v.append(el("p", { class: "sec", text: group }), el("div", { class: "tchips" }, ...keys.map(k => el("button", { class: "tchip", type: "button", text: termLabel(k), onclick: () => showTerm(k) }))));
+  return v;
+}
+function showTerms() { if (busy) return; addMe("What does a term mean?"); addBot([el("div", { class: "text", text: "Here are the terms first-time investors run into most. Tap any one." }), termListCard()]); }
+function showTerm(k) {
+  if (busy || !GLOSSARY[k]) return; const g = GLOSSARY[k]; addMe(termLabel(k)); const f = { term: g.term, _topic: k };
+  addBot([el("div", { class: "text", text: `${g.term}, in plain words:` }), explainCard(k), meta("explain", f, "guide"), chips([["More terms", showTerms], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(ASKS)]); }]])]);
+}
+function showTypes() { if (busy) return; addMe("How do the main fund types compare?"); const f = fundFacts(); addBot([el("div", { class: "text", text: fallbackText("fund_choice", f) }), cardFor("fund_choice", f), meta("fund_choice", f, "guide"), followUps("fund_choice", f)]); }
+function suggestions(list) { const g = el("div", { class: "suggest" }); for (const [ic, title, , q] of list) g.append(el("button", { class: "sug", type: "button", onclick: () => askAction(q) }, icon(ic), el("span", { text: title }))); return g; }
 function greet() {
   thread().append(el("div", { class: "empty" },
+    el("div", { class: "news", id: "news", hidden: "" }),
     el("div", { class: "hello" }, heroArt(), el("h2", { text: "Hi! What would you like to check?" }), el("p", { text: "Tap one, or type your own question below." })),
-    tiles(ASKS.map(([ic, title, , q]) => [title, ic, ASK_TINT[ic] || "t-blue", () => { if (!busy) userSays(q); }]))));
+    tiles(ASKS.map(([ic, title, , q]) => [title, ic, ASK_TINT[ic] || "t-blue", () => askAction(q)]))));
 }
 const TERM_CHIPS = [["Expense ratio", "expense_ratio"], ["NAV", "nav"], ["Exit load", "exit_load"], ["Direct vs regular", "direct_vs_regular"], ["Switching funds", "switching"], ["Tax-saving options", "tax_options"]];
 function followUps(route, f) {
@@ -1161,7 +1224,8 @@ function followUps(route, f) {
   if (route === "returns_check" && f.monthly_amount && !f.expectation && !f.worth_today) return returnsForm();
   if (route === "payment_help" && !f.next_instalment) return datesForm(f.likely_cause);
   if (route === "fund_choice" && !f.goal) return el("div", { style: "display:grid;gap:8px" }, el("p", { class: "sec", text: "Narrow it down: what's the money for?" }), tiles(Object.entries(GOALS).map(([k, g]) => [g.label, GOAL_ICONS[k][0], GOAL_ICONS[k][1], (label, grid) => { grid.querySelectorAll("button").forEach(b => b.disabled = true); addMe(label); respond("fund_choice", { goal: k }, label); }])));
-  if (route === "explain" && !f.term) return chips(TERM_CHIPS.map(([label, t]) => [label, () => { addMe(label); respond("explain", { topic: t }, `What is ${label}?`); }]));
+  if (route === "explain" && !f.term) return termListCard();
+  if (route === "explain") return chips([["More terms", showTerms], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(ASKS)]); }]]);
   return chips([["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(ASKS)]); }]]);
 }
 function returnsForm() {
@@ -1222,7 +1286,7 @@ async function setupChat() {
 let chatReady = null;
 function initStart() {
   const box = $("#asks");
-  for (const [ic, title, ex, q] of ASKS) box.append(el("button", { class: "ask", type: "button", onclick: async () => { location.hash = "#chat"; await chatReady; userSays(q); } }, tint(ic, ASK_TINT[ic] || "t-blue"), el("span", {}, el("b", { text: title }), el("span", { class: "ex", text: ex })), el("span", { class: "chev", html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' })));
+  for (const [ic, title, ex, q] of ASKS) box.append(el("button", { class: "ask", type: "button", onclick: async () => { location.hash = "#chat"; await chatReady; askAction(q); } }, tint(ic, ASK_TINT[ic] || "t-blue"), el("span", {}, el("b", { text: title }), el("span", { class: "ex", text: ex })), el("span", { class: "chev", html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' })));
   $("#startBtn").addEventListener("click", () => { location.hash = "#chat"; });
   $("#startHero").append(heroArt());
   $("#cNext").textContent = fmtDate(nextOnDay(5));
@@ -1244,11 +1308,41 @@ function basicPayment() { const s = $("#pSip").value, p = $("#pSalary").value; p
 function basicGuide() { plainInto($("#gOut"), "fund_choice", fundFacts($("#gGoal").value)); }
 
 
+// ---------- Market highlights (headlines from public feeds, no AI) ----------
+const NEWS_API = "/api/news", NEWS_EVERY_MS = 3 * 60 * 1000;
+const news = { items: [], at: 0, seen: new Set(), fresh: new Set(), sources: [], updated: null };
+function ago(iso) { const m = Math.max(0, Math.round((Date.now() - Date.parse(iso)) / 60000)); return m < 1 ? "just now" : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : `${Math.round(m / 1440)} d ago`; }
+async function loadNews() {
+  if (document.hidden) return;
+  try {
+    const r = await fetch(NEWS_API, { headers: { Accept: "application/json" } }); if (!r.ok) return;
+    const j = await r.json(); if (!j || !Array.isArray(j.items) || !j.items.length) return;
+    const first = !news.at; news.fresh = new Set(first ? [] : j.items.filter(i => !news.seen.has(i.url)).map(i => i.url));
+    for (const i of j.items) news.seen.add(i.url);
+    news.items = j.items.slice(0, 3); news.at = Date.now(); news.updated = j.updated; news.sources = Array.isArray(j.sources) ? j.sources : [];
+    renderNews();
+  } catch { /* no headlines is fine: the strip stays hidden */ }
+}
+function renderNews() {
+  const box = $("#news"); if (!box || !news.items.length) return;
+  box.hidden = false;
+  box.replaceChildren(
+    el("div", { class: "news-h" }, el("span", { class: "live", "aria-hidden": "true" }), el("b", { text: "Market highlights" }), el("span", { class: "upd", text: `Updated ${ago(news.updated)}` })),
+    el("ul", {}, ...news.items.map(i => el("li", {}, el("a", { href: i.url, target: "_blank", rel: "noopener" }, el("span", { class: "nt", text: i.title }), el("span", { class: "ns" }, news.fresh.has(i.url) ? el("i", { class: "new", text: "New" }) : null, `${i.source} · ${ago(i.published)}`))))),
+    el("p", { class: "foot", text: `From ${news.sources.join(" and ") || "news sites"}. News, not advice: a SIP invests on its date either way.` }));
+}
+function startNews() {
+  loadNews();
+  setInterval(loadNews, NEWS_EVERY_MS);
+  setInterval(() => { if (news.items.length && !document.hidden) renderNews(); }, 60000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden && Date.now() - news.at > NEWS_EVERY_MS) loadNews(); });
+}
+
 // ---------- Tabs and start ----------
 // Testers see the start page, chat and Without AI; mentors open the page with ?view=mentor to also see the quality check and how it works.
 const MENTOR = (() => { try { return new URLSearchParams(location.search).get("view") === "mentor"; } catch { return false; } })();
 if (MENTOR) document.body.classList.add("mentor");
-function show() { const views = ["start", "chat", "basic"].concat(MENTOR ? ["quality", "how"] : []); let v = (location.hash || "#start").slice(1); if (!views.includes(v)) v = "start"; for (const n of ["start", "chat", "basic", "quality", "how"]) { const e = $("#view-" + n); if (e) e.hidden = n !== v; } if (v !== "chat") window.scrollTo(0, 0); }
+function show() { const views = ["start", "chat", "basic"].concat(MENTOR ? ["quality", "how"] : []); let v = (location.hash || "#start").slice(1); if (!views.includes(v)) v = "start"; for (const n of ["start", "chat", "basic", "quality", "how"]) { const e = $("#view-" + n); if (e) e.hidden = n !== v; } if (v !== "chat" || !document.querySelector("#thread .msg")) window.scrollTo(0, 0); }
 window.addEventListener("hashchange", show);
 $("#send").addEventListener("click", () => userSays($("#box").value));
 $("#box").addEventListener("input", e => { const t = e.target; t.style.height = "auto"; t.style.height = Math.min(t.scrollHeight, 140) + "px"; });
@@ -1257,7 +1351,7 @@ $("#eBtn").addEventListener("click", basicExpectation); $("#vBtn").addEventListe
 initStart(); initTools();
 $("#runBtn").addEventListener("click", runEval); $("#runStop").addEventListener("click", () => runCtl && runCtl.abort()); $("#copyBtn").addEventListener("click", copyResults);
 (() => { const t = today(); $("#pSip").value = isoDate(addDays(t, 3)); $("#pSalary").value = isoDate(addDays(t, 5)); $("#pSip").min = isoDate(t); })();
-chatReady = setupChat(); show(); renderReport(); greet(); basicExpectation(); basicValue(); basicPayment(); basicGuide();
+chatReady = setupChat(); show(); renderReport(); greet(); startNews(); basicExpectation(); basicValue(); basicPayment(); basicGuide();
 </script>
 </body>
 </html>
