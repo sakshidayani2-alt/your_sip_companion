@@ -1,7 +1,7 @@
 // Netlify Function: the only place the Gemini API key is used.
 // GET  /api/companion  -> health: is a key set, which model, which prompt version (no AI call, no quota used)
 // POST /api/companion  -> {step:"extract", text} or {step:"explain", text, route, facts}
-import { PROMPT_VERSION, ROUTES, CAUSES, GOAL_KEYS, extractPrompt, explainPrompt, ruleCheck, scrub } from "./core.mjs";
+import { PROMPT_VERSION, ROUTES, TOPICS, CAUSES, GOAL_KEYS, extractPrompt, explainPrompt, ruleCheck, scrub } from "./core.mjs";
 
 const DEFAULT_MODEL = "gemini-3.5-flash-lite";
 const UPSTREAM_TIMEOUT_MS = 9000; // Netlify ends synchronous functions at 10 s
@@ -122,6 +122,7 @@ export default async (req, context) => {
       if (x.route === "payment_help" && !CAUSES.includes(x.cause)) x.cause = "unknown";
       if (x.route !== "payment_help") x.cause = null;
       if (!GOAL_KEYS.includes(x.goal)) x.goal = null;
+      if (!TOPICS.includes(x.topic)) x.topic = null;
       return reply(200, { extract: x, model: model(), prompt_version: PROMPT_VERSION });
     }
     if (b.step === "explain") {
