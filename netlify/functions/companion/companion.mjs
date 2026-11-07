@@ -1,12 +1,13 @@
 // Netlify Function: the only place the AI API keys are used. They live in Netlify's environment variables, never in the page.
 // GET  /api/companion  -> health: is a key set, which provider and model, which prompt version (no AI call, no credit used)
-// POST /api/companion  -> {step:"extract", text} or {step:"explain", text, route, facts}
+// POST /api/companion  -> {step:"agent", messages, round, fix?}: one turn of the SIP Buddy agent (agent-v1). The page runs the tools and the loop.
+//                         {step:"extract"} and {step:"explain"} are the older two-step prompts, kept for reference.
 //
 // v7: runs on Anthropic's Claude (paid API credits) by default. Google's Gemini is kept behind a setting so you can switch back:
 //   AI_PROVIDER = "anthropic" (default when ANTHROPIC_API_KEY is set) or "gemini".
 // The prompts in core.mjs are the same for both. Changing the provider or model switches AI replies off in the page
 // until the quality check has been run again on the new model.
-import { PROMPT_VERSION, ROUTES, TOPICS, CAUSES, GOAL_KEYS, OFF_TOPIC_MESSAGE, extractPrompt, explainPrompt, ruleCheck, scrub } from "./core.mjs";
+import { PROMPT_VERSION, ROUTES, TOPICS, CAUSES, GOAL_KEYS, OFF_TOPIC_MESSAGE, extractPrompt, explainPrompt, ruleCheck, scrub, TOOL_DEFS, TOOL_NAMES, AGENT_SYSTEM, AGENT_MAX_ROUNDS, RESULT_CARDS, agentRuleCheck, safeSuggestions } from "./core.mjs";
 
 const DEFAULT_CLAUDE_MODEL = "claude-haiku-5-5";
 const DEFAULT_GEMINI_MODEL = "gemini-3.5-flash-lite";
@@ -41,7 +42,7 @@ const fail = (status, code, extra) => Object.assign(new Error(code), { status, c
 // Best-effort limit per visitor (per function instance), so one person can't use up the credit. The provider's own limits apply on top.
 const hits = new Map();
 function overLimit(ip) {
-  const now = Date.now(), windowMs = 10 * 60 * 1000, max = Number(env("MAX_REQUESTS_PER_10_MIN") || 300); // the 82-case quality run needs about 155
+  const now = Date.now(), windowMs = 10 * 60 * 1000, max = Number(env("MAX_REQUESTS_PER_10_MIN") || 600); // an agent message makes 2 to 4 calls; the 96-case quality run needs about 300
   const list = (hits.get(ip) || []).filter(t => now - t < windowMs);
   const over = list.length >= max; if (!over) list.push(now);
   hits.set(ip, list); if (hits.size > 5000) hits.clear();
@@ -129,6 +130,102 @@ async function callAnthropicOnce(prompt, schema, outerSignal, ms) {
   return parseJson(text);
 }
 
+// ---------- Agent turn on Claude: system prompt + tools; returns the model's content blocks ----------
+async function callAnthropicAgent(messages, toolChoice, outerSignal, ms) {
+  const key = apiKey(); if (!key) throw fail(503, "not_configured");
+  const thinking = claudeThinking(), effort = claudeEffort();
+  const body = { model: model(), max_tokens: 1500, system: AGENT_SYSTEM, tools: TOOL_DEFS, tool_choice: toolChoice, messages, thinking: { type: thinking } };
+  if (effort) body.output_config = { effort };
+  const { timeout, signal } = signalFor(outerSignal, ms);
+  const headers = { "content-type": "application/json", authorization: `Bearer ${key}`, "anthropic-version": clean(env("ANTHROPIC_VERSION")) || ANTHROPIC_VERSION };
+  const ws = clean(env("ANTHROPIC_WORKSPACE_ID")); if (ws) headers["anthropic-workspace-id"] = ws;
+  const post = () => fetch(ANTHROPIC_URL, { method: "POST", headers, body: JSON.stringify(body), signal });
+  let res;
+  try {
+    res = await post();
+    for (let i = 0; i < 2 && res.status === 400; i++) {
+      const t = await res.clone().text();
+      if (/thinking/i.test(t) && body.thinking) delete body.thinking;
+      else if (/effort|output_config/i.test(t) && body.output_config) delete body.output_config;
+      else break;
+      res = await post();
+    }
+  } catch (e) {
+    if (timeout.aborted) throw fail(504, "timeout");
+    throw fail(502, "upstream_unreachable");
+  }
+  let data = null; try { data = await res.json(); } catch { /* not JSON */ }
+  const detail = anthropicDetail(res.status, data);
+  if (res.status === 429) { const ra = parseInt(res.headers.get("retry-after") || "", 10); throw fail(429, "rate_limited", { retryAfter: isFinite(ra) && ra > 0 ? ra : 20, detail }); }
+  if (BUSY_STATUSES.includes(res.status)) throw fail(503, "upstream_busy", { retryAfter: 5, detail });
+  if (res.status === 401 || res.status === 403) throw fail(502, "upstream_auth", { detail });
+  if (res.status === 404) throw fail(502, "model_not_found", { detail });
+  if (res.status === 400 && /credit balance/i.test(detail)) throw fail(502, "no_credit", { detail });
+  if (res.status === 400 && /anthropic-workspace-id|scoped to a workspace/i.test(detail)) throw fail(502, "needs_workspace", { detail });
+  if (!res.ok) throw fail(502, "upstream_error", { detail });
+  return (data && Array.isArray(data.content)) ? data.content : [];
+}
+
+// The conversation the page sends: checked block by block, with personal details removed from everything the person wrote.
+const MAX_MESSAGES = 30, MAX_BLOCK = 12000, MAX_TOTAL = 80000;
+function cleanMessages(list) {
+  if (!Array.isArray(list) || !list.length || list.length > MAX_MESSAGES) throw fail(400, "bad_messages");
+  const out = [];
+  for (const m of list) {
+    if (!m || (m.role !== "user" && m.role !== "assistant")) throw fail(400, "bad_messages");
+    if (typeof m.content === "string") {
+      const t = m.content.slice(0, 2000); if (!t.trim()) throw fail(400, "bad_messages");
+      out.push({ role: m.role, content: m.role === "user" ? scrub(t) : t }); continue;
+    }
+    if (!Array.isArray(m.content) || !m.content.length || m.content.length > 8) throw fail(400, "bad_messages");
+    const blocks = [];
+    for (const b of m.content) {
+      if (m.role === "user" && b && b.type === "tool_result" && typeof b.tool_use_id === "string" && typeof b.content === "string" && b.content.length <= MAX_BLOCK) blocks.push({ type: "tool_result", tool_use_id: b.tool_use_id.slice(0, 100), content: b.content });
+      else if (m.role === "assistant" && b && b.type === "tool_use" && typeof b.id === "string" && TOOL_NAMES.includes(b.name) && b.input && typeof b.input === "object" && JSON.stringify(b.input).length <= 4000) blocks.push({ type: "tool_use", id: b.id.slice(0, 100), name: b.name, input: b.input });
+      else throw fail(400, "bad_messages");
+    }
+    out.push({ role: m.role, content: blocks });
+  }
+  if (out[0].role !== "user" || out[out.length - 1].role !== "user") throw fail(400, "bad_messages");
+  for (let i = 1; i < out.length; i++) if (out[i].role === out[i - 1].role) throw fail(400, "bad_messages");
+  if (JSON.stringify(out).length > MAX_TOTAL) throw fail(400, "too_long");
+  return out;
+}
+// Everything a number in the reply may come from: tool results, the person's words and earlier replies (which passed this check).
+function sourcesOf(messages) {
+  const data = [], user = [];
+  for (const m of messages) {
+    if (typeof m.content === "string") (m.role === "user" ? user : data).push(m.content);
+    else for (const b of m.content) if (b.type === "tool_result") data.push(b.content);
+  }
+  return { data: data.join("\n"), user: user.join("\n") };
+}
+async function agentTurn(b, signal) {
+  const messages = cleanMessages(b.messages);
+  const round = Math.max(0, Math.min(AGENT_MAX_ROUNDS, Number(b.round) || 0));
+  const mustReply = b.fix === true || round >= AGENT_MAX_ROUNDS - 1;
+  const content = await callModelWith(() => (sig, left) => callAnthropicAgent(messages, mustReply ? { type: "tool", name: "reply" } : { type: "any" }, sig, left), signal);
+  const uses = content.filter(c => c && c.type === "tool_use" && TOOL_NAMES.includes(c.name) && c.input && typeof c.input === "object");
+  const replyUse = uses.find(u => u.name === "reply"), dataUses = uses.filter(u => u.name !== "reply");
+  if (replyUse && (!dataUses.length || mustReply)) {
+    const x = replyUse.input, offTopic = x.scope === "off_topic";
+    const final = {
+      scope: offTopic ? "off_topic" : "in_scope",
+      message: offTopic ? OFF_TOPIC_MESSAGE : (typeof x.message === "string" ? x.message.trim() : ""),
+      show_results: offTopic ? [] : (Array.isArray(x.show_results) ? x.show_results.filter(k => RESULT_CARDS.includes(k)).slice(0, 2) : []),
+      show_topics: offTopic ? [] : (Array.isArray(x.show_topics) ? x.show_topics.filter(k => TOPICS.includes(k)).slice(0, 2) : []),
+      needs_zerodha_support: !offTopic && x.needs_zerodha_support === true,
+      suggestions: offTopic ? [] : safeSuggestions(x.suggestions),
+    };
+    const src = sourcesOf(messages);
+    const issues = offTopic ? [] : agentRuleCheck(final.message, src.data, src.user);
+    return { final, issues, fixed: offTopic, reply_use: { type: "tool_use", id: replyUse.id, name: "reply", input: replyUse.input } };
+  }
+  if (!dataUses.length) throw fail(502, "no_tool_call");
+  const calls = dataUses.slice(0, 6).map(u => ({ type: "tool_use", id: u.id, name: u.name, input: u.input }));
+  return { tool_uses: calls.map(({ id, name, input }) => ({ id, name, input })), assistant_content: calls };
+}
+
 // ---------- Google (Gemini), kept so you can switch back with AI_PROVIDER=gemini ----------
 function retrySeconds(errBody) {
   try {
@@ -177,6 +274,16 @@ async function callGeminiOnce(prompt, schema, outerSignal, ms) {
   return parseJson(text);
 }
 
+// The same busy-retry loop for an agent turn.
+async function callModelWith(make, outerSignal) {
+  const once = make(); const started = Date.now(), budget = timeoutMs(); let lastErr = null;
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const left = budget - (Date.now() - started); if (left < 2500) break;
+    try { return await once(outerSignal, left); }
+    catch (e) { lastErr = e; if (e.code !== "upstream_busy") throw e; const wait = Math.min(1000 * (attempt + 1), budget - (Date.now() - started) - 2500); if (wait <= 0) break; await pause(wait); }
+  }
+  throw lastErr || fail(504, "timeout");
+}
 // One model call, retried within the function's time budget when the provider reports it is busy.
 async function callModel(prompt, schema, outerSignal) {
   const once = provider() === "anthropic" ? callAnthropicOnce : callGeminiOnce;
@@ -197,7 +304,7 @@ async function callModel(prompt, schema, outerSignal) {
 }
 
 const low = v => (typeof v === "string" ? v.trim().toLowerCase() : v);
-const meta = () => ({ provider: provider(), model: model(), prompt_version: PROMPT_VERSION });
+const meta = () => ({ provider: provider(), model: model(), prompt_version: PROMPT_VERSION, agent: provider() === "anthropic" });
 
 export default async (req, context) => {
   if (req.method === "GET") return reply(200, Object.assign({ ok: true, configured: !!apiKey() }, meta()));
@@ -209,6 +316,11 @@ export default async (req, context) => {
   if (overLimit(ip)) return reply(429, { code: "rate_limited", retryAfter: 60, scope: "site" });
 
   let b; try { b = await req.json(); } catch { return reply(400, { code: "bad_request" }); }
+  if (b && b.step === "agent") {
+    if (provider() !== "anthropic") return reply(400, Object.assign({ code: "agent_needs_claude" }, meta()));
+    try { return reply(200, Object.assign(await agentTurn(b, req.signal), meta())); }
+    catch (e) { return reply(e.status || 502, { code: e.code || "error", retryAfter: e.retryAfter, detail: e.detail }); }
+  }
   const text = scrub(typeof b.text === "string" ? b.text.trim() : "");
   if (!text || text.length > MAX_TEXT) return reply(400, { code: "bad_text" });
 
