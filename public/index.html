@@ -263,7 +263,7 @@ body.mentor .mentor-links { display: flex }
 .hbars { display: grid; gap: 12px }
 .hbar { display: grid; gap: 5px }
 .hbar .lab { display: flex; justify-content: space-between; gap: 10px; font-size: 13.5px }
-.hbar .lab b { font-variant-numeric: tabular-nums; font-size: 15px }
+.hbar .lab b { white-space: nowrap; font-variant-numeric: tabular-nums; font-size: 15px }
 .hbar .track { height: 14px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden }
 .hbar .fill { height: 100%; border-radius: 999px; width: 0 }
 .fill.amber { background: var(--amber-line) } .fill.blue { background: var(--blue) } .fill.grey { background: var(--grey-line) } .fill.green { background: var(--green-line) } .fill.red { background: var(--red) }
@@ -424,50 +424,170 @@ details.check summary { font-size: 12px }
 @media (prefers-reduced-motion: no-preference) { .frow .fill { transition: width .7s ease-out } }
 .frow p.s { font-size: 12.5px; color: var(--muted) }
 .s-note { font-size: 14px; font-weight: 600 }
+
+/* v6.9: minimal and calm. One accent colour, plain lists, few boxes; extra detail folded under "More details". */
+:root { --page: #f4f4f1; --bg: #fbfbf9; --surface: #ffffff; --surface-2: #f5f5f2; --ink: #1d1d1b; --muted: #6b6a65; --line: #e7e6e1; --soft: #efeee9; --shadow: none;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, ui-serif, serif }
+body { background: var(--page) }
+.app { background: var(--bg) }
+
+/* start and stage pages */
+.start { padding: max(16px, env(safe-area-inset-top, 0px)) 20px 32px; gap: 20px; align-content: start; min-height: 100vh }
+.topbar { display: flex; align-items: center; gap: 10px; min-height: 36px }
+.topbar b { font-size: 15px; font-weight: 600 }
+.topbar .iconbtn { margin-left: -8px }
+.mark-sm { width: 28px; height: 28px; border-radius: 8px } .mark-sm .ico { width: 17px; height: 17px }
+.intro { display: grid; gap: 8px; text-align: center; padding: 26px 0 4px }
+.intro h1 { font: 400 31px/1.2 var(--serif); letter-spacing: -0.01em }
+.tagline { color: var(--muted); font-size: 15.5px; max-width: none }
+#view-stage .intro { padding-top: 40px }
+.sec { font-size: 13px; font-weight: 500; color: var(--muted); text-transform: none; letter-spacing: 0 }
+.askblock { display: grid; gap: 8px }
+.list { display: grid; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden }
+.lrow { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; padding: 14px 16px; border: 0; border-radius: 0; background: transparent; color: var(--ink); font: 500 15px/1.35 var(--font); cursor: pointer }
+.lrow + .lrow { border-top: 1px solid var(--line) }
+.lrow:hover { background: var(--surface-2) }
+.lrow > .ico { width: 18px; height: 18px; color: var(--muted) }
+.lrow .rt { flex: 1; min-width: 0 }
+.lrow .chev { width: 16px; height: 16px; color: #aeada7; display: grid; flex: none }
+.lrow .chev svg { width: 100%; height: 100% }
+.lrow.on, .lrow.on .chev { color: var(--blue-text) }
+.lrow:disabled { opacity: .55; cursor: default }
+.primary { padding: 14px; font-size: 16px; font-weight: 600; border-radius: 12px; background: var(--blue); border-color: var(--blue) }
+.know { text-align: center }
+.know > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; color: var(--muted); font-size: 14px; font-weight: 500; padding: 6px 10px }
+.know > summary::-webkit-details-marker { display: none }
+.know > summary::after, .more > summary::after { content: ""; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: translateY(-2px) rotate(45deg) }
+.know[open] > summary::after, .more[open] > summary::after { transform: translateY(2px) rotate(-135deg) }
+.know > .in { text-align: left; display: grid; gap: 10px; padding-top: 12px }
+.know h2 { font-size: 14px; font-weight: 600; margin-top: 10px }
+.know h2:first-child { margin-top: 0 }
+.know p, .know li { font-size: 14px; color: #3c3b37; line-height: 1.5 }
+.know ul { margin: 0; padding-left: 18px; display: grid; gap: 6px }
+.fine { font-size: 12px; color: var(--muted); text-align: center }
+.know .fine, .know .cap { text-align: left; color: var(--muted); font-size: 12.5px }
+.sipcard { box-shadow: none; border-radius: 14px }
+.sc-top { grid-template-columns: minmax(0, 1fr) auto }
+.sc-ask { border-width: 1px }
+
+/* chat */
+.chat-head { background: var(--bg); border-bottom: 1px solid var(--line); padding: 10px 14px }
+.chat-head .mark-sm { width: 28px; height: 28px }
+.chat-head .t b { font-size: 15px; font-weight: 600 }
+.thread { gap: 22px; padding-top: 18px }
+.msg.bot { display: block }
+.msg.bot .avatar { display: none }
+.msg.bot .bubble { gap: 12px }
+.msg.me .bubble { background: var(--soft); border-radius: 16px; padding: 10px 14px }
+.bubble .text { font-size: 15.5px; line-height: 1.6 }
+.empty { padding-top: 28px }
+.hello { background: none; padding: 0; gap: 6px; border-radius: 0 }
+.hello .greet { font: 400 25px/1.25 var(--serif); text-align: center; letter-spacing: -0.01em }
+.hello .sub { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 14px }
+.hello > .list { margin-top: 10px }
+.suggest { display: grid; gap: 10px }
+.textlink { justify-self: center; background: none; border: 0; color: var(--blue-text); font: 500 14px var(--font); padding: 4px 6px }
+.chip, .tchip, .tile { background: var(--surface); color: var(--ink); border: 1px solid var(--line); font: 500 14px/1.3 var(--font); border-radius: 999px; padding: 8px 14px }
+.chip:hover, .tchip:hover, .tile:hover { border-color: #c9c8c1; color: var(--ink) }
+.tiles { display: flex; flex-wrap: wrap; gap: 8px }
+.tiles > :last-child:nth-child(odd) { grid-column: auto }
+.tile { min-height: 0 }
+
+/* answers: one card, then folded details */
+.visual { box-shadow: none; border-radius: 14px; padding: 16px; gap: 12px }
+.headline { font-size: 15.5px; font-weight: 600; letter-spacing: 0 }
+.subline { font-size: 14px }
+.stack { display: grid; gap: 12px }
+.stack.tight { gap: 8px }
+.sep { height: 1px; background: var(--line) }
+.more { font-size: 14px }
+.more > summary { color: var(--muted); font-weight: 500; gap: 8px }
+.more > summary::before { content: none; display: none }
+.more > .in { gap: 14px; padding-top: 14px }
+.more .visual { border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: 14px 0 0; background: none }
+.more .meta { padding-top: 4px }
+.hbar .track, .frow .track { height: 10px; border: 0; background: var(--soft) }
+.points { font-size: 14.5px; gap: 6px }
+.steps li::before { background: var(--soft); color: var(--ink); font-weight: 600 }
+.opt { grid-template-columns: minmax(0, 1fr); padding: 12px 14px; border-radius: 12px }
+.opt.top { border-color: transparent; background: var(--blue-soft) }
+.opt b { font-weight: 600 }
+.type, .guide li { grid-template-columns: minmax(0, 1fr); background: none; border: 0; border-top: 1px solid var(--line); border-radius: 0; padding: 10px 0 0 }
+.types, .guide { gap: 10px }
+.picks { gap: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden }
+.pick { grid-template-columns: minmax(0, 1fr); border: 0; border-radius: 0; padding: 13px 16px; font: 500 15px/1.35 var(--font); background: transparent }
+.pick + .pick { border-top: 1px solid var(--line) }
+.pick:hover { background: var(--surface-2) }
+.pick b { font-weight: 500 }
+.prog { display: grid; gap: 8px }
+.live .lvlnum { font-size: 22px; font-weight: 600 }
+.meta { gap: 4px 12px }
+details.check summary, details.src > summary { background: none !important; border: 0 !important; padding: 2px 0; color: var(--muted); font-weight: 500; font-size: 12.5px }
+details.check.ok summary { color: var(--green) }
+details.check.blocked summary { color: var(--amber) }
+.links a { background: var(--surface-2); color: var(--ink); font-weight: 500 }
+label.f { font-weight: 500 }
+textarea, input, select { border-color: var(--line) }
+.form.visual { gap: 12px }
+.tool { grid-template-columns: minmax(0, 1fr) 16px }
+.composer .row { box-shadow: none; border-color: #dcdbd5 }
+.ftable td b { font-weight: 600 }
+.s-note { font-weight: 500 }
 </style>
 </head>
 <body>
 <div class="app">
   <section id="view-start" class="start" aria-labelledby="startTitle">
-    <div class="appbar"><span class="mark-sm"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span></span><b>My SIP Buddy</b><span class="pill">Case-study concept</span></div>
-    <div class="banner">
-      <div id="startHero"></div>
-      <h1 id="startTitle">Hi! I'm your SIP Buddy</h1>
-      <p class="tagline">Your helper for the first year of a SIP on Coin.</p>
+    <div class="topbar"><span class="mark-sm"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span></span><b>My SIP Buddy</b></div>
+    <div class="intro">
+      <h1 id="startTitle">Hi, I'm your SIP Buddy</h1>
+      <p class="tagline">Help for your first year of SIPs on Coin.</p>
     </div>
-    <div class="who"><b>Which sounds like you?</b><p>It's made for your first year of SIPs. Your answer changes what it asks and shows.</p><div id="levels"></div></div>
-    <div class="good why">
-      <h2>Why use it</h2>
-      <ul>
-        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span><b>Built for the moments people stop.</b> A flat first year or a failed instalment, answered with your numbers and real index history.</span></li>
-        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 14c2-1 3 1 5 0s3-1 5 0 2 0 3-1"/></svg></span><span><b>About your SIP, not fund rankings.</b> Fund sites rank funds; this explains yours: how it compares with its part of the market, and what past SIPs of the same age did.</span></li>
-        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span><span><b>Inside Coin, nothing to type.</b> It would read your SIP's details, so there's no other app to open.</span></li>
-      </ul>
-    </div>
-    <p class="sec">What you can ask</p>
-    <div class="asks" id="asks"></div>
-    <p class="sec">Where it would live</p>
-    <div class="concept">
-      <div class="sipcard">
-        <div class="sc-top"><span class="ic t-blue"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span></span><div class="sc-t"><b>Monthly SIP</b><span>₹3,000 on the 5th of every month</span></div><span class="sc-status">Active</span></div>
-        <div class="sc-dots" role="img" aria-label="9 of 12 instalments paid in year one"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
-        <div class="sc-meta"><span>9 of 12 paid in year one</span><span>Next: <b id="cNext">5th</b></span></div>
-        <button class="sc-ask" type="button" id="conceptAsk"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span>Ask SIP Buddy about this SIP</button>
-      </div>
-      <p class="cap">Example only. A button like this on Coin's SIP screen would open the chat with that SIP's details filled in. Try it.</p>
-    </div>
-    <div class="good">
-      <h2>Good to know</h2>
-      <ul>
-        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg></span><span><b>Not investment advice.</b> It explains your numbers and your options. It never names funds or tells you what to buy, sell or stop.</span></li>
-        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg></span><span><b>Every AI reply is checked</b> before you see it. Numbers and dates come from the page's own maths.</span></li>
-        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></span><span><b>It can't see your account.</b> Replies come from Google's Gemini, so don't type your PAN, account or phone number.</span></li>
-        <li><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 20h10"/><path d="M10 20c5.5-2.5.8-6.4 3-10"/><path d="M9.5 9.4c1.1.8 1.8 2.2 2.3 3.7-2 .4-3.5.4-4.8-.3-1.2-.6-2.3-1.9-3-4.2 2.8-.5 4.4 0 5.5.8z"/><path d="M14.1 6a7 7 0 0 0-1.1 4c1.9-.1 3.3-.6 4.3-1.4 1-1 1.6-2.3 1.7-4.6-2.7.1-4 1-4.9 2z"/></svg></span><span><b>A case-study concept</b>, not made by or linked to Zerodha. Picture it inside Coin's SIP screen.</span></li>
-      </ul>
+    <div class="askblock">
+      <p class="sec">You can ask</p>
+      <div id="asks"></div>
     </div>
     <button type="button" class="primary" id="startBtn">Start</button>
-    <p class="fine">For adults (18+). Mutual fund investments are subject to market risks, and past returns don't predict future returns.</p>
+    <details class="know">
+      <summary>Know more</summary>
+      <div class="in">
+        <h2>Who it's for</h2>
+        <p>People in their first year of a SIP on Coin, and people about to start one.</p>
+        <h2>Why use it</h2>
+        <ul>
+          <li><b>Built for the moments people stop.</b> A flat first year or a failed instalment, answered with your numbers and real index history.</li>
+          <li><b>About your SIP, not fund rankings.</b> It shows how your SIP compares with its part of the market, and what past SIPs of the same age did.</li>
+          <li><b>Inside Coin, nothing to type.</b> It would read your SIP's details, so there's no other app to open.</li>
+        </ul>
+        <h2>Where it would live</h2>
+        <div class="sipcard">
+          <div class="sc-top"><div class="sc-t"><b>Monthly SIP</b><span>₹3,000 on the 5th of every month</span></div><span class="sc-status">Active</span></div>
+          <div class="sc-dots" role="img" aria-label="9 of 12 instalments paid in year one"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i><i></i></div>
+          <div class="sc-meta"><span>9 of 12 paid in year one</span><span>Next: <b id="cNext">5th</b></span></div>
+          <button class="sc-ask" type="button" id="conceptAsk">Ask SIP Buddy about this SIP</button>
+        </div>
+        <p class="cap">Example only. A button like this on Coin's SIP screen would open the chat with that SIP's details filled in. Try it.</p>
+        <h2>Good to know</h2>
+        <ul>
+          <li><b>Not investment advice.</b> It explains your numbers and your options. It never names funds or tells you what to buy, sell or stop.</li>
+          <li><b>Every AI reply is checked</b> before you see it. Numbers and dates come from the page's own maths.</li>
+          <li><b>It can't see your account.</b> Typed questions go to <span class="aiName">Anthropic's Claude</span>, so don't type your PAN, account or phone number.</li>
+          <li><b>A case-study concept</b>, not made by or linked to Zerodha. Picture it inside Coin's SIP screen.</li>
+        </ul>
+        <p class="fine">For adults (18+). Mutual fund investments are subject to market risks, and past returns don't predict future returns.</p>
+      </div>
+    </details>
+    <p class="fine">A case-study concept, not linked to Zerodha. Not investment advice.</p>
     <p class="mentor-links"><a href="#quality">Quality check</a><a href="#how">How it works</a><a href="#basic">Without AI tools</a></p>
+  </section>
+
+  <section id="view-stage" class="start" hidden aria-labelledby="stageTitle">
+    <div class="topbar"><a class="iconbtn" href="#start" aria-label="Back"><span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></span></a></div>
+    <div class="intro">
+      <h1 id="stageTitle">How far into your SIP?</h1>
+      <p class="tagline">One tap. It changes what I show first.</p>
+    </div>
+    <div id="stages"></div>
   </section>
 
   <section id="view-chat" hidden>
@@ -528,7 +648,7 @@ details.check summary { font-size: 12px }
     </div>
     <div class="card">
       <h2>Run the test set now</h2>
-      <p class="small muted">Runs all 46 cases through this site's AI service: 92 short requests. The free AI tier allows only a few requests a minute, so it takes about 10 minutes. Keep this tab open, then copy the results for the Evidence Log.</p>
+      <p class="small muted">Runs all 46 cases through this site's AI service: 92 short requests. On Claude it takes a few minutes and uses a few cents of API credit. Keep this tab open, then copy the results for the Evidence Log.</p>
       <div class="chips"><button type="button" id="runBtn">Run the 46 cases</button><button type="button" id="runStop" class="ghost" hidden>Stop</button><button type="button" id="copyBtn" class="ghost" hidden>Copy results</button></div>
       <p class="small muted" id="runStatus"></p>
       <div id="liveScores"></div>
@@ -563,14 +683,14 @@ details.check summary { font-size: 12px }
         <li><b>When it can't help:</b> it says so and points to an official source: Zerodha's help pages, SEBI or a SEBI-registered investment adviser.</li>
       </ul>
       <h2>Where the AI runs</h2>
-      <p>Replies come from Google's Gemini (<span id="modelName">gemini-3.5-flash-lite</span>) on its free tier. The page calls this site's own server, which holds the key, so the key never reaches your browser. PAN, account numbers, phone numbers and email addresses are removed before your message is sent. Google's free-tier terms let it use what's sent to improve its products, and people may review it, so please don't type personal details. If the free tier's limit is reached, you get the pre-written replies until it resets.</p>
+      <p>Typed questions are answered by <span class="aiName">Anthropic's Claude</span> (<span id="modelName">claude-haiku-5-5</span>), paid for with API credit. Buttons don't use AI. The page calls this site's own server, which holds the key, so the key never reaches your browser. PAN, account numbers, phone numbers and email addresses are removed before your message is sent. <span id="aiTerms">Anthropic doesn't use what's sent through its API to train its models unless you opt in, but please still don't type personal details.</span> If the AI service is busy or takes more than 10 seconds, you get the pre-written replies.</p>
       <h2>Sources</h2>
       <ul class="small">
         <li><a href="https://nsearchives.nseindia.com/content/indices/ind_nifty50.pdf" target="_blank" rel="noopener">NSE: Nifty 50</a>, <a href="https://nsearchives.nseindia.com/content/indices/ind_Nifty_Midcap_150.pdf" target="_blank" rel="noopener">Nifty Midcap 150</a> and <a href="https://nsearchives.nseindia.com/content/indices/ind_Nifty_Smallcap_250.pdf" target="_blank" rel="noopener">Nifty Smallcap 250</a> factsheets, 30 October 2026 (total return index figures).</li>
         <li><a href="https://niftyindices.com/docs/default-source/indices/nifty-50/nifty-50-whitepaper_2026.pdf" target="_blank" rel="noopener">NSE Indices, Nifty 50 white paper</a>: positive in 21 of 26 calendar years.</li>
         <li><a href="https://support.zerodha.com/category/mutual-funds/coin-app/sip-coin-app/articles/mandates-for-mutual-funds" target="_blank" rel="noopener">Zerodha: mandates for mutual funds</a>, <a href="https://support.zerodha.com/category/mutual-funds/understanding-mutual-funds/about-coin/articles/funds-not-debited-as-per-sip-schedule" target="_blank" rel="noopener">funds not debited as per the SIP schedule</a>, <a href="https://support.zerodha.com/category/mutual-funds/features-on-coin/systematic-investment-plan/articles/amc-sips-cancelled" target="_blank" rel="noopener">SIPs and failed payments</a>, <a href="https://support.zerodha.com/category/mutual-funds/features-on-coin/systematic-investment-plan/articles/how-do-i-pause-my-sip" target="_blank" rel="noopener">pausing a SIP</a>.</li>
         <li><a href="https://support.zerodha.com/category/mutual-funds/understanding-mutual-funds/about-coin/articles/what-are-the-advantages-of-coin" target="_blank" rel="noopener">Zerodha: direct plans carry no commission</a>.</li>
-        <li><a href="https://ai.google.dev/terms_of_service" target="_blank" rel="noopener">Gemini API Additional Terms of Service</a>: how Google uses what's sent on the free tier.</li>
+        <li id="aiTermsLink"><a href="https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training" target="_blank" rel="noopener">Anthropic: is my data used for model training?</a>: how Anthropic handles what's sent through its API.</li>
       </ul>
     </div>
   </div>
@@ -697,13 +817,13 @@ function publicFacts(f) { const o = {}; for (const [k, v] of Object.entries(f)) 
 const API = "/api/companion";
 const ROUTES = ["payment_help", "returns_check", "fund_choice", "explain", "decline_advice", "support_redirect", "other"];
 const CAUSES = ["short_balance", "mandate_or_bank", "app_or_payment_error", "unknown"];
-const PACE_MS = (() => { try { const p = new URLSearchParams(location.search).get("pace"); return p !== null && isFinite(+p) ? +p : 6000; } catch { return 6000; } })();
-// Google's free-tier terms say not to send personal information, so it is removed before anything leaves the page (the server removes it again).
+const PACE_MS = (() => { try { const p = new URLSearchParams(location.search).get("pace"); return p !== null && isFinite(+p) ? +p : null; } catch { return null; } })(); // null: set from the provider when a run starts
+// Personal details are removed before anything leaves the page (the server removes them again).
 const SCRUB = [[/\b[A-Z]{5}[0-9]{4}[A-Z]\b/gi, "[ID removed]"], [/[\w.+-]+@[\w-]+\.[\w.]+/g, "[email removed]"], [/(\+91[\s-]?)?\b[6-9]\d{9}\b/g, "[phone removed]"], [/\b\d{9,18}\b/g, "[number removed]"]];
 function scrub(t) { let s = String(t || ""); for (const [re, rep] of SCRUB) s = s.replace(re, rep); return s; }
 const sleep = (ms, signal) => new Promise((res, rej) => { const id = setTimeout(res, ms); if (signal) signal.addEventListener("abort", () => { clearTimeout(id); rej({ code: "cancelled" }); }, { once: true }); });
 let paceMs = 0, lastCall = 0;
-// Errors from the free AI service that usually pass if you try again a little later.
+// Errors from the AI service that usually pass if you try again a little later.
 const TRANSIENT = ["rate_limited", "upstream_busy", "timeout", "network", "upstream_unreachable", "http_502", "http_503", "http_504"];
 const isTransient = e => !!(e && TRANSIENT.includes(e.code));
 async function callApi(body, signal) {
@@ -778,7 +898,7 @@ const ICONS = {
   shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>',
 };
 function icon(name) { return el("span", { class: "ico", "aria-hidden": "true", html: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ""}</svg>` }); }
-function tint(name, cls) { return el("span", { class: `ic ${cls}` }, icon(name)); }
+function tint() { return null; } // v6.9: minimal look, no coloured icon tiles
 function stat(k, v, cls) { return el("div", { class: `stat ${cls || ""}` }, el("span", { class: "k", text: k }), el("span", { class: "v", text: v })); }
 function figure(markup, label) { return el("div", { class: "chart", role: "img", "aria-label": label, html: markup }); }
 const fmtN = n => (Math.round(n * 10) / 10).toLocaleString("en-IN");
@@ -869,7 +989,7 @@ function tiles(list) { const g = el("div", { class: "tiles" }); for (const [labe
 
 function checkNote(kind, issues, confidence) {
   const d = el("details", { class: `check ${kind === "busy" ? "plain" : kind}` });
-  if (kind === "busy") { d.append(el("summary", {}, icon("info"), "Pre-written answer (AI busy)"), el("p", { text: "The free AI service has hit its limit for the moment, so this reply comes from the page's own rules. Try again in a minute." })); return d; }
+  if (kind === "busy") { d.append(el("summary", {}, icon("info"), "Pre-written answer (AI busy)"), el("p", { text: "The AI service is busy or at its limit for the moment, so this reply comes from the page's own rules. Try again in a minute." })); return d; }
   if (kind === "plain") { d.append(el("summary", {}, icon("info"), "Pre-written answer"), el("p", { text: "This reply comes from the page's own rules. No AI was used." })); return d; }
   if (kind === "blocked") { d.append(el("summary", {}, icon("shield"), "Quality check stepped in"), el("p", { text: `The AI's reply was stopped (${issues.join("; ")}), so you're seeing the pre-written answer.` })); return d; }
   d.append(el("summary", {}, icon("check"), "Checked before showing"), el("p", { text: `No fund names or advice, no promises or pressure, and every number comes from the page's own maths.${confidence === "low" ? " The AI said it isn't sure, so check the official links." : ""}` })); return d;
@@ -977,23 +1097,26 @@ async function withRetry(fn, i, status) {
     catch (e) {
       if (!isTransient(e) || attempt >= 5) throw e;
       const wait = e.code === "rate_limited" ? Math.min(120, (e.retryAfter || 30) + 2) : Math.min(60, 8 * (attempt + 1));
-      const why = e.code === "rate_limited" ? "Free-tier limit reached" : "The AI service didn't answer";
+      const why = e.code === "rate_limited" ? "Rate limit reached" : "The AI service didn't answer";
       for (let t = wait; t > 0; t--) { status.textContent = `${why}. Waiting ${t} s, then retrying case ${i + 1} (try ${attempt + 2})…`; await sleep(1000, runCtl.signal); }
     }
   }
 }
+// Errors that will repeat on every case, so the run stops and says how to fix them.
+const STOP_NOTES = { no_credit: " The API credit has run out: check the balance on the Claude Console's Billing page, then run it again.", upstream_auth: " The API key was refused: check ANTHROPIC_API_KEY in Netlify, redeploy, then run it again.", model_not_found: " The model name wasn't found: check ANTHROPIC_MODEL in Netlify, or remove it to use the default.", needs_workspace: " The API key isn't tied to a workspace: create a key inside a workspace in the Claude Console, or add ANTHROPIC_WORKSPACE_ID in Netlify, then run it again." };
 async function runEval() {
   const status = $("#runStatus"); const h = await getHealth();
-  if (!h || !h.configured) { status.textContent = "The AI service isn't connected on this site, so the test set can't run. Check that GEMINI_API_KEY is set in Netlify and that the site was redeployed after adding it."; return; }
+  if (!h || !h.configured) { status.textContent = "The AI service isn't connected on this site, so the test set can't run. Check that ANTHROPIC_API_KEY is set in Netlify (Site configuration, then Environment variables) and that the site was redeployed after adding it."; return; }
   if (h.prompt_version !== PROMPT_VERSION) { status.textContent = `The server runs ${h.prompt_version} but this page is ${PROMPT_VERSION}. Redeploy so they match.`; return; }
-  runCtl = new AbortController(); paceMs = PACE_MS; $("#runBtn").disabled = true; $("#runStop").hidden = false; $("#copyBtn").hidden = true; $("#copyArea").hidden = true; $("#liveWrap").hidden = false;
+  runCtl = new AbortController(); paceMs = PACE_MS ?? (h.provider === "gemini" ? 6000 : 1000); $("#runBtn").disabled = true; $("#runStop").hidden = false; $("#copyBtn").hidden = true; $("#copyArea").hidden = true; $("#liveWrap").hidden = false;
   const tb = $("#liveTable tbody"); tb.replaceChildren(); const results = []; let stopNote = "";
   for (let i = 0; i < CASES.length; i++) {
     const c = CASES[i]; let r, grade;
     try { r = await withRetry(() => runCompanion(c.text, runCtl.signal), i, status); grade = gradeCase(c, r); }
     catch (e) {
       if (e && e.code === "cancelled") break;
-      if (e && e.code === "rate_limited") { stopNote = " The free tier's limit kept blocking requests: wait a few minutes (or until tomorrow if it's the daily limit) and run it again."; break; }
+      if (e && e.code === "rate_limited") { stopNote = " The AI service's rate limit kept blocking requests: wait a few minutes and run it again."; break; }
+      if (e && STOP_NOTES[e.code]) { stopNote = STOP_NOTES[e.code]; break; }
       r = { extract: { route: "error" }, issues: ["no usable answer"], message: "" }; grade = { pass: false, routeOk: false, checkOk: false, why: ["no usable answer: " + ((e && e.code) || "error") + (e && e.detail ? ` (${e.detail})` : "")] };
     }
     results.push({ case: c, r, grade });
@@ -1135,7 +1258,7 @@ function linksFor(route, f) { const ids = routeLinks(route, f || {}); if (!ids.l
 function pageNote(kind) {
   const d = el("details", { class: "check plain" });
   if (kind === "guide") d.append(el("summary", {}, icon("check"), "Worked out by the page"), el("p", { text: "Numbers come from the page's own maths and NSE data, and explanations from the sources linked, so it's instant. No AI was used." }));
-  else d.append(el("summary", {}, icon("info"), "Pre-written answer (AI slow)"), el("p", { text: "The free AI service took more than 10 seconds, so this reply comes from the page's own rules instead of making you wait." }));
+  else d.append(el("summary", {}, icon("info"), "Pre-written answer (AI slow)"), el("p", { text: "The AI service took more than 10 seconds, so this reply comes from the page's own rules instead of making you wait." }));
   return d;
 }
 function meta(route, f, kind, issues, conf) { return el("div", { class: "meta" }, kind === "guide" || kind === "slow" ? pageNote(kind) : checkNote(kind, issues || [], conf), linksFor(route, f)); }
@@ -1158,7 +1281,7 @@ function returnsCard(f) {
     let details = null;
     if (f._exp) {
       const e = f._exp, put = Array.from({ length: e.h + 1 }, (_, k) => e.monthly * k), hist = sipPath(e.monthly, HIST_I, e.h), need = sipPath(e.monthly, e.needI, e.h);
-      details = more("See how it would grow",
+      details = more("More details",
         lineChart({ h: e.h, xStart: "Start", xEnd: `Month ${e.h}`, aria: `Over ${e.h} months you'd put in ${inr(put[e.h])}; at the Nifty 50's past pace that would be about ${inr(hist[e.h])}; your target is ${inr(need[e.h])}.`, series: [{ cls: "c-put", label: "Put in", vcls: "put", values: put }, { cls: "c-hist", label: "Past pace", vcls: "hist", values: hist, area: true }, { cls: "c-need", label: "Your target", vcls: "need", values: need }] }),
         el("div", { class: "legend" }, el("span", {}, el("i", { class: "sw put" }), "Money you put in"), el("span", {}, el("i", { class: "sw hist" }), `Growing at ${REF.niftyTriPct}% a year`), el("span", {}, el("i", { class: "sw need" }), "The pace your goal needs")),
         stairBlock(e.h, true), numbersLedger(f));
@@ -1172,7 +1295,7 @@ function returnsCard(f) {
     out.push(el("div", { class: "visual" }, el("p", { class: "headline", text: head }),
       el("div", { class: "hbars" }, hbar("You put in", inr(v.invested), v.invested, max, "grey"), hbar("Worth today", inr(v.value), v.value, max, up ? "green" : "red")),
       el("p", { class: "subline", text: `Why so little? On average your money has been invested for only about ${fmtN((v.months + 1) / 2)} months.` }),
-      more("See why the first year looks slow", stairBlock(v.months, false),
+      more("More details", stairBlock(v.months, false),
         lineChart({ h: v.months, xStart: "First instalment", xEnd: "Today", aria: `You put in ${inr(v.invested)}; it's worth ${inr(v.value)} today; at the Nifty 50's past pace it would be about ${inr(hist[v.months])}.`, series: [{ cls: "c-put", label: "Put in", vcls: "put", values: put }, { cls: "c-hist", label: "Past pace", vcls: "hist", values: hist, area: true }], dot: { value: v.value, cls: up ? "c-dot-up" : "c-dot-down", label: "Yours today", vcls: up ? "up" : "down" } }),
         el("p", { class: "note", text: "Only today's value is known, so the chart doesn't draw your SIP's path in between." }), numbersLedger(f))));
   }
@@ -1201,45 +1324,39 @@ function displayOptions(f, reason) {
   return out;
 }
 const OPT_ICON = { next_ok: ["check", "t-green"], move_date: ["calmove", "t-blue"], pay_now: ["rupee", "t-green"], skip: ["skip", "t-amber"], pause: ["pause", "t-violet"] };
+function optCard(o, top) { return el("div", { class: `opt${top ? " top" : ""}` }, el("div", {}, el("b", { text: o.label }), el("p", { text: o.detail }))); }
+const CAUSE_LABEL = { short_balance: "Balance short on the SIP date", mandate_or_bank: "Mandate, bank or card problem", app_or_payment_error: "App or payment system error", unknown: "Cause not clear yet" };
 function paymentCard(f) {
-  const C = { short_balance: ["wallet", "t-amber", "Balance short on the SIP date"], mandate_or_bank: ["bank", "t-blue", "Mandate, bank or card problem"], app_or_payment_error: ["alert", "t-red", "App or payment system error"], unknown: ["help", "t-violet", "Cause not clear yet"] }[f.likely_cause] || ["help", "t-violet", "Cause not clear yet"];
-  const causeRow = el("div", { class: "row-h" }, tint(C[0], C[1]), el("div", {}, el("span", { class: "foot", text: "Likely cause" }), el("b", { text: C[2] })));
-  const optCard = (o, top) => { const ic = OPT_ICON[o.id] || ["info", "t-blue"]; return el("div", { class: `opt${top ? " top" : ""}` }, tint(ic[0], ic[1]), el("div", {}, el("b", { text: o.label }), el("p", { text: o.detail }))); };
-  const v = el("div", { class: "visual" });
-  if (f.next_instalment) {
-    v.append(el("p", { class: "headline", text: `Next instalment: ${f.next_instalment}` }), el("p", { class: "subline", text: f.too_late_to_change ? `That one is too late to change, so it runs as planned. You can change the next one until ${f.last_day_to_change_it}.` : `Change it until ${f.last_day_to_change_it}, or pause it until ${f.pause_before}.` }));
-    if (f._cal) v.append(monthCal(f._cal));
-  } else v.append(causeRow);
-  const opts = displayOptions(f);
+  const opts = displayOptions(f), v = el("div", { class: "visual" });
+  if (f.next_instalment) v.append(el("p", { class: "headline", text: `Next instalment: ${f.next_instalment}` }), el("p", { class: "subline", text: f.too_late_to_change ? `That one is too late to change, so it runs as planned. You can change the next one until ${f.last_day_to_change_it}.` : `Change it until ${f.last_day_to_change_it}, or pause it until ${f.pause_before}.` }));
   v.append(el("p", { class: "sec", text: opts[0].id === "move_date" ? "Best fit for your dates" : "What to do first" }), optCard(opts[0], true));
-  const rest = opts.slice(1).map(o => optCard(o, false));
-  v.append(more("Other choices and details", ...rest, f.next_instalment ? causeRow : null, f.date_note ? el("p", { class: "note", text: f.date_note }) : null, el("p", { class: "foot", text: `Worked out from today, ${f.today}.` })));
-  return v;
+  const details = more("More details", f._cal ? monthCal(f._cal) : null, opts.length > 1 ? el("p", { class: "sec", text: "Other choices" }) : null, ...opts.slice(1).map(o => optCard(o, false)),
+    el("p", { class: "foot" }, "Likely cause: ", el("b", { text: CAUSE_LABEL[f.likely_cause] || CAUSE_LABEL.unknown })), f.date_note ? el("p", { class: "note", text: f.date_note }) : null, el("p", { class: "foot", text: `Worked out from today, ${f.today}.` }));
+  return el("div", { class: "stack" }, v, details);
 }
 function signed(n) { return el("span", { class: n < 0 ? "neg" : "pos", text: `${n < 0 ? "−" : "+"}${Math.abs(n).toFixed(2)}%` }); }
 function fundTable() {
-  const t = el("table", { class: "ftable" }), head = el("tr", {}, el("th", { text: "Type and long run" }), el("th", { class: "r", text: "5 yrs, a year" }), el("th", { class: "r", text: "Last year" }), el("th", { text: "Ups & downs" }));
+  const t = el("table", { class: "ftable" }), head = el("tr", {}, el("th", { text: "Type" }), el("th", { class: "r", text: "5 yrs, a year" }), el("th", { class: "r", text: "Last year" }), el("th", { text: "Ups & downs" }));
   t.append(el("thead", {}, head));
   const tb = el("tbody");
-  for (const r of FUND_TYPES) { const lvl = r.sd < 15 ? 1 : r.sd < 17.5 ? 2 : 3; tb.append(el("tr", {}, el("td", {}, el("b", { text: r.name }), el("span", { class: "s", text: `${r.index}: ${r.longRun}% a year since ${r.since}` })), el("td", { class: "r" }, signed(r.y5)), el("td", { class: "r" }, signed(r.y1)), el("td", {}, el("span", { class: "dots", "aria-label": ["", "smaller", "medium", "bigger"][lvl] + " ups and downs" }, ...[1, 2, 3].map(i => el("i", { class: i <= lvl ? "on" : "" })))))); }
+  for (const r of FUND_TYPES) { const lvl = r.sd < 15 ? 1 : r.sd < 17.5 ? 2 : 3; tb.append(el("tr", {}, el("td", {}, el("b", { text: r.name }), el("span", { class: "s", text: r.index })), el("td", { class: "r" }, signed(r.y5)), el("td", { class: "r" }, signed(r.y1)), el("td", {}, el("span", { class: "dots", "aria-label": ["", "smaller", "medium", "bigger"][lvl] + " ups and downs" }, ...[1, 2, 3].map(i => el("i", { class: i <= lvl ? "on" : "" })))))); }
   t.append(tb); return t;
 }
-function goalTiles(heading) { return el("div", { style: "display:grid;gap:8px" }, heading ? el("p", { class: "sec", text: heading }) : null, tiles(Object.entries(GOALS).map(([k, g]) => [g.label, GOAL_ICONS[k][0], GOAL_ICONS[k][1], (label, grid) => { grid.querySelectorAll("button").forEach(b => b.disabled = true); addMe(label); guidedReply("fund_choice", { goal: k }); }]))); }
+function goalTiles(heading) { return el("div", { class: "stack tight" }, heading ? el("p", { class: "sec", text: heading }) : null, tiles(Object.entries(GOALS).map(([k, g]) => [g.label, GOAL_ICONS[k][0], GOAL_ICONS[k][1], (label, grid) => { grid.querySelectorAll("button").forEach(b => b.disabled = true); addMe(label); guidedReply("fund_choice", { goal: k }); }]))); }
 function fundChoiceCard(f) {
-  const v = el("div", { class: "visual" }, el("p", { class: "headline", text: "How the main fund types have done" }), el("p", { class: "subline", text: "Returns of each type's index, not of any fund." }), fundTable(),
-    el("p", { class: "foot", text: `Index total returns from NSE factsheets dated ${REF.asOf}. Long run: Nifty 50 ${FUND_TYPES[0].longRun}% a year since ${FUND_TYPES[0].since}; Midcap 150 ${FUND_TYPES[1].longRun}% and Smallcap 250 ${FUND_TYPES[2].longRun}% a year since ${FUND_TYPES[1].since}. Past returns don't predict future ones.` }),
-    more("Other fund types and what to check",
-      el("div", { class: "types" }, ...OTHER_TYPES.map(([n, ic, tc, d]) => el("div", { class: "type" }, tint(ic, tc), el("div", {}, el("b", { text: n }), el("p", { text: d }))))),
-      el("p", { class: "sec", text: "What to check in any fund" }),
-      el("ul", { class: "guide" }, ...CHECKLIST.map(([ic, tc, h, d]) => el("li", {}, tint(ic, tc), el("div", {}, el("b", { text: h }), el("span", { class: "t", text: d }))))),
-      el("div", { class: "mini" }, riskometer())),
-    more("Why no fund names?", el("p", { text: "Naming or ranking funds for you would be investment advice, which needs a SEBI registration. This shows how each type of fund has behaved, so you can judge funds yourself. Inside Coin, each fund's own page is one tap away." })));
-  if (!f.goal) return v;
-  if (GOAL_FIT[f._goal]) return goalFitCard(f._goal);
-  const gi = GOAL_ICONS[f._goal] || ["sprout", "t-green"];
-  const tip = el("div", { class: "visual" }, el("div", { class: "row-h" }, tint(gi[0], gi[1]), el("div", {}, el("span", { class: "foot", text: "Tips for your goal" }), el("b", { text: f.goal }))), el("p", { class: "subline", text: f._goal_note }));
+  if (f.goal && GOAL_FIT[f._goal]) return goalFitCard(f._goal);
+  const v = el("div", { class: "visual" }, el("p", { class: "headline", text: "How the main fund types have done" }), el("p", { class: "subline", text: "Returns of each type's index, not of any fund. Past returns don't predict future ones." }), fundTable());
+  const details = more("More details",
+    el("p", { class: "foot", text: `Index total returns from NSE factsheets dated ${REF.asOf}. Long run: Nifty 50 ${FUND_TYPES[0].longRun}% a year since ${FUND_TYPES[0].since}; Midcap 150 ${FUND_TYPES[1].longRun}% and Smallcap 250 ${FUND_TYPES[2].longRun}% a year since ${FUND_TYPES[1].since}.` }),
+    el("p", { class: "sec", text: "Other fund types" }), el("div", { class: "types" }, ...OTHER_TYPES.map(([n, , , d]) => el("div", { class: "type" }, el("div", {}, el("b", { text: n }), el("p", { text: d }))))),
+    el("p", { class: "sec", text: "What to check in any fund" }), el("ul", { class: "guide" }, ...CHECKLIST.map(([, , h, d]) => el("li", {}, el("div", {}, el("b", { text: h }), el("span", { class: "t", text: d }))))),
+    riskometer(),
+    el("p", { class: "sec", text: "Why no fund names?" }), el("p", { class: "note", text: "Naming or ranking funds for you would be investment advice, which needs a SEBI registration. This shows how each type of fund has behaved, so you can judge funds yourself. Inside Coin, each fund's own page is one tap away." }));
+  const card = el("div", { class: "stack" }, v, details);
+  if (!f.goal) return card;
+  const tip = el("div", { class: "visual" }, el("p", { class: "headline", text: f.goal }), el("p", { class: "subline", text: f._goal_note }));
   if (f._goal === "tax") { const g = GLOSSARY.tax_options; tip.append(el("ul", { class: "points" }, ...g.points.map(p => el("li", { text: p })))); }
-  return el("div", { style: "display:grid;gap:12px" }, tip, v);
+  return el("div", { class: "stack" }, tip, card);
 }
 function feeCalc() {
   const id = "fc" + Math.random().toString(36).slice(2, 7), out = el("p", { class: "out" });
@@ -1256,13 +1373,12 @@ function feeCalc() {
 }
 function explainCard(topic) {
   const g = GLOSSARY[topic]; if (!g) return null;
-  const v = el("div", { class: "visual" }, el("div", { class: "row-h" }, tint(g.icon, "t-blue"), el("p", { class: "headline", text: g.term })));
+  const v = el("div", { class: "visual" }, el("p", { class: "headline", text: g.term }));
   if (g.steps) v.append(el("p", { class: "sec", text: "How it works" }), el("ol", { class: "steps" }, ...g.steps.map(s => el("li", { text: s }))));
   v.append(el("ul", { class: "points" }, ...g.points.map(p => el("li", { text: p }))));
-  if (g.calc) v.append(feeCalc());
   if (topic === "riskometer") v.append(riskometer());
-  if (topic === "fund_types") return el("div", { style: "display:grid;gap:12px" }, v, fundChoiceCard({}));
-  return v;
+  if (topic === "fund_types") return el("div", { class: "stack" }, v, fundChoiceCard({}));
+  return g.calc ? el("div", { class: "stack" }, v, more("What fees cost you", feeCalc())) : v;
 }
 function withArt(node, ic, tc) {
   const h = node && node.querySelector ? node.querySelector(".visual > .headline") : null;
@@ -1285,42 +1401,48 @@ const ASKS = [
   ["calx", "My instalment failed", "Pick what happened, see what to do", "@fail"],
   ["compass", "How do fund types compare?", "Large, mid and small cap, ELSS and more", "@types"],
   ["bulb", "What does a term mean?", "NAV, expense ratio, XIRR, exit load, tax and more", "@terms"],
+  ["calendar", "How does a SIP work?", "Instalments, units and NAV in plain words", "@sip"],
 ];
 const ASK_TINT = { target: "t-amber", flat: "t-blue", calx: "t-red", compass: "t-violet", bulb: "t-green", tag: "t-green" };
-const REPLY_CAP_MS = 10000; // after this, the chat shows the pre-written answer instead of waiting on the free AI tier
-function askAction(q) { if (q === "@terms") return showTerms(); if (q === "@types") return showTypes(); if (q === "@goal") return startGoal(); if (q === "@flat") return startFlat(); if (q === "@fail") return startFail(); return userSays(q); }
+const REPLY_CAP_MS = 10000; // after this, the chat shows the pre-written answer instead of waiting on the AI service
+function askAction(q) { if (q === "@sip") return showTerm("sip_basics"); if (q === "@terms") return showTerms(); if (q === "@types") return showTypes(); if (q === "@goal") return startGoal(); if (q === "@flat") return startFlat(); if (q === "@fail") return startFail(); return userSays(q); }
 // Button and form follow-ups answer from the page (instant); typed messages go to the AI.
 function guidedReply(route, x) { const merged = Object.assign({}, memory, x); const f = factsFor(route, merged); addBot([el("div", { class: "text", text: fallbackText(route, f) }), cardFor(route, f), el("div", { class: "meta" }, pageNote("guide"), linksFor(route, f)), followUps(route, f)]); }
 function termListCard() {
-  const v = el("div", { class: "visual termlist" }, el("div", { class: "row-h" }, tint("bulb", "t-green"), el("p", { class: "headline", text: "Mutual fund and SIP terms" })), el("p", { class: "subline", text: `${TERM_COUNT} terms first-time investors meet most. Tap one to see what it means.` }));
+  const v = el("div", { class: "visual termlist" }, el("p", { class: "headline", text: "Mutual fund and SIP terms" }));
   for (const [group, keys] of TERM_GROUPS) v.append(el("p", { class: "sec", text: group }), el("div", { class: "tchips" }, ...keys.map(k => el("button", { class: "tchip", type: "button", text: termLabel(k), onclick: () => showTerm(k) }))));
   return v;
 }
-function showTerms() { if (busy) return; addMe("What does a term mean?"); addBot([el("div", { class: "text", text: "Here are the terms first-time investors run into most. Tap any one." }), termListCard()]); }
+function showTerms() { if (busy) return; addMe("What does a term mean?"); addBot([el("div", { class: "text", text: `The ${TERM_COUNT} terms first-time investors run into most. Tap one.` }), termListCard()]); }
 function showTerm(k) {
   if (busy || !GLOSSARY[k]) return; const g = GLOSSARY[k]; addMe(termLabel(k)); const f = { term: g.term, _topic: k };
   addBot([el("div", { class: "text", text: `${g.term}, in plain words:` }), explainCard(k), meta("explain", f, "guide"), chips([["More terms", showTerms], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]])]);
 }
 function showTypes() { if (busy) return; addMe("How do the main fund types compare?"); const f = fundFacts(); addBot([el("div", { class: "text", text: fallbackText("fund_choice", f) }), cardFor("fund_choice", f), meta("fund_choice", f, "guide"), followUps("fund_choice", f)]); }
 function askTitle(q, title) { return level === "exp" && q === "@flat" ? "Compare my SIP with its market" : title; }
-function askEx(q, ex) { return level === "exp" && q === "@flat" ? "See how it's doing against its part of the market" : ex; }
-function suggestions(list) { const g = el("div", { class: "suggest" }); for (const [ic, title, , q] of list) g.append(el("button", { class: "sug", type: "button", onclick: () => askAction(q) }, icon(ic), el("span", { text: askTitle(q, title) }))); return g; }
-// ---------- v6.4: first-timer or experienced, asked up front (changes the greeting, the order and a scope note) ----------
-// Both choices sit inside the first year (the target segment): just starting, or more than 6 months in.
-const LEVELS = [["new", "New to SIPs", "Starting soon, or under 6 months in", "sprout", "t-green"], ["exp", "Investing for a while", "More than 6 months of SIPs", "chart", "t-blue"]];
-let level = (() => { try { const v = localStorage.getItem("sipbuddy.level"); return v === "new" || v === "exp" ? v : null; } catch { return null; } })();
-function setLevel(k) { level = k; try { if (k) localStorage.setItem("sipbuddy.level", k); else localStorage.removeItem("sipbuddy.level"); } catch { /* storage off: keep it for this visit */ } renderHello(); renderLevels(); }
-const EXP_ORDER = ["@flat", "@goal", "@fail", "@types", "@terms"];
-function asksFor() { return level === "exp" ? EXP_ORDER.map(q => ASKS.find(a => a[3] === q)).filter(Boolean) : ASKS; }
-function levelPicks(onPick) { return el("div", { class: "lvls" }, ...LEVELS.map(([k, t, s, ic, tc]) => el("button", { class: "lvl" + (level === k ? " on" : ""), type: "button", "aria-pressed": String(level === k), onclick: () => onPick(k) }, tint(ic, tc), el("span", {}, el("b", { text: t }), el("span", { class: "ex", text: s }))))); }
-function renderLevels() { const b = $("#levels"); if (b) b.replaceChildren(levelPicks(k => { setLevel(k); location.hash = "#chat"; })); renderAsks(); }
+const CHEV = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
+const TICK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+function askList(list, run) { return el("div", { class: "list" }, ...list.map(([ic, title, , q]) => el("button", { class: "lrow", type: "button", onclick: () => run(q) }, icon(ic), el("span", { class: "rt", text: askTitle(q, title) }), el("span", { class: "chev", html: CHEV })))); }
+function termsLink() { return el("button", { class: "textlink", type: "button", text: "Or explain a term: NAV, XIRR, exit load…", onclick: () => askAction("@terms") }); }
+function suggestions(list) { return el("div", { class: "suggest" }, askList(list, askAction), list.some(a => a[3] === "@terms") ? null : termsLink()); }
+// ---------- v6.9: "How far into your SIP?", asked once after Start ----------
+// It only changes the greeting and the order of the questions. Nothing here reaches the AI, so the checked prompt and facts are unchanged.
+const STAGES = [["pre", "Haven't started yet"], ["lt6", "Less than 6 months in"], ["6to12", "6 to 12 months in"], ["gt12", "More than a year"]];
+const STAGE_NOTE = { pre: "Before your first instalment.", lt6: "Less than 6 months in.", "6to12": "6 to 12 months in.", gt12: "More than a year in. It's made for the first year, but every check still works." };
+const STAGE_ASKS = { pre: ["@goal", "@sip", "@types", "@terms"], lt6: ["@goal", "@flat", "@fail", "@types"], "6to12": ["@flat", "@goal", "@fail", "@types"], gt12: ["@flat", "@goal", "@fail", "@types"] };
+const levelOf = k => k ? (k === "pre" || k === "lt6" ? "new" : "exp") : null;
+let stage = (() => { try { const v = localStorage.getItem("sipbuddy.stage"); return STAGE_ASKS[v] ? v : null; } catch { return null; } })();
+let level = levelOf(stage), pending = null;
+function setStage(k) { stage = k; level = levelOf(k); try { localStorage.setItem("sipbuddy.stage", k); } catch { /* storage off: keep it for this visit */ } renderHello(); renderAsks(); renderStages(); }
+function asksFor() { return (STAGE_ASKS[stage] || STAGE_ASKS.lt6).map(q => ASKS.find(a => a[3] === q)).filter(Boolean); }
+function stageList(onPick) { return el("div", { class: "list" }, ...STAGES.map(([k, t]) => el("button", { class: "lrow" + (stage === k ? " on" : ""), type: "button", "aria-pressed": String(stage === k), onclick: () => onPick(k) }, el("span", { class: "rt", text: t }), el("span", { class: "chev", html: stage === k ? TICK : CHEV })))); }
+function renderStages() { const b = $("#stages"); if (b) b.replaceChildren(stageList(k => { setStage(k); const run = pending; pending = null; location.hash = "#chat"; if (run) chatReady.then(() => setTimeout(run, 0)); })); }
+// Open the chat and run something there; ask the stage first if it isn't known yet.
+function go(run) { if (!stage) { pending = run; location.hash = "#stage"; return; } location.hash = "#chat"; chatReady.then(() => setTimeout(run, 0)); }
 function renderHello() {
   const box = $("#hello"); if (!box) return;
-  if (!level) { box.replaceChildren(el("div", { class: "hello" }, heroArt(), el("h2", { text: "Hi! First, how long have you been investing in SIPs?" }), el("p", { text: "Your answer changes what I ask and show." }), levelPicks(setLevel))); return; }
-  const exp = level === "exp";
-  box.replaceChildren(el("div", { class: "hello" }, heroArt(), el("h2", { text: exp ? "Welcome! What would you like to check?" : "Hi! What would you like to check?" }),
-      el("p", { text: exp ? "You're a few months in. I can compare your SIP with its part of the market, check a goal against real history, or help with a failed instalment. I don't pick funds." : "Made for your first year of SIPs. Tap one, or type your own question below." })),
-    tiles(asksFor().map(([ic, title, , q]) => [askTitle(q, title), ic, ASK_TINT[ic] || "t-blue", () => askAction(q)])));
+  if (!stage) { box.replaceChildren(el("div", { class: "hello" }, el("h2", { class: "greet", text: "How far into your SIP?" }), stageList(setStage))); return; }
+  box.replaceChildren(el("div", { class: "hello" }, el("h2", { class: "greet", text: stage === "pre" ? "What would you like to know first?" : "What would you like to check?" }), el("p", { class: "sub", text: STAGE_NOTE[stage] }), suggestions(asksFor())));
 }
 function greet() { thread().append(el("div", { class: "empty" }, el("div", { id: "hello" }))); renderHello(); }
 const TERM_CHIPS = [["Expense ratio", "expense_ratio"], ["NAV", "nav"], ["Exit load", "exit_load"], ["Direct vs regular", "direct_vs_regular"], ["Switching funds", "switching"], ["Tax-saving options", "tax_options"]];
@@ -1329,7 +1451,7 @@ function followUps(route, f) {
   if (route === "returns_check" && f.monthly_amount && !f.expectation && !f.worth_today) return returnsForm();
   if (route === "payment_help" && !f.next_instalment && f.likely_cause === "unknown") return el("div", { style: "display:grid;gap:8px" }, el("p", { class: "sec", text: "What happened? Pick the closest reason." }), pickList(REASONS.map(([k, l, ic, tc]) => [k, l, ic, tc]), (k, label) => { addMe(label); failResult(k); }));
   if (route === "payment_help" && !f.next_instalment) return datesForm(f.likely_cause);
-  if (route === "fund_choice" && !f.goal) return goalTiles("Narrow it down: what's the money for?");
+  if (route === "fund_choice" && !f.goal) return goalTiles("What's the money for?");
   if (route === "fund_choice") return chips([["Another goal", () => addBot([el("div", { class: "text", text: "Sure. What's the money for?" }), goalTiles(null)])], ["Compare all fund types", showTypes], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]]);
   if (route === "explain" && !f.term) return termListCard();
   if (route === "explain") return chips([["More terms", showTerms], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]]);
@@ -1378,8 +1500,14 @@ function regexExtract(t) {
   x.topic = topicOf(s);
   return x;
 }
+// Who answers typed questions, as the server reports it (Claude by default; Gemini if the site was switched back).
+const AI_ABOUT = {
+  anthropic: { name: "Anthropic's Claude", terms: "Anthropic doesn't use what's sent through its API to train its models unless you opt in, but please still don't type personal details.", url: "https://privacy.claude.com/en/articles/7996868-is-my-data-used-for-model-training", link: "Anthropic: is my data used for model training?", linkNote: "how Anthropic handles what's sent through its API." },
+  gemini: { name: "Google's Gemini", terms: "Google's free-tier terms let it use what's sent to improve its products, and people may review it, so please don't type personal details.", url: "https://ai.google.dev/terms_of_service", link: "Gemini API Additional Terms of Service", linkNote: "how Google uses what's sent on the free tier." },
+};
 async function setupChat() {
   const h = await getHealth(); const g = $("#gateLine"), gt = $("#gateText"), full = $("#gateFull");
+  if (h && AI_ABOUT[h.provider]) { const a = AI_ABOUT[h.provider]; document.querySelectorAll(".aiName").forEach(e => { e.textContent = a.name; }); const t = $("#aiTerms"), l = $("#aiTermsLink"); if (t) t.textContent = a.terms; if (l) l.replaceChildren(el("a", { href: a.url, target: "_blank", rel: "noopener", text: a.link }), `: ${a.linkNote}`); }
   if (h && h.model) { const m = $("#modelName"); if (m) m.textContent = h.model; }
   let on = false, short = "Pre-written replies", msg;
   if (!gateOpen) msg = `AI replies are off until ${PROMPT_VERSION} passes its quality check. You'll get pre-written replies for now.`;
@@ -1392,17 +1520,12 @@ async function setupChat() {
 // ---------- v6 start page and Without AI tools ----------
 let chatReady = null;
 function initStart() {
-  renderAsks();
-  $("#startBtn").addEventListener("click", () => { location.hash = "#chat"; });
-  $("#startHero").append(heroArt()); renderLevels();
+  renderAsks(); renderStages();
+  $("#startBtn").addEventListener("click", () => { pending = null; location.hash = "#stage"; });
   $("#cNext").textContent = fmtDate(nextOnDay(5));
-  $("#conceptAsk").addEventListener("click", async () => { location.hash = "#chat"; await chatReady; startFlat({ said: "My SIP: ₹3,000 a month, 9 instalments, worth ₹27,300. Why does it look flat?", monthly: 3000, months: 9, worth: 27300 }); });
+  $("#conceptAsk").addEventListener("click", () => go(() => startFlat({ said: "My SIP: ₹3,000 a month, 9 instalments, worth ₹27,300. Why does it look flat?", monthly: 3000, months: 9, worth: 27300 })));
 }
-function renderAsks() {
-  const box = $("#asks"); if (!box) return; box.replaceChildren();
-  for (const [ic, title0, ex0, q] of asksFor()) { const title = askTitle(q, title0), ex = askEx(q, ex0); box.append(el("button", { class: "ask", type: "button", onclick: async () => { location.hash = "#chat"; await chatReady; askAction(q); } }, tint(ic, ASK_TINT[ic] || "t-blue"), el("span", {}, el("b", { text: title }), el("span", { class: "ex", text: ex })), el("span", { class: "chev", html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' })));
-  }
-}
+function renderAsks() { const box = $("#asks"); if (box) box.replaceChildren(askList(asksFor(), q => go(() => askAction(q)))); }
 const TOOLS = [["goal", "target", "Is my goal realistic?", "Monthly amount, target and years"], ["value", "flat", "What is my SIP doing?", "Put in vs worth today"], ["pay", "calx", "My instalment failed", "Dates and choices"], ["types", "compass", "How do fund types compare?", "Index returns and what to check"], ["fees", "tag", "What do fees cost me?", "Compare two expense ratios"]];
 function initTools() {
   const list = $("#toolList");
@@ -1508,10 +1631,11 @@ function field(id, label, attrs) { return el("label", { class: "f", for: id }, l
 function selectField(id, label, opts, val) { const s = el("select", { id }, ...opts.map(([v, t]) => el("option", { value: v, text: t }))); if (val != null) s.value = val; return el("label", { class: "f", for: id }, label, s); }
 const rid = p => p + Math.random().toString(36).slice(2, 7);
 function guideMeta(ids) { const links = ids.filter(id => SRC[id]).map(id => el("a", { href: SRC[id].url, target: "_blank", rel: "noopener" }, SRC[id].label, icon("external"))); return el("div", { class: "meta" }, pageNote("guide"), links.length ? el("details", { class: "src" }, el("summary", { text: "Sources" }), el("div", { class: "links" }, ...links)) : null); }
-function moreChips() { return chips([["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]]); }
+function somethingElse() { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }
+function moreChips() { return chips([["Something else", somethingElse]]); }
 
 // ================= 1. Is my goal realistic? =================
-function startGoal(prefill) { if (busy) return; addMe("Is my goal realistic?"); addBot([el("div", { class: "text", text: "To check it, I need four things: how much you'll put in each month, your target, how many years, and the type of fund, so I compare it with the right part of the market." }), goalForm(prefill || {})]); }
+function startGoal(prefill) { if (busy) return; addMe("Is my goal realistic?"); addBot([el("div", { class: "text", text: "Tell me four things and I'll check it against real index history." }), goalForm(prefill || {})]); }
 function goalForm(p) {
   const id = rid("g"), card = el("div", { class: "form visual" });
   const amt = field(id + "t", "Target amount (₹)", { type: "number", min: "1000", step: "1000", placeholder: "e.g. 2,00,000" }); amt.hidden = true;
@@ -1538,33 +1662,34 @@ function goalForm(p) {
   card.append(el("div", {}, go)); return card;
 }
 function goalResult(g) {
-  const t = ftype(g.type), key = t[2], ix = IDX[key], mult = g.targetVal / g.putIn;
+  const t = ftype(g.type), key = t[2], ix = IDX[key], mult = g.targetVal / g.putIn, Y = `${g.years} year${g.years === 1 ? "" : "s"}`;
   const fee = g.fee || 0, need = annualPct(solveMonthly(mult, g.n)), gross = longRunPct(key), pace = ((1 + gross / 100) * (1 - fee / 100) - 1) * 100, ratio = need / pace;
-  const text = `To turn ${inr(g.putIn)} into ${inr(g.targetVal)} in ${g.years} year${g.years === 1 ? "" : "s"}, your SIP would need to grow about ${pct(need)} a year. ${ixPhrase(key).replace(/^t/, "T")} grew about ${pct(gross)} a year from ${HIST_FROM} to ${HIST_TO}${fee ? `, or about ${pct(pace)} after a ${fee}% yearly fee` : ""}. History, not a forecast.`;
+  const text = `To turn ${inr(g.putIn)} into ${inr(g.targetVal)} in ${Y}, your SIP would need to grow about ${pct(need)} a year. The ${ix.name} grew about ${pct(gross)} a year from ${HIST_FROM.split(" ")[1]} to 2026${fee ? `, or about ${pct(pace)} after a ${fee}% yearly fee` : ""}.`;
   const head = need <= pace ? `Your goal is within the ${ix.name}'s long-run pace.` : ratio < 1.25 ? `Your goal needs a bit more than the ${ix.name}'s long-run pace.` : `Your goal needs about ${ratio.toFixed(1)}× the ${ix.name}'s long-run pace.`;
   const max = Math.max(need, pace) * 1.1;
-  const v = el("div", { class: "visual" }, el("div", { class: "row-h" }, tint("target", "t-amber"), el("p", { class: "headline", text: head })),
+  const v = el("div", { class: "visual" }, el("p", { class: "headline", text: head }),
     el("div", { class: "hbars" }, hbar("Your goal needs", `${pct(need)} a year`, need, max, "amber"), hbar(`${ix.name}, ${HIST_FROM.split(" ")[1]} to 2026${fee ? `, after ${fee}% fee` : ""}`, `${pct(pace)} a year`, pace, max, "blue")));
-  const parts = [el("div", { class: "text", text }), v];
-  if (g.n <= MAX_SIP_MONTHS) {
-    const outs = sipOutcomes(key, g.n, fee), s = summary(outs), targetGain = (mult - 1) * 100, hit = outs.filter(x => x >= targetGain - 1e-9).length;
-    parts.push(el("div", { class: "visual" }, el("div", { class: "row-h" }, tint("hourglass", "t-violet"), el("p", { class: "headline", text: `How past ${g.years}-year SIPs in the ${ix.name} ended` })),
-      el("p", { class: "subline", text: `A ${g.years}-year SIP started in any month from ${HIST_FROM} (${s.n} of them), checked when it finished.` }),
-      histSvg(outs, targetGain, `Your target ${signedPct(targetGain, 0)}`), legendRow(),
-      el("ul", { class: "points" }, el("li", { text: hit ? `Reached your target: ${hit} of ${s.n} (${share(hit / s.n)}).` : `Reached your target: none of the ${s.n}.` }), el("li", { text: `Middle result: ${signedPct(s.median, 0)}. Worst ${signedPct(s.min, 0)}, best ${signedPct(s.max, 0)}.` }), el("li", { text: `Ended below what went in: ${share(s.below)}.` })),
-      el("p", { class: "foot", text: `${t[5] ? t[5] + " " : ""}Index total returns, ${fee ? `after your ${fee}% yearly fee` : "before fund costs"}. Past results, not a forecast.` })));
-  } else parts.push(el("p", { class: "foot", text: `NSE's data for this index starts in ${HIST_FROM}, so there aren't enough past ${g.years}-year stretches to compare.` }));
+  const fits = g.n <= MAX_SIP_MONTHS, outs = fits ? sipOutcomes(key, g.n, fee) : null, s = fits ? summary(outs) : null, targetGain = (mult - 1) * 100, hit = fits ? outs.filter(x => x >= targetGain - 1e-9).length : 0;
+  let y2 = null;
   if (need > pace * 1.05) {
     const i = Math.pow(1 + pace / 100, 1 / 12) - 1; let n2 = null;
     for (let m = g.n + 1; m <= 360 && n2 === null; m++) if (g.monthly * fvFactor(i, m) >= (g.amountMode ? g.targetVal : g.monthly * m * mult)) n2 = m;
-    const y2 = n2 ? Math.ceil(n2 / 12) : null, pts = [];
-    pts.push(el("li", { text: y2 ? `Give it longer: at the ${ix.name}'s long-run pace${fee ? " after fees" : ""}, this target took about ${y2} years, not ${g.years}.` : `Even 30 years at the ${ix.name}'s long-run pace wouldn't reach this target.` }));
-    if (g.n <= MAX_SIP_MONTHS) { const med = summary(sipOutcomes(key, g.n, fee)).median; pts.push(el("li", { text: `Or expect what's usual: over ${g.years} year${g.years === 1 ? "" : "s"}, the middle past SIP ended ${signedPct(med, 0)}, about ${inr(g.putIn * (1 + med / 100))} on your ${inr(g.putIn)}.` })); }
-    parts.push(el("div", { class: "visual" }, el("div", { class: "row-h" }, tint("sprout", "t-green"), el("p", { class: "headline", text: "What would make it realistic?" })), el("ul", { class: "points" }, ...pts), el("p", { class: "foot", text: "Based on past index results, not a forecast." })));
-    if (y2 && y2 <= 30) parts.push(chips([[`Check it over ${y2} years`, () => { const n = y2 * 12; addMe(`Check it over ${y2} years`); goalResult(Object.assign({}, g, { years: y2, n, putIn: g.monthly * n, targetVal: g.amountMode ? g.targetVal : g.monthly * n * mult })); }]]));
-  }
-  parts.push(liveCard(key), guideMeta(["niHist", "niLive"]), chips([["Try another goal", () => startGoal({ type: g.type })], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]]));
-  addBot(parts);
+    y2 = n2 ? Math.ceil(n2 / 12) : null;
+    const pts = [el("li", { text: y2 ? `Give it about ${y2} years instead of ${g.years}.` : `Even 30 years at the ${ix.name}'s long-run pace wouldn't get there.` })];
+    if (fits) { const mid = g.putIn * (1 + s.median / 100), step = mid >= 10000 ? 1000 : 100; pts.push(el("li", { text: `Or aim for about ${inr(Math.round(mid / step) * step)}: where the middle past ${g.years}-year SIP ended.` })); }
+    v.append(el("div", { class: "sep" }), el("p", { class: "sec", text: "To make it realistic" }), el("ul", { class: "points" }, ...pts));
+  } else if (fits) v.append(el("p", { class: "subline", text: `Past ${g.years}-year SIPs in the ${ix.name} reached this target ${share(hit / s.n)}.` }));
+  v.append(el("p", { class: "foot", text: "Index history, not a forecast." }));
+  const hist = fits ? el("div", { class: "visual" }, el("p", { class: "headline", text: `How past ${g.years}-year SIPs in the ${ix.name} ended` }),
+      el("p", { class: "subline", text: `A ${g.years}-year SIP started in any month from ${HIST_FROM} (${s.n} of them), checked when it finished.` }),
+      histSvg(outs, targetGain, `Your target ${signedPct(targetGain, 0)}`), legendRow(),
+      el("ul", { class: "points" }, el("li", { text: hit ? `Reached your target: ${hit} of ${s.n} (${share(hit / s.n)}).` : `Reached your target: none of the ${s.n}.` }), el("li", { text: `Middle result: ${signedPct(s.median, 0)}. Worst ${signedPct(s.min, 0)}, best ${signedPct(s.max, 0)}.` }), el("li", { text: `Ended below what went in: ${share(s.below)}.` })),
+      el("p", { class: "foot", text: `${t[5] ? t[5] + " " : ""}Index total returns, ${fee ? `after your ${fee}% yearly fee` : "before fund costs"}. Past results, not a forecast.` }))
+    : el("p", { class: "foot", text: `NSE's data for this index starts in ${HIST_FROM}, so there aren't enough past ${g.years}-year stretches to compare.` });
+  const next = [];
+  if (y2 && y2 <= 30) next.push([`Check it over ${y2} years`, () => { const n = y2 * 12; addMe(`Check it over ${y2} years`); goalResult(Object.assign({}, g, { years: y2, n, putIn: g.monthly * n, targetVal: g.amountMode ? g.targetVal : g.monthly * n * mult })); }]);
+  next.push(["Try another goal", () => startGoal({ type: g.type })], ["Something else", somethingElse]);
+  addBot([el("div", { class: "text", text }), v, more("More details", hist, liveCard(key), guideMeta(["niHist", "niLive"])), chips(next)]);
 }
 
 // ================= 2. My instalment failed =================
@@ -1578,36 +1703,34 @@ const REASONS = [
 ];
 const CAUSE_OF = { new_bank: "mandate_or_bank", debited: "app_or_payment_error" };
 const CHECKS = {
-  short_balance: ["Check your bank statement: was the balance below the SIP amount at the start of the SIP date?", "Note when your salary usually lands compared with the SIP date. Add your dates below and I'll work out whether to move it."],
+  short_balance: ["Check your bank statement: was the balance below the SIP amount at the start of the SIP date?", "Note when your salary usually lands compared with the SIP date. Tap \"Work out my next dates\" and I'll work out whether to move it."],
   mandate_or_bank: ["Check your mandate's status in Coin. If it's pending, expired or rejected, set up a new one.", "Your bank can reject a debit if the mandate's limit is lower than your SIP amount."],
   new_bank: ["A mandate is tied to one bank account. After changing banks, set up a new mandate for the new account in Coin.", "Until the new mandate is active, instalments will keep failing."],
   app_or_payment_error: ["A stuck order can show as processing for up to 5 business days before it's marked failed.", "Check the order's status in Coin before paying again, so you don't pay twice."],
   debited: ["Check the order's status in Coin first. Units can take a few days to show.", "If money left your bank and the order then failed, contact Zerodha support with the order details."],
-  unknown: ["Look at your bank statement: was a debit tried on the SIP date?", "Then check the order's status in Coin. Pick a reason above if one fits better."],
+  unknown: ["Look at your bank statement: was a debit tried on the SIP date?", "Then check the order's status in Coin."],
 };
-function startFail() { if (busy) return; addMe("My instalment failed"); addBot([el("div", { class: "text", text: "Sorry about that. Pick the closest reason, so I can tell you what usually happens and what to check." }), pickList(REASONS.map(([k, l, ic, tc]) => [k, l, ic, tc]), (k, label) => { addMe(label); failResult(k); })]); }
+function startFail() { if (busy) return; addMe("My instalment failed"); addBot([el("div", { class: "text", text: "Sorry about that. What happened? Pick the closest." }), pickList(REASONS.map(([k, l, ic, tc]) => [k, l, ic, tc]), (k, label) => { addMe(label); failResult(k); })]); }
 function failResult(reason) {
-  const cause = CAUSE_OF[reason] || reason, f = paymentFacts({ cause });
-  const label = (REASONS.find(r => r[0] === reason) || [])[1];
-  const v = el("div", { class: "visual" }, el("div", { class: "row-h" }, tint("calx", "t-red"), el("p", { class: "headline", text: "What usually happens" })), el("p", { text: f.what_usually_happens }),
-    el("p", { class: "sec", text: "First, check" }), el("ol", { class: "steps" }, ...CHECKS[reason].map(s => el("li", { text: s }))),
-    el("p", { class: "sec", text: "What you can do, most useful first" }), ...displayOptions(f, reason).map((o, i) => el("div", { class: "opt" + (i ? "" : " top") }, tint((OPT_ICON[o.id] || ["info"])[0], (OPT_ICON[o.id] || [, "t-blue"])[1]), el("div", {}, el("b", { text: o.label }), el("p", { text: o.detail })))));
-  addBot([el("div", { class: "text", text: "Got it. A failed instalment isn't retried, but on a Zerodha SIP the next one runs as normal. Here's what usually happens and what to check." }), v,
-    el("div", { style: "display:grid;gap:8px" }, el("p", { class: "sec", text: "Want your next dates? Add them and I'll work out the last day to change or pause." }), (() => { const df = datesForm(cause); const sel = df.querySelector("select"); if (sel) sel.closest("label").hidden = true; return df; })()),
-    guideMeta(routeLinks("payment_help", f)), moreChips()]);
+  const cause = CAUSE_OF[reason] || reason, f = paymentFacts({ cause }), opts = displayOptions(f, reason);
+  const v = el("div", { class: "visual" }, el("p", { class: "headline", text: "What to do first" }), optCard(opts[0], true),
+    el("p", { class: "sec", text: "Then check" }), el("ol", { class: "steps" }, ...CHECKS[reason].map(s => el("li", { text: s }))));
+  const details = more("More details", el("p", { class: "sec", text: "What usually happens" }), el("p", { class: "note", text: f.what_usually_happens }),
+    el("p", { class: "sec", text: "Other choices" }), ...opts.slice(1).map(o => optCard(o, false)), guideMeta(routeLinks("payment_help", f)));
+  addBot([el("div", { class: "text", text: "Got it. A failed instalment isn't retried, but on a Zerodha SIP the next one runs as normal." }), v, details,
+    chips([["Work out my next dates", () => { addMe("Work out my next dates"); addBot([el("div", { class: "text", text: "Add your dates and I'll work out the last day to change or pause." }), (() => { const df = datesForm(cause); const sel = df.querySelector("select"); if (sel) sel.closest("label").hidden = true; return df; })()]); }], ["Something else", somethingElse]])]);
 }
 
 // ================= 3. Why does my SIP look flat? =================
-function progressCard(months, monthly) { // progress that grows whatever the market does
+function progressRow(months, monthly) { // progress that grows whatever the market does
   const yr = Math.floor((months - 1) / 12) + 1, inYear = months - (yr - 1) * 12;
-  return el("div", { class: "visual" }, el("div", { class: "row-h" }, tint("calendar", "t-green"), el("p", { class: "headline", text: yr === 1 ? `${inYear} of your first 12 instalments are in` : `${months} instalments in: ${inYear} of 12 in year ${yr}` })),
-    el("div", { class: "sc-dots", role: "img", "aria-label": `${inYear} of 12 instalments in year ${yr}` }, ...Array.from({ length: 12 }, (_, i) => el("i", { class: i < inYear ? "on" : "" }))),
-    el("p", { class: "subline", text: `${inr(monthly * months)} invested so far. Each instalment adds units you own, whatever the value shows today.` }));
+  return el("div", { class: "prog" }, el("div", { class: "sc-dots", role: "img", "aria-label": `${inYear} of 12 instalments in year ${yr}` }, ...Array.from({ length: 12 }, (_, i) => el("i", { class: i < inYear ? "on" : "" }))),
+    el("p", { class: "subline", text: `${yr === 1 ? `${inYear} of your first 12 instalments are in` : `${months} instalments in, ${inYear} of 12 this year`}. Each one adds units you own, whatever the value shows today.` }));
 }
 function startFlat(prefill) {
   if (busy) return; addMe(prefill && prefill.said || askTitle("@flat", "Why does my SIP look flat?"));
-  addBot([el("div", { class: "text", text: "Which type of fund is your SIP in? I need it to compare your SIP with the right part of the market." }),
-    pickList(FTYPES.map(([k, l, , ic, tc]) => [k, l, ic, tc]), (k, label) => { addMe(label); prefill && prefill.monthly ? flatResult(Object.assign({ type: k }, prefill)) : addBot([el("div", { class: "text", text: "Now three numbers from your SIP in Coin, so I can compare it with that index. (Inside Coin, these would fill in for you.)" }), flatForm(k)]); })]);
+  addBot([el("div", { class: "text", text: "Which type of fund is your SIP in? I'll compare it with that part of the market." }),
+    pickList(FTYPES.map(([k, l, , ic, tc]) => [k, l, ic, tc]), (k, label) => { addMe(label); prefill && prefill.monthly ? flatResult(Object.assign({ type: k }, prefill)) : addBot([el("div", { class: "text", text: "Now three numbers from your SIP in Coin. (Inside Coin, these would fill in for you.)" }), flatForm(k)]); })]);
 }
 function flatForm(type) {
   const id = rid("f"), card = el("div", { class: "form visual" });
@@ -1626,40 +1749,44 @@ function flatForm(type) {
   card.append(el("div", { class: "btnrow" }, go, skip)); return card;
 }
 function flatResult(r) {
-  const t = ftype(r.type), key = t[2], ix = IDX[key], y1 = oneYearPct(key), parts = [];
+  const t = ftype(r.type), key = t[2], ix = IDX[key], y1 = oneYearPct(key);
   const months = r.months ? Math.min(Math.round(r.months), MAX_SIP_MONTHS) : 12;
   const since = (HIST.latestTri[key][1] / HIST.series[key].at(-1) - 1) * 100, sinceDate = new Date(HIST.latestTri[key][0] + "T00:00:00").toLocaleDateString("en-IN", { day: "numeric", month: "short" });
-  const market = `Over the year to 30 Oct 2026, ${ixPhrase(key)} ${y1 < 0 ? "fell" : "rose"} ${Math.abs(y1).toFixed(2)}%${Math.abs(since) >= 0.5 ? `, and it has ${since > 0 ? "risen" : "fallen"} ${Math.abs(since).toFixed(1)}% since (to ${sinceDate})` : ""}.`;
-  if (r.monthly && r.months && r.worth) {
-    const putIn = r.monthly * r.months, gain = r.worth - putIn, gp = gain / putIn * 100, same = sameSipInIndex(key, Math.round(r.months), r.monthly), gap = (r.worth / same - 1) * 100;
-    const verdict = Math.abs(gap) <= 3 ? "So your SIP is moving with its part of the market." : gap < 0 ? `Your SIP is about ${inr(same - r.worth)} behind the index. Fund costs, the fund's own picks and your exact instalment dates can all cause a gap.` : `Your SIP is about ${inr(r.worth - same)} ahead of the index.`;
-    parts.push(el("div", { class: "text", text: `You've put in ${inr(putIn)} and it's worth ${inr(r.worth)}: ${gain >= 0 ? "up" : "down"} ${inr(Math.abs(gain))} (${signedPct(gp)}). ${market} ${verdict}` }));
-    parts.push(progressCard(r.months, r.monthly));
-    const max = Math.max(putIn, r.worth, same) * 1.04;
-    parts.push(el("div", { class: "visual" }, el("div", { class: "row-h" }, tint("flat", "t-blue"), el("p", { class: "headline", text: `${gain >= 0 ? "Up" : "Down"} ${inr(Math.abs(gain))} (${signedPct(gp)}) on what you put in` })),
-      el("div", { class: "hbars" }, hbar("You put in", inr(putIn), putIn, max, "grey"), hbar("Worth today", inr(r.worth), r.worth, max, gain >= 0 ? "green" : "red"), hbar(`Same instalments in the ${ix.name}`, `about ${inr(same)}`, same, max, "blue")),
-      el("p", { class: "subline", text: `${gp < 8 ? "Why so little? On average your money has been invested for only about" : "On average your money has been invested for about"} ${Math.max(1, Math.round((r.months + 1) / 2))} months, not ${r.months}. The index line assumes your instalments went in at the last ${r.months} month-ends.` })));
-  } else parts.push(el("div", { class: "text", text: `${market} A young SIP mostly reflects what the market did recently, because most of the money has only been in for a few months.` }));
-  parts.push(liveCard(key));
-  const outs = sipOutcomes(key, months), s = summary(outs), my = r.worth ? (r.worth / (r.monthly * r.months) - 1) * 100 : null;
-  const five = summary(sipOutcomes(key, 60));
-  parts.push(el("div", { class: "visual" }, el("div", { class: "row-h" }, tint("hourglass", "t-violet"), el("p", { class: "headline", text: `How ${months}-month SIPs in the ${ix.name} have done before` })),
+  const yearLine = `Over the year to 30 Oct 2026, the ${ix.name} ${y1 < 0 ? "fell" : "rose"} ${Math.abs(y1).toFixed(2)}%.`;
+  const sinceLine = Math.abs(since) >= 0.5 ? `Since then it has ${since > 0 ? "risen" : "fallen"} ${Math.abs(since).toFixed(1)}% (to ${sinceDate}).` : "";
+  const outs = sipOutcomes(key, months), s = summary(outs), my = r.worth ? (r.worth / (r.monthly * r.months) - 1) * 100 : null, five = summary(sipOutcomes(key, 60));
+  const hist = el("div", { class: "visual" }, el("p", { class: "headline", text: `How ${months}-month SIPs in the ${ix.name} have done before` }),
     el("p", { class: "subline", text: `Every ${months}-month SIP started in any month from ${HIST_FROM} (${s.n} of them), checked when it reached ${months} months.` }),
     histSvg(outs, my, my != null ? `You ${signedPct(my, 0)}` : null), legendRow(),
     el("ul", { class: "points" }, el("li", { text: `Ended below what went in: ${share(s.below)}. Middle result ${signedPct(s.median, 0)}.` }), el("li", { text: `Range: ${signedPct(s.min, 0)} to ${signedPct(s.max, 0)}.` }), el("li", { text: `SIPs that kept going 5 years ended below what went in ${oneIn(five.below)}.` })),
-    el("p", { class: "foot", text: `${t[5] ? t[5] + " " : ""}Index total returns, before fund costs. Past results, not a forecast.` })));
-  parts.push(guideMeta(["niHist", "niLive"]), chips([["Another fund type", () => startFlat(r.monthly ? { said: "Compare with another fund type", monthly: r.monthly, months: r.months, worth: r.worth } : null)], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]]));
+    el("p", { class: "foot", text: `${t[5] ? t[5] + " " : ""}Index total returns, before fund costs. Past results, not a forecast.` }));
+  const parts = [];
+  if (r.monthly && r.months && r.worth) {
+    const putIn = r.monthly * r.months, gain = r.worth - putIn, gp = gain / putIn * 100, same = sameSipInIndex(key, Math.round(r.months), r.monthly), gap = (r.worth / same - 1) * 100;
+    const verdict = Math.abs(gap) <= 3 ? "So your SIP is moving with its part of the market." : gap < 0 ? `Your SIP is about ${inr(same - r.worth)} behind the index. Fund costs, the fund's own picks and your exact instalment dates can all cause a gap.` : `Your SIP is about ${inr(r.worth - same)} ahead of the index.`;
+    parts.push(el("div", { class: "text", text: `You've put in ${inr(putIn)} and it's worth ${inr(r.worth)}. ${yearLine} ${verdict}` }));
+    const max = Math.max(putIn, r.worth, same) * 1.04;
+    parts.push(el("div", { class: "visual" }, el("p", { class: "headline", text: `${gain >= 0 ? "Up" : "Down"} ${inr(Math.abs(gain))} (${signedPct(gp)}) on what you put in` }),
+      el("div", { class: "hbars" }, hbar("You put in", inr(putIn), putIn, max, "grey"), hbar("Worth today", inr(r.worth), r.worth, max, gain >= 0 ? "green" : "red"), hbar(`Same SIP in the ${ix.name}`, inr(same), same, max, "blue")),
+      el("p", { class: "subline", text: `On average your money has been invested for about ${Math.max(1, Math.round((r.months + 1) / 2))} months, not ${r.months}.` }),
+      el("div", { class: "sep" }), progressRow(r.months, r.monthly)));
+    parts.push(more("More details", sinceLine ? el("p", { class: "note", text: sinceLine }) : null, el("p", { class: "note", text: `The index line assumes your instalments went in at the last ${r.months} month-ends.` }), hist, liveCard(key), guideMeta(["niHist", "niLive"])));
+  } else {
+    parts.push(el("div", { class: "text", text: `${yearLine} A young SIP mostly reflects what the market did recently, because most of the money has only been in for a few months.` }), hist);
+    parts.push(more("More details", sinceLine ? el("p", { class: "note", text: sinceLine }) : null, liveCard(key), guideMeta(["niHist", "niLive"])));
+  }
+  parts.push(chips([["Another fund type", () => startFlat(r.monthly ? { said: "Compare with another fund type", monthly: r.monthly, months: r.months, worth: r.worth } : null)], ["Something else", somethingElse]]));
   addBot(parts);
 }
 
 // ================= Fund types for a goal: how each type did over that goal's time span (NSE history, no fund names) =================
 const FIT_TYPES = [["Large cap", "n50", "Nifty 50"], ["Mid cap", "mid150", "Nifty Midcap 150"], ["Small cap", "small250", "Nifty Smallcap 250"], ["Flexi cap, ELSS", "n500", "Nifty 500"]];
 const GOAL_FIT = {
-  emergency: { months: 12, lump: true, span: "any 1 year", lead: "For emergency money, what matters most is how far it can fall in the month you need it. Here's how far each type of share fund has fallen within a year, and what to keep in mind. I don't pick specific funds." },
-  short: { months: 24, span: "2 years", lead: "For money you need in 1 to 3 years, the question is how often a SIP that long ended below what went in. Here's each fund type's history over 2 years, and what to keep in mind. I don't pick specific funds." },
-  medium: { months: 48, span: "4 years", lead: "For money you need in 3 to 5 years, here's how often a 4-year SIP in each fund type ended below what went in, and what to keep in mind. I don't pick specific funds." },
-  long: { months: 84, span: "7 years", lead: "For long-term money, here's how 7-year SIPs in each fund type ended, and what to keep in mind. I don't pick specific funds." },
-  tax: { months: 36, span: "3 years, the ELSS lock-in", lead: "For saving tax, ELSS funds lock each instalment in for 3 years. Here's how 3-year SIPs ended by fund type, the tax options that count, and what to keep in mind. I don't pick specific funds." },
+  emergency: { months: 12, lump: true, span: "any 1 year", lead: "For emergency money, what matters is how far it can fall when you need it. Here's how far each type of share fund has fallen within a year. I don't pick specific funds." },
+  short: { months: 24, span: "2 years", lead: "For money you need in 1 to 3 years, here's how often a 2-year SIP in each fund type ended below what went in. I don't pick specific funds." },
+  medium: { months: 48, span: "4 years", lead: "For money you need in 3 to 5 years, here's how often a 4-year SIP in each fund type ended below what went in. I don't pick specific funds." },
+  long: { months: 84, span: "7 years", lead: "For long-term money, here's how often a 7-year SIP in each fund type ended below what went in. I don't pick specific funds." },
+  tax: { months: 36, span: "3 years, the ELSS lock-in", lead: "ELSS funds lock each instalment in for 3 years. Here's how often a 3-year SIP in each fund type ended below what went in. The tax options are under More details. I don't pick specific funds." },
 };
 function fitRows(goal) {
   const fit = GOAL_FIT[goal];
@@ -1669,35 +1796,35 @@ function fitRows(goal) {
   });
 }
 function goalFitCard(goal) {
-  const fit = GOAL_FIT[goal], rows = fitRows(goal), gi = GOAL_ICONS[goal] || ["sprout", "t-green"];
+  const fit = GOAL_FIT[goal], rows = fitRows(goal);
   const lo = Math.round(Math.min(...rows.map(r => r.below)) * 100), hi = Math.round(Math.max(...rows.map(r => r.below)) * 100);
-  const title = fit.lump ? "How far each type fell within a year" : `How ${fit.months / 12}-year SIPs ended, by fund type`;
-  const sub = fit.lump ? `Every 1-year stretch from ${HIST_FROM} to ${HIST_TO}, for each type's index.` : `Every ${fit.months / 12}-year SIP started in any month from ${HIST_FROM} (${rows[0].n} of them), for each type's index.`;
+  const title = fit.lump ? "How far each type fell within a year" : `How often ${fit.months / 12}-year SIPs ended below what went in`;
   const scale = fit.lump ? Math.max(...rows.map(r => Math.abs(r.worst))) : Math.max(0.3, ...rows.map(r => r.below));
   const rowEl = r => {
     const val = fit.lump ? Math.abs(r.worst) : r.below, w = Math.max(val ? 3 : 0, val / scale * 100);
-    const right = fit.lump ? `worst ${signedPct(r.worst, 0)}` : `${Math.round(r.below * 100)}% below`;
-    const note = fit.lump ? `Fell in ${Math.round(r.below * 100)}% of 1-year stretches.` : `Middle result ${signedPct(r.median, 0)}. Worst ${signedPct(r.worst, 0)}.`;
-    return el("div", { class: "frow" }, el("div", { class: "frow-h" }, el("b", { text: r.label }), el("span", { class: "s", text: r.ix }), el("span", { class: "v", text: right })),
-      el("div", { class: "track" }, el("div", { class: "fill red", "data-w": w.toFixed(1) })), el("p", { class: "s", text: note }));
+    return el("div", { class: "frow" }, el("div", { class: "frow-h" }, el("b", { text: r.label }), el("span", { class: "v", text: fit.lump ? `worst ${signedPct(r.worst, 0)}` : `${Math.round(r.below * 100)}%` })),
+      el("div", { class: "track" }, el("div", { class: "fill red", "data-w": w.toFixed(1) })));
   };
-  const chart = el("div", { class: "visual" }, el("div", { class: "row-h" }, tint(gi[0], gi[1]), el("p", { class: "headline", text: title })), el("p", { class: "subline", text: sub }),
-    el("div", { class: "frows" }, ...rows.map(rowEl)),
-    el("p", { class: "s-note", text: fit.lump ? `Share funds fell in ${lo}% to ${hi}% of 1-year stretches.` : `Share funds ended below what went in ${lo === hi ? lo + "%" : `${lo}% to ${hi}%`} of the time over ${fit.span}.` }),
-    el("p", { class: "foot", text: "Index total returns from NSE Indices, before fund costs. Past results, not a forecast. Flexi-cap and ELSS funds can hold companies of any size, so they're compared with the Nifty 500." }));
-  const keep = el("div", { class: "visual" }, el("div", { class: "row-h" }, tint("bulb", "t-green"), el("p", { class: "headline", text: "What to keep in mind" })), el("p", { text: GOALS[goal].note }));
-  if (goal === "emergency") keep.append(el("p", { text: "Liquid funds work differently: they lend money for up to 91 days instead of buying shares, so their value usually moves much less than a share fund's." }));
-  if (goal === "tax") keep.append(el("ul", { class: "points" }, ...GLOSSARY.tax_options.points.map(p => el("li", { text: p }))));
-  keep.append(more("Why no fund names?", el("p", { text: "Naming or ranking funds for you would be investment advice, which needs a SEBI registration. This shows how each type of fund has behaved over a stretch that fits your goal, so you can judge funds yourself." })));
+  const chart = el("div", { class: "visual" }, el("p", { class: "headline", text: title }), el("div", { class: "frows" }, ...rows.map(rowEl)),
+    el("p", { class: "subline", text: fit.lump ? `Share funds fell in ${lo}% to ${hi}% of 1-year stretches.` : `Share funds ended below what went in ${lo === hi ? lo + "%" : `${lo}% to ${hi}%`} of the time over ${fit.span}.` }),
+    el("p", { class: "foot", text: "Index history from NSE, before fund costs. Not a forecast." }));
+  const extra = [];
+  if (goal === "emergency") extra.push(el("p", { class: "note", text: "Liquid funds work differently: they lend money for up to 91 days instead of buying shares, so their value usually moves much less than a share fund's." }));
+  if (goal === "tax") extra.push(el("ul", { class: "points" }, ...GLOSSARY.tax_options.points.map(p => el("li", { text: p }))));
+  const details = more("More details",
+    el("p", { class: "sec", text: "What to keep in mind" }), el("p", { class: "note", text: GOALS[goal].note }), ...extra,
+    el("p", { class: "sec", text: "By fund type" }), el("ul", { class: "points" }, ...rows.map(r => el("li", { text: `${r.label} (${r.ix}): ${fit.lump ? `fell in ${Math.round(r.below * 100)}% of 1-year stretches; worst ${signedPct(r.worst, 0)}` : `middle result ${signedPct(r.median, 0)}; worst ${signedPct(r.worst, 0)}`}.` }))),
+    el("p", { class: "foot", text: fit.lump ? `Every 1-year stretch from ${HIST_FROM} to ${HIST_TO}, for each type's index.` : `Every ${fit.months / 12}-year SIP started in any month from ${HIST_FROM} (${rows[0].n} of them), for each type's index. Index total returns, before fund costs. Flexi-cap and ELSS funds can hold companies of any size, so they're compared with the Nifty 500.` }),
+    el("p", { class: "sec", text: "Why no fund names?" }), el("p", { class: "note", text: "Naming or ranking funds for you would be investment advice, which needs a SEBI registration. This shows how each type of fund has behaved over a stretch that fits your goal, so you can judge funds yourself." }));
   setTimeout(() => animateFills(chart), 60);
-  return el("div", { style: "display:grid;gap:12px" }, chart, keep);
+  return el("div", { class: "stack" }, chart, details);
 }
 
 // ---------- Tabs and start ----------
 // Testers see the start page, chat and Without AI; mentors open the page with ?view=mentor to also see the quality check and how it works.
 const MENTOR = (() => { try { return new URLSearchParams(location.search).get("view") === "mentor"; } catch { return false; } })();
 if (MENTOR) document.body.classList.add("mentor");
-function show() { const views = ["start", "chat", "basic"].concat(MENTOR ? ["quality", "how"] : []); let v = (location.hash || "#start").slice(1); if (!views.includes(v)) v = "start"; for (const n of ["start", "chat", "basic", "quality", "how"]) { const e = $("#view-" + n); if (e) e.hidden = n !== v; } if (v !== "chat" || !document.querySelector("#thread .msg")) window.scrollTo(0, 0); }
+function show() { const views = ["start", "stage", "chat", "basic"].concat(MENTOR ? ["quality", "how"] : []); let v = (location.hash || "#start").slice(1); if (!views.includes(v)) v = "start"; for (const n of ["start", "stage", "chat", "basic", "quality", "how"]) { const e = $("#view-" + n); if (e) e.hidden = n !== v; } if (v !== "chat" || !document.querySelector("#thread .msg")) window.scrollTo(0, 0); }
 window.addEventListener("hashchange", show);
 $("#send").addEventListener("click", () => userSays($("#box").value));
 $("#box").addEventListener("input", e => { const t = e.target; t.style.height = "auto"; t.style.height = Math.min(t.scrollHeight, 140) + "px"; });
