@@ -14,7 +14,7 @@ const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 const ANTHROPIC_VERSION = "2026-10-21"; // current API version (no temperature/top_p/top_k, which this function never sends)
 const UPSTREAM_TIMEOUT_MS = 9000; // Netlify ends synchronous functions at 10 s
 const MAX_TEXT = 1500;
-const MAX_FACTS = 4000;
+const MAX_FACTS = 6000;
 
 function env(name) {
   try { if (globalThis.Netlify && Netlify.env && typeof Netlify.env.get === "function") { const v = Netlify.env.get(name); if (v !== undefined) return v; } } catch { /* not on Netlify */ }
@@ -41,7 +41,7 @@ const fail = (status, code, extra) => Object.assign(new Error(code), { status, c
 // Best-effort limit per visitor (per function instance), so one person can't use up the credit. The provider's own limits apply on top.
 const hits = new Map();
 function overLimit(ip) {
-  const now = Date.now(), windowMs = 10 * 60 * 1000, max = Number(env("MAX_REQUESTS_PER_10_MIN") || 150);
+  const now = Date.now(), windowMs = 10 * 60 * 1000, max = Number(env("MAX_REQUESTS_PER_10_MIN") || 300); // the 82-case quality run needs about 155
   const list = (hits.get(ip) || []).filter(t => now - t < windowMs);
   const over = list.length >= max; if (!over) list.push(now);
   hits.set(ip, list); if (hits.size > 5000) hits.clear();
@@ -214,7 +214,9 @@ export default async (req, context) => {
 
   try {
     if (b.step === "extract") {
-      const x = await callModel(extractPrompt(text), EXTRACT_SCHEMA, req.signal);
+      // Optional context: the previous answer's route and topic, only as values from the fixed lists (never free text).
+      const prev = b.prev && typeof b.prev === "object" && ROUTES.includes(b.prev.route) ? { route: b.prev.route, topic: TOPICS.includes(b.prev.topic) ? b.prev.topic : null } : null;
+      const x = await callModel(extractPrompt(text, prev), EXTRACT_SCHEMA, req.signal);
       if (x) { for (const k of ["route", "topic", "cause", "goal"]) x[k] = low(x[k]); if (x.expectation && typeof x.expectation === "object") x.expectation.kind = low(x.expectation.kind); }
       if (!x || !ROUTES.includes(x.route)) return reply(502, { code: "bad_route" });
       if (x.route === "payment_help" && !CAUSES.includes(x.cause)) x.cause = "unknown";
