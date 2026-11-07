@@ -410,6 +410,20 @@ details.check summary { font-size: 12px }
 .linkbtn.wa { display: none } body.mentor .linkbtn.wa { display: inline-flex }
 @media (max-width: 360px) { .lvls { grid-template-columns: minmax(0, 1fr) } }
 .hello .hero-art { max-height: 84px }
+.pick { font-weight: 600 }
+
+/* v6.7: fund types for a goal */
+.frows { display: grid; gap: 12px }
+.frow { display: grid; gap: 5px }
+.frow-h { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap }
+.frow-h b { font-size: 14.5px }
+.frow-h .s { font-size: 12px; color: var(--muted) }
+.frow-h .v { margin-left: auto; font-size: 14px; font-weight: 700; font-variant-numeric: tabular-nums; color: var(--red) }
+.frow .track { height: 12px; border-radius: 999px; background: var(--surface-2); border: 1px solid var(--line); overflow: hidden }
+.frow .fill { height: 100%; border-radius: 999px; width: 0 }
+@media (prefers-reduced-motion: no-preference) { .frow .fill { transition: width .7s ease-out } }
+.frow p.s { font-size: 12.5px; color: var(--muted) }
+.s-note { font-size: 14px; font-weight: 600 }
 </style>
 </head>
 <body>
@@ -1090,7 +1104,7 @@ function factsFor(route, x) {
 function routeLinks(route, f) {
   if (route === "returns_check") return ["nifty50fs", "nifty"];
   if (route === "payment_help") return ["notDebited", "mandates", "cancelled", "pause"];
-  if (route === "fund_choice") return ["nifty50fs", "midfs", "smallfs", "sebiCat"].concat(f._goal === "tax" ? ["tax123"] : []);
+  if (route === "fund_choice") return (f._goal && GOAL_FIT[f._goal] ? ["niHist"] : ["nifty50fs", "midfs", "smallfs"]).concat(["sebiCat"], f._goal === "tax" ? ["tax123"] : []);
   if (route === "explain") { const g = GLOSSARY[f._topic]; return g ? g.links.concat(f._topic === "fund_types" ? ["nifty50fs", "midfs", "smallfs"] : []) : []; }
   if (route === "decline_advice") return ["sebiRia"].concat(GLOSSARY[f._topic] ? GLOSSARY[f._topic].links : ["sebiInvestor"]);
   if (route === "support_redirect") return ["support"];
@@ -1107,7 +1121,7 @@ function fallbackText(route, f) {
     return p.join(" ");
   }
   if (route === "payment_help") return `${f.what_usually_happens} A failed instalment isn't retried. Here's what you can do.`;
-  if (route === "fund_choice") return f.goal ? `I don't pick specific funds, but here's how the main fund types have done, plus tips for "${f.goal}".` : "I don't pick specific funds, but here's how the main fund types have done. Tell me what the money is for and I'll add tips for that goal.";
+  if (route === "fund_choice") return f.goal ? (GOAL_FIT[f._goal] ? GOAL_FIT[f._goal].lead : `I don't pick specific funds, but here's how the main fund types have done, plus tips for "${f.goal}".`) : "I don't pick specific funds, but here's how the main fund types have done. Tell me what the money is for and I'll add tips for that goal.";
   if (route === "explain") return f.term ? `Here's a quick guide: ${f.term}.` : "Here are the terms I can explain. Tap one.";
   if (route === "decline_advice") return `I can't tell you whether to stop, switch or wait: that depends on your situation, and a SEBI-registered investment adviser can help with it.${f.term ? " Here's how it works, so you can decide." : " I can check your numbers, explain a term or help with a failed payment."}`;
   if (route === "support_redirect") return "This needs Zerodha's own support or help pages. I can't see your account, so I can't check orders, statements or portfolio data.";
@@ -1210,6 +1224,7 @@ function fundTable() {
   for (const r of FUND_TYPES) { const lvl = r.sd < 15 ? 1 : r.sd < 17.5 ? 2 : 3; tb.append(el("tr", {}, el("td", {}, el("b", { text: r.name }), el("span", { class: "s", text: `${r.index}: ${r.longRun}% a year since ${r.since}` })), el("td", { class: "r" }, signed(r.y5)), el("td", { class: "r" }, signed(r.y1)), el("td", {}, el("span", { class: "dots", "aria-label": ["", "smaller", "medium", "bigger"][lvl] + " ups and downs" }, ...[1, 2, 3].map(i => el("i", { class: i <= lvl ? "on" : "" })))))); }
   t.append(tb); return t;
 }
+function goalTiles(heading) { return el("div", { style: "display:grid;gap:8px" }, heading ? el("p", { class: "sec", text: heading }) : null, tiles(Object.entries(GOALS).map(([k, g]) => [g.label, GOAL_ICONS[k][0], GOAL_ICONS[k][1], (label, grid) => { grid.querySelectorAll("button").forEach(b => b.disabled = true); addMe(label); guidedReply("fund_choice", { goal: k }); }]))); }
 function fundChoiceCard(f) {
   const v = el("div", { class: "visual" }, el("p", { class: "headline", text: "How the main fund types have done" }), el("p", { class: "subline", text: "Returns of each type's index, not of any fund." }), fundTable(),
     el("p", { class: "foot", text: `Index total returns from NSE factsheets dated ${REF.asOf}. Long run: Nifty 50 ${FUND_TYPES[0].longRun}% a year since ${FUND_TYPES[0].since}; Midcap 150 ${FUND_TYPES[1].longRun}% and Smallcap 250 ${FUND_TYPES[2].longRun}% a year since ${FUND_TYPES[1].since}. Past returns don't predict future ones.` }),
@@ -1220,6 +1235,7 @@ function fundChoiceCard(f) {
       el("div", { class: "mini" }, riskometer())),
     more("Why no fund names?", el("p", { text: "Naming or ranking funds for you would be investment advice, which needs a SEBI registration. This shows how each type of fund has behaved, so you can judge funds yourself. Inside Coin, each fund's own page is one tap away." })));
   if (!f.goal) return v;
+  if (GOAL_FIT[f._goal]) return goalFitCard(f._goal);
   const gi = GOAL_ICONS[f._goal] || ["sprout", "t-green"];
   const tip = el("div", { class: "visual" }, el("div", { class: "row-h" }, tint(gi[0], gi[1]), el("div", {}, el("span", { class: "foot", text: "Tips for your goal" }), el("b", { text: f.goal }))), el("p", { class: "subline", text: f._goal_note }));
   if (f._goal === "tax") { const g = GLOSSARY.tax_options; tip.append(el("ul", { class: "points" }, ...g.points.map(p => el("li", { text: p })))); }
@@ -1286,7 +1302,9 @@ function showTerm(k) {
   addBot([el("div", { class: "text", text: `${g.term}, in plain words:` }), explainCard(k), meta("explain", f, "guide"), chips([["More terms", showTerms], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]])]);
 }
 function showTypes() { if (busy) return; addMe("How do the main fund types compare?"); const f = fundFacts(); addBot([el("div", { class: "text", text: fallbackText("fund_choice", f) }), cardFor("fund_choice", f), meta("fund_choice", f, "guide"), followUps("fund_choice", f)]); }
-function suggestions(list) { const g = el("div", { class: "suggest" }); for (const [ic, title, , q] of list) g.append(el("button", { class: "sug", type: "button", onclick: () => askAction(q) }, icon(ic), el("span", { text: title }))); return g; }
+function askTitle(q, title) { return level === "exp" && q === "@flat" ? "Compare my SIP with its market" : title; }
+function askEx(q, ex) { return level === "exp" && q === "@flat" ? "See how it's doing against its part of the market" : ex; }
+function suggestions(list) { const g = el("div", { class: "suggest" }); for (const [ic, title, , q] of list) g.append(el("button", { class: "sug", type: "button", onclick: () => askAction(q) }, icon(ic), el("span", { text: askTitle(q, title) }))); return g; }
 // ---------- v6.4: first-timer or experienced, asked up front (changes the greeting, the order and a scope note) ----------
 const LEVELS = [["new", "New to SIPs", "In my first year, or about to start", "sprout", "t-green"], ["exp", "Investing for a while", "More than a year of SIPs", "chart", "t-blue"]];
 let level = (() => { try { const v = localStorage.getItem("sipbuddy.level"); return v === "new" || v === "exp" ? v : null; } catch { return null; } })();
@@ -1294,15 +1312,14 @@ function setLevel(k) { level = k; try { if (k) localStorage.setItem("sipbuddy.le
 const EXP_ORDER = ["@flat", "@goal", "@fail", "@types", "@terms"];
 function asksFor() { return level === "exp" ? EXP_ORDER.map(q => ASKS.find(a => a[3] === q)).filter(Boolean) : ASKS; }
 function levelPicks(onPick) { return el("div", { class: "lvls" }, ...LEVELS.map(([k, t, s, ic, tc]) => el("button", { class: "lvl" + (level === k ? " on" : ""), type: "button", "aria-pressed": String(level === k), onclick: () => onPick(k) }, tint(ic, tc), el("span", {}, el("b", { text: t }), el("span", { class: "ex", text: s }))))); }
-function renderLevels() { const b = $("#levels"); if (b) b.replaceChildren(levelPicks(k => { setLevel(k); location.hash = "#chat"; })); }
+function renderLevels() { const b = $("#levels"); if (b) b.replaceChildren(levelPicks(k => { setLevel(k); location.hash = "#chat"; })); renderAsks(); }
 function renderHello() {
   const box = $("#hello"); if (!box) return;
   if (!level) { box.replaceChildren(el("div", { class: "hello" }, heroArt(), el("h2", { text: "Hi! First, how long have you been investing in SIPs?" }), el("p", { text: "Your answer changes what I ask and show." }), levelPicks(setLevel))); return; }
   const exp = level === "exp";
   box.replaceChildren(el("div", { class: "hello" }, heroArt(), el("h2", { text: exp ? "Welcome! What would you like to check?" : "Hi! What would you like to check?" }),
-      el("p", { text: exp ? "Built for first-year SIPs, so some answers may feel basic. I can compare a SIP with its part of the market; I don't review portfolios or pick funds." : "Made for your first year of SIPs. Tap one, or type your own question below." }),
-      el("button", { type: "button", class: "lvlchg", text: exp ? "Actually, I'm new to SIPs" : "Been investing for a while? Tell me", onclick: () => setLevel(exp ? "new" : "exp") })),
-    tiles(asksFor().map(([ic, title, , q]) => [exp && q === "@flat" ? "Compare my SIP with its market" : title, ic, ASK_TINT[ic] || "t-blue", () => askAction(q)])));
+      el("p", { text: exp ? "Built for first-year SIPs, so some answers may feel basic. I can compare a SIP with its part of the market; I don't review portfolios or pick funds." : "Made for your first year of SIPs. Tap one, or type your own question below." })),
+    tiles(asksFor().map(([ic, title, , q]) => [askTitle(q, title), ic, ASK_TINT[ic] || "t-blue", () => askAction(q)])));
 }
 function greet() { thread().append(el("div", { class: "empty" }, el("div", { id: "hello" }))); renderHello(); }
 const TERM_CHIPS = [["Expense ratio", "expense_ratio"], ["NAV", "nav"], ["Exit load", "exit_load"], ["Direct vs regular", "direct_vs_regular"], ["Switching funds", "switching"], ["Tax-saving options", "tax_options"]];
@@ -1311,7 +1328,8 @@ function followUps(route, f) {
   if (route === "returns_check" && f.monthly_amount && !f.expectation && !f.worth_today) return returnsForm();
   if (route === "payment_help" && !f.next_instalment && f.likely_cause === "unknown") return el("div", { style: "display:grid;gap:8px" }, el("p", { class: "sec", text: "What happened? Pick the closest reason." }), pickList(REASONS.map(([k, l, ic, tc]) => [k, l, ic, tc]), (k, label) => { addMe(label); failResult(k); }));
   if (route === "payment_help" && !f.next_instalment) return datesForm(f.likely_cause);
-  if (route === "fund_choice" && !f.goal) return el("div", { style: "display:grid;gap:8px" }, el("p", { class: "sec", text: "Narrow it down: what's the money for?" }), tiles(Object.entries(GOALS).map(([k, g]) => [g.label, GOAL_ICONS[k][0], GOAL_ICONS[k][1], (label, grid) => { grid.querySelectorAll("button").forEach(b => b.disabled = true); addMe(label); guidedReply("fund_choice", { goal: k }); }])));
+  if (route === "fund_choice" && !f.goal) return goalTiles("Narrow it down: what's the money for?");
+  if (route === "fund_choice") return chips([["Another goal", () => addBot([el("div", { class: "text", text: "Sure. What's the money for?" }), goalTiles(null)])], ["Compare all fund types", showTypes], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]]);
   if (route === "explain" && !f.term) return termListCard();
   if (route === "explain") return chips([["More terms", showTerms], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]]);
   return chips([["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]]);
@@ -1373,12 +1391,16 @@ async function setupChat() {
 // ---------- v6 start page and Without AI tools ----------
 let chatReady = null;
 function initStart() {
-  const box = $("#asks");
-  for (const [ic, title, ex, q] of ASKS) box.append(el("button", { class: "ask", type: "button", onclick: async () => { location.hash = "#chat"; await chatReady; askAction(q); } }, tint(ic, ASK_TINT[ic] || "t-blue"), el("span", {}, el("b", { text: title }), el("span", { class: "ex", text: ex })), el("span", { class: "chev", html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' })));
+  renderAsks();
   $("#startBtn").addEventListener("click", () => { location.hash = "#chat"; });
   $("#startHero").append(heroArt()); renderLevels();
   $("#cNext").textContent = fmtDate(nextOnDay(5));
   $("#conceptAsk").addEventListener("click", async () => { location.hash = "#chat"; await chatReady; startFlat({ said: "My SIP: ₹3,000 a month, 9 instalments, worth ₹27,300. Why does it look flat?", monthly: 3000, months: 9, worth: 27300 }); });
+}
+function renderAsks() {
+  const box = $("#asks"); if (!box) return; box.replaceChildren();
+  for (const [ic, title0, ex0, q] of asksFor()) { const title = askTitle(q, title0), ex = askEx(q, ex0); box.append(el("button", { class: "ask", type: "button", onclick: async () => { location.hash = "#chat"; await chatReady; askAction(q); } }, tint(ic, ASK_TINT[ic] || "t-blue"), el("span", {}, el("b", { text: title }), el("span", { class: "ex", text: ex })), el("span", { class: "chev", html: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' })));
+  }
 }
 const TOOLS = [["goal", "target", "Is my goal realistic?", "Monthly amount, target and years"], ["value", "flat", "What is my SIP doing?", "Put in vs worth today"], ["pay", "calx", "My instalment failed", "Dates and choices"], ["types", "compass", "How do fund types compare?", "Index returns and what to check"], ["fees", "tag", "What do fees cost me?", "Compare two expense ratios"]];
 function initTools() {
@@ -1582,7 +1604,7 @@ function progressCard(months, monthly) { // progress that grows whatever the mar
     el("p", { class: "subline", text: `${inr(monthly * months)} invested so far. Each instalment adds units you own, whatever the value shows today.` }));
 }
 function startFlat(prefill) {
-  if (busy) return; addMe(prefill && prefill.said || "Why does my SIP look flat?");
+  if (busy) return; addMe(prefill && prefill.said || askTitle("@flat", "Why does my SIP look flat?"));
   addBot([el("div", { class: "text", text: "Which type of fund is your SIP in? I need it to compare your SIP with the right part of the market." }),
     pickList(FTYPES.map(([k, l, , ic, tc]) => [k, l, ic, tc]), (k, label) => { addMe(label); prefill && prefill.monthly ? flatResult(Object.assign({ type: k }, prefill)) : addBot([el("div", { class: "text", text: "Now three numbers from your SIP in Coin, so I can compare it with that index. (Inside Coin, these would fill in for you.)" }), flatForm(k)]); })]);
 }
@@ -1615,7 +1637,7 @@ function flatResult(r) {
     const max = Math.max(putIn, r.worth, same) * 1.04;
     parts.push(el("div", { class: "visual" }, el("div", { class: "row-h" }, tint("flat", "t-blue"), el("p", { class: "headline", text: `${gain >= 0 ? "Up" : "Down"} ${inr(Math.abs(gain))} (${signedPct(gp)}) on what you put in` })),
       el("div", { class: "hbars" }, hbar("You put in", inr(putIn), putIn, max, "grey"), hbar("Worth today", inr(r.worth), r.worth, max, gain >= 0 ? "green" : "red"), hbar(`Same instalments in the ${ix.name}`, `about ${inr(same)}`, same, max, "blue")),
-      el("p", { class: "subline", text: `Why so little? On average your money has been invested for only about ${Math.max(1, Math.round((r.months + 1) / 2))} months, not ${r.months}. The index line assumes your instalments went in at the last ${r.months} month-ends.` })));
+      el("p", { class: "subline", text: `${gp < 8 ? "Why so little? On average your money has been invested for only about" : "On average your money has been invested for about"} ${Math.max(1, Math.round((r.months + 1) / 2))} months, not ${r.months}. The index line assumes your instalments went in at the last ${r.months} month-ends.` })));
   } else parts.push(el("div", { class: "text", text: `${market} A young SIP mostly reflects what the market did recently, because most of the money has only been in for a few months.` }));
   parts.push(liveCard(key));
   const outs = sipOutcomes(key, months), s = summary(outs), my = r.worth ? (r.worth / (r.monthly * r.months) - 1) * 100 : null;
@@ -1627,6 +1649,47 @@ function flatResult(r) {
     el("p", { class: "foot", text: `${t[5] ? t[5] + " " : ""}Index total returns, before fund costs. Past results, not a forecast.` })));
   parts.push(guideMeta(["niHist", "niLive"]), chips([["Another fund type", () => startFlat(r.monthly ? { said: "Compare with another fund type", monthly: r.monthly, months: r.months, worth: r.worth } : null)], ["Something else", () => { addBot([el("div", { class: "text", text: "Sure. What else would you like to check?" }), suggestions(asksFor())]); }]]));
   addBot(parts);
+}
+
+// ================= Fund types for a goal: how each type did over that goal's time span (NSE history, no fund names) =================
+const FIT_TYPES = [["Large cap", "n50", "Nifty 50"], ["Mid cap", "mid150", "Nifty Midcap 150"], ["Small cap", "small250", "Nifty Smallcap 250"], ["Flexi cap, ELSS", "n500", "Nifty 500"]];
+const GOAL_FIT = {
+  emergency: { months: 12, lump: true, span: "any 1 year", lead: "For emergency money, what matters most is how far it can fall in the month you need it. Here's how far each type of share fund has fallen within a year, and what to keep in mind. I don't pick specific funds." },
+  short: { months: 24, span: "2 years", lead: "For money you need in 1 to 3 years, the question is how often a SIP that long ended below what went in. Here's each fund type's history over 2 years, and what to keep in mind. I don't pick specific funds." },
+  medium: { months: 48, span: "4 years", lead: "For money you need in 3 to 5 years, here's how often a 4-year SIP in each fund type ended below what went in, and what to keep in mind. I don't pick specific funds." },
+  long: { months: 84, span: "7 years", lead: "For long-term money, here's how 7-year SIPs in each fund type ended, and what to keep in mind. I don't pick specific funds." },
+  tax: { months: 36, span: "3 years, the ELSS lock-in", lead: "For saving tax, ELSS funds lock each instalment in for 3 years. Here's how 3-year SIPs ended by fund type, the tax options that count, and what to keep in mind. I don't pick specific funds." },
+};
+function fitRows(goal) {
+  const fit = GOAL_FIT[goal];
+  return FIT_TYPES.map(([label, key, ix]) => {
+    if (fit.lump) { const a = HIST.series[key], v = []; for (let s = 0; s + 12 < a.length; s++) v.push((a[s + 12] / a[s] - 1) * 100); const s = summary(v); return { label, ix, below: s.below, worst: s.min, median: s.median, n: s.n }; }
+    const s = summary(sipOutcomes(key, fit.months)); return { label, ix, below: s.below, worst: s.min, median: s.median, n: s.n };
+  });
+}
+function goalFitCard(goal) {
+  const fit = GOAL_FIT[goal], rows = fitRows(goal), gi = GOAL_ICONS[goal] || ["sprout", "t-green"];
+  const lo = Math.round(Math.min(...rows.map(r => r.below)) * 100), hi = Math.round(Math.max(...rows.map(r => r.below)) * 100);
+  const title = fit.lump ? "How far each type fell within a year" : `How ${fit.months / 12}-year SIPs ended, by fund type`;
+  const sub = fit.lump ? `Every 1-year stretch from ${HIST_FROM} to ${HIST_TO}, for each type's index.` : `Every ${fit.months / 12}-year SIP started in any month from ${HIST_FROM} (${rows[0].n} of them), for each type's index.`;
+  const scale = fit.lump ? Math.max(...rows.map(r => Math.abs(r.worst))) : Math.max(0.3, ...rows.map(r => r.below));
+  const rowEl = r => {
+    const val = fit.lump ? Math.abs(r.worst) : r.below, w = Math.max(val ? 3 : 0, val / scale * 100);
+    const right = fit.lump ? `worst ${signedPct(r.worst, 0)}` : `${Math.round(r.below * 100)}% below`;
+    const note = fit.lump ? `Fell in ${Math.round(r.below * 100)}% of 1-year stretches.` : `Middle result ${signedPct(r.median, 0)}. Worst ${signedPct(r.worst, 0)}.`;
+    return el("div", { class: "frow" }, el("div", { class: "frow-h" }, el("b", { text: r.label }), el("span", { class: "s", text: r.ix }), el("span", { class: "v", text: right })),
+      el("div", { class: "track" }, el("div", { class: "fill red", "data-w": w.toFixed(1) })), el("p", { class: "s", text: note }));
+  };
+  const chart = el("div", { class: "visual" }, el("div", { class: "row-h" }, tint(gi[0], gi[1]), el("p", { class: "headline", text: title })), el("p", { class: "subline", text: sub }),
+    el("div", { class: "frows" }, ...rows.map(rowEl)),
+    el("p", { class: "s-note", text: fit.lump ? `Share funds fell in ${lo}% to ${hi}% of 1-year stretches.` : `Share funds ended below what went in ${lo === hi ? lo + "%" : `${lo}% to ${hi}%`} of the time over ${fit.span}.` }),
+    el("p", { class: "foot", text: "Index total returns from NSE Indices, before fund costs. Past results, not a forecast. Flexi-cap and ELSS funds can hold companies of any size, so they're compared with the Nifty 500." }));
+  const keep = el("div", { class: "visual" }, el("div", { class: "row-h" }, tint("bulb", "t-green"), el("p", { class: "headline", text: "What to keep in mind" })), el("p", { text: GOALS[goal].note }));
+  if (goal === "emergency") keep.append(el("p", { text: "Liquid funds work differently: they lend money for up to 91 days instead of buying shares, so their value usually moves much less than a share fund's." }));
+  if (goal === "tax") keep.append(el("ul", { class: "points" }, ...GLOSSARY.tax_options.points.map(p => el("li", { text: p }))));
+  keep.append(more("Why no fund names?", el("p", { text: "Naming or ranking funds for you would be investment advice, which needs a SEBI registration. This shows how each type of fund has behaved over a stretch that fits your goal, so you can judge funds yourself." })));
+  setTimeout(() => animateFills(chart), 60);
+  return el("div", { style: "display:grid;gap:12px" }, chart, keep);
 }
 
 // ---------- Tabs and start ----------

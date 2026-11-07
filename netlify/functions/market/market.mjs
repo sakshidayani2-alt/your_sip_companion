@@ -3,7 +3,8 @@
 export const config = { path: "/api/market" };
 
 const SOURCE = "https://liveindexsa.niftyindices.com/jsonfiles/LiveIndicesWatch.json";
-export const WANT = { "NIFTY 50": "n50", "NIFTY MIDCAP 150": "mid150", "NIFTY SMALLCAP 250": "small250", "NIFTY 500": "n500" };
+// NSE's live file names the small-cap index "NIFTY SMLCAP 250" (checked 7 Nov 2026); the long form is kept in case it changes.
+export const WANT = { "NIFTY 50": "n50", "NIFTY MIDCAP 150": "mid150", "NIFTY SMLCAP 250": "small250", "NIFTY SMALLCAP 250": "small250", "NIFTY 500": "n500" };
 const TTL_MS = 60 * 1000;
 let cache = null; // { at, body }
 
