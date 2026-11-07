@@ -6,7 +6,7 @@
 //   AI_PROVIDER = "anthropic" (default when ANTHROPIC_API_KEY is set) or "gemini".
 // The prompts in core.mjs are the same for both. Changing the provider or model switches AI replies off in the page
 // until the quality check has been run again on the new model.
-import { PROMPT_VERSION, ROUTES, TOPICS, CAUSES, GOAL_KEYS, extractPrompt, explainPrompt, ruleCheck, scrub } from "./core.mjs";
+import { PROMPT_VERSION, ROUTES, TOPICS, CAUSES, GOAL_KEYS, OFF_TOPIC_MESSAGE, extractPrompt, explainPrompt, ruleCheck, scrub } from "./core.mjs";
 
 const DEFAULT_CLAUDE_MODEL = "claude-haiku-5-5";
 const DEFAULT_GEMINI_MODEL = "gemini-3.5-flash-lite";
@@ -225,6 +225,8 @@ export default async (req, context) => {
     }
     if (b.step === "explain") {
       if (!ROUTES.includes(b.route)) return reply(400, { code: "bad_route" });
+      // Outside SIPs and mutual funds: a fixed reply, and no AI call, whatever the page sends.
+      if (b.route === "off_topic") return reply(200, Object.assign({ message: OFF_TOPIC_MESSAGE, confidence: "high", issues: [], fixed: true }, meta()));
       const facts = b.facts && typeof b.facts === "object" && !Array.isArray(b.facts) ? b.facts : {};
       if (JSON.stringify(facts).length > MAX_FACTS) return reply(400, { code: "facts_too_long" });
       const y = await callModel(explainPrompt(text, b.route, facts), EXPLAIN_SCHEMA, req.signal);
